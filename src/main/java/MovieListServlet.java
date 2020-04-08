@@ -19,8 +19,6 @@ public class MovieListServlet extends HttpServlet implements Parameters {
         // set response mime type
         response.setContentType("text/html");
 
-        String s = request.getRequestURI();
-
         String loginurl = "jdbc:mysql://localhost:3306/moviedb?characterEncoding=latin1&useConfigs=maxPerformance";
 
         // get the printwriter for writing response
