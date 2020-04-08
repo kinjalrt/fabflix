@@ -6,4 +6,12 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+    <servlet>
+        <servlet-name>SingleStarServlet</servlet-name>
+        <servlet-class>SingleStarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SingleStarServlet</servlet-name>
+        <url-pattern>/SingleStarServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

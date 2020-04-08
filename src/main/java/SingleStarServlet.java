@@ -1,5 +1,3 @@
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,8 +7,8 @@ import java.io.PrintWriter;
 import java.sql.*;
 
 // this annotation maps this Java Servlet Class to a URL
-@WebServlet("/top20")
-public class MovieListServlet extends HttpServlet implements Parameters {
+@WebServlet("/SingleStarServlet")
+public class SingleStarServlet extends HttpServlet implements Parameters {
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -18,28 +16,26 @@ public class MovieListServlet extends HttpServlet implements Parameters {
 
         // set response mime type
         response.setContentType("text/html");
-
-        String s = request.getRequestURI();
-
-        String loginurl = "jdbc:mysql://localhost:3306/moviedb?characterEncoding=latin1&useConfigs=maxPerformance";
+      //  String loginurl = "jdbc:mysql://localhost:3306/moviedb?characterEncoding=latin1&useConfigs=maxPerformance";
 
         // get the printwriter for writing response
         PrintWriter out = response.getWriter();
+        String singleStar = request.getParameter("star");
 
         out.println("<html>");
         out.println("<head><title>Fabflix</title></head>");
 
-
         try {
             out.println("<body>");
 
-            out.println("<H2>Top 20 Best Rated Movies</H2>");
             Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String loginurl = "jdbc:mysql://localhost:3306/moviedb?characterEncoding=latin1&useConfigs=maxPerformance";
+
 
             // Connect to the test database
             Connection connection = DriverManager.getConnection(loginurl,
                     Parameters.username, Parameters.password);
-          //  out.println("<body>i own you</body>");
+            //  out.println("<body>i own you</body>");
             if (connection != null) {
                 System.out.println("Connection established!!");
                 System.out.println();
@@ -47,47 +43,34 @@ public class MovieListServlet extends HttpServlet implements Parameters {
 
             // Create an execute an SQL statement to select all of table"Stars" records
             Statement select = connection.createStatement();
-            String q1 = "SELECT DISTINCT title, year, director, rating\n" +
-                    "FROM movies as m, ratings as r\n" +
-                    "WHERE m.id = r.movieId\n" +
-                    "ORDER BY rating DESC\n" +
-                    "LIMIT 20";
+            String q1 = "SELECT id, name, birthYear\n" +
+                    "FROM stars\n" +
+                    "where name = \""+singleStar+"\"";
             ResultSet r1 = select.executeQuery(q1);
 
 
-                out.println("<ol>");
             while (r1.next()) {
-                out.println("<li><H4>" + r1.getString("title") +" </H4></li>");
+                String id = r1.getString("id");
+                out.println("<H2>Name: " + r1.getString("name")+"</H2>");
                 out.println("<ul>");
-                out.println("<li>Year: " + r1.getInt("year")+" </li>");
-                out.println("<li>Director: " + r1.getString("director")+ " </li>");
-                out.println("<li>Rating: " + r1.getFloat("rating")+ " </li>");
-
+                if (r1.getInt("birthYear")==0)
+                    out.println("<li>Birth Year: N/A </li>");
+                else
+                    out.println("<li>Birth Year: " + r1.getInt("birthYear")+"</li>");
 
                 Statement s2 = connection.createStatement();
-                String q2 ="SELECT title, name\n" +
-                        "FROM movies as m, genres as g, genres_in_movies as gim\n" +
-                        "WHERE  m.title = \""+r1.getString("title") +"\" AND m.id = gim.movieId AND gim.genreId = g.id\n" +
-                        "LIMIT 3";
+                String q2 ="SELECT title\n" +
+                        "FROM stars_in_movies as sim, movies as m\n" +
+                        "WHERE sim.movieId = m.id AND sim.starId = \""+id+"\"";
                 ResultSet r2 = s2.executeQuery(q2);
                 while(r2.next()) {
-                    out.println("<li>Genre: " + r2.getString("name")+" </li>");
+                    out.println("<li>Movie: " + r2.getString("title")+" </li>");
                 }
-
-                Statement s3 = connection.createStatement();
-                String q3 ="SELECT title, name\n" +
-                        "FROM movies as m, stars_in_movies as sim, stars as s\n" +
-                        "WHERE  m.title = \""+r1.getString("title")+"\" AND m.id = sim.movieId AND sim.starId = s.id\n" +
-                        "LIMIT 3";
-                ResultSet r3 = s3.executeQuery(q3);
-                while(r3.next()) {
-                    String starName = r3.getString("name");
-                    out.println("<li>Star: <a class=\"active\" href=\"SingleStarServlet?star="+starName+"\">" + r3.getString("name") +" </a></li>");
-                }
-
                 out.println("</ul>");
+
+
             }
-            out.println("</ol>");
+
 
 
         } catch (Exception e) {
