@@ -42,7 +42,7 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
             ResultSet resultSet = statement.executeQuery(query);
 
             out.println("<body>");
-            out.println("<h1>Title: " + movieTitle + "</h1>");
+            out.println("<h2>Title: " + movieTitle + "</h2>");
 
             while (resultSet.next()){
                 // get a movie from result set
@@ -84,7 +84,7 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
                 out.println("<ul>");
                 while(starsResultSet.next()) {
                     String stars = starsResultSet.getString("name");
-                    out.print("<li>Star: <a class=\"active\" href=\"SingleStarServlet?star="+stars+"\">" + stars +" </a></li>");
+                    out.print("<li><a class=\"active\" href=\"SingleStarServlet?star="+stars+"\">" + stars +" </a></li>");
                 }
                 out.print("</ul></li>");
                 starsResultSet.close();
@@ -113,7 +113,7 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
                 out.println("</ul>");
             }
 
-            out.println("<div align= \"right\"><h3> <- go back <h3></div>");
+            out.println("<h3><a class=\"active\" href=\"top20?\"> <- Back to Top 20 Best Rated Movies <h3>");
             out.println("</body>");
 
 

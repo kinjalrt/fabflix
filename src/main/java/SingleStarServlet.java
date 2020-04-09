@@ -97,6 +97,7 @@ public class SingleStarServlet extends HttpServlet implements Parameters {
             out.println("</p>");
             out.print("</body>");
         }
+        out.println("<h3><a class=\"active\" href=\"top20?\"> <- Back to Top 20 Best Rated Movies <h3>");
         out.print("</body>");
         out.println("</html>");
         out.close();
