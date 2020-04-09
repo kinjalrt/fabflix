@@ -15,7 +15,7 @@ public class MovieListServlet extends HttpServlet implements Parameters {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // change this to your own mysql username and password
-        //RequestDispatcher rd = request.getRequestDispatcher("index.html");
+//         RequestDispatcher rd = request.getRequestDispatcher("index.html");
 
         // set response mime type
         response.setContentType("text/html");
