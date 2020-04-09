@@ -65,7 +65,7 @@ public class SingleStarServlet extends HttpServlet implements Parameters {
                 ResultSet r2 = s2.executeQuery(q2);
                 while(r2.next()) {
                     out.println("<li>Movie: " + "<a class=\"active\" href=\"movieServlet?title="
-                            + r2.getString("title")+"\">" + r2.getString("title")+" </li>");
+                            + r2.getString("title")+"\">" + r2.getString("title")+" </a></li>");
                 }
                 r2.close();
                 s2.close();
