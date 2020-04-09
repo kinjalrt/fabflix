@@ -86,10 +86,12 @@ public class MovieListServlet extends HttpServlet implements Parameters {
                         "WHERE  m.title = \""+r1.getString("title")+"\" AND m.id = sim.movieId AND sim.starId = s.id\n" +
                         "LIMIT 3";
                 ResultSet r3 = s3.executeQuery(q3);
+                out.println("<li>Star:<ul>");
                 while(r3.next()) {
                     String starName = r3.getString("name");
-                    out.println("<li>Star: <a class=\"active\" href=\"SingleStarServlet?star="+starName+"\">" + r3.getString("name") +" </a></li>");
+                    out.println("<li><a class=\"active\" href=\"SingleStarServlet?star="+starName+"\">" + r3.getString("name") +" </a></li>");
                 }
+                out.println("</ul></li>");
                 r3.close();
                 s3.close();
 
