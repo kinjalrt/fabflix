@@ -56,7 +56,10 @@ public class MovieListServlet extends HttpServlet implements Parameters {
 
                 out.println("<ol>");
             while (r1.next()) {
-                out.println("<li><H4>" + r1.getString("title") +" </H4></li>");
+                //hyperlink to SingleMovie which sends title and ratings as a parameter
+                out.println("<li><H4>" + "<a class=\"active\" href=\"movieServlet?title="
+                        + r1.getString("title")+"&rating=" + r1.getFloat("rating")+"\">"
+                        + r1.getString("title") +" </a>"+"</H4></li>");
                 out.println("<ul>");
                 out.println("<li>Year: " + r1.getInt("year")+" </li>");
                 out.println("<li>Director: " + r1.getString("director")+ " </li>");
