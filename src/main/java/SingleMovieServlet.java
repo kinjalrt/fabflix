@@ -1,3 +1,4 @@
+import javax.naming.ldap.PagedResultsResponseControl;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 // this annotation maps this Java Servlet Class to a URL
-@WebServlet("/movie")
+@WebServlet("/movieServlet")
 public class SingleMovieServlet extends HttpServlet implements Parameters {
     private static final long serialVersionUID = 1L;
 
@@ -22,7 +23,8 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
 
         // get the printwriter for writing response
         PrintWriter out = response.getWriter();
-        String movieTitle = "Bigfoot"; //request.getParameter("movie");
+        String movieTitle = request.getParameter("title");
+        String movieRating = request.getParameter("rating");
 
         out.println("<html>");
         out.println("<head><title>Fabflix</title></head>");
@@ -43,20 +45,55 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
             out.println("<h1>Title: " + movieTitle + "</h1>");
 
             while (resultSet.next()){
-                // get a star from result set
-                String title = resultSet.getString("title");
+                // get a movie from result set
                 int year = resultSet.getInt("year");
                 String director = resultSet.getString("director");
 
                 out.println("<ul>");
                 out.println("<li>Year: " + year + "</li>");
                 out.println("<li>Director: " + director + "</li>");
-                out.println("<li>Genre: " + year + "</li>");
-                out.println("<li>Stars: " + year + "</li>");
-                out.println("<li>Rating: " + year + "</li>");
+
+                // declare genre statement
+                Statement genreStatement = connection.createStatement();
+                //prepare genre query
+                String genreQuery = "SELECT g.name \n" +
+                        "FROM moviedb.movies as m, moviedb.genres as g, moviedb.genres_in_movies as gm \n" +
+                        "where title = \""+movieTitle+"\" and m.id = gm.movieId and gm.genreId = g.id;";
+                //execute genre query
+                ResultSet genreResultSet = genreStatement.executeQuery(genreQuery);
+                out.println("<li>Genre: ");
+                out.println("<ul>");
+                while(genreResultSet.next()) {
+                    String genre = genreResultSet.getString("name");
+                    out.print("<li>" + genre + "</li>");
+                }
+                out.print("</ul></li>");
+                genreResultSet.close();
+                genreStatement.close();
+
+                // declare stars statement
+                Statement starsStatement = connection.createStatement();
+                //prepare stars query
+                String starsQuery = "SELECT s.name \n" +
+                        "FROM moviedb.movies as m, moviedb.stars as s, moviedb.stars_in_movies as sm \n" +
+                        "where title = \""+movieTitle+"\" and m.id = sm.movieId and sm.starId = s.id;";
+                //execute stars query
+                ResultSet starsResultSet = starsStatement.executeQuery(starsQuery);
+                out.println("<li>Stars: ");
+                out.println("<ul>");
+                while(starsResultSet.next()) {
+                    String stars = starsResultSet.getString("name");
+                    out.print("<li>" + stars + "</li>");
+                }
+                out.print("</ul></li>");
+                starsResultSet.close();
+                starsStatement.close();
+
+                out.println("<li>Rating: " + movieRating + "</li>");
                 out.println("</ul>");
             }
             out.println("</body>");
+
 
             resultSet.close();
             statement.close();
