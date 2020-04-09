@@ -15,6 +15,7 @@ public class MovieListServlet extends HttpServlet implements Parameters {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // change this to your own mysql username and password
+        //RequestDispatcher rd = request.getRequestDispatcher("index.html");
 
         // set response mime type
         response.setContentType("text/html");
@@ -68,9 +69,13 @@ public class MovieListServlet extends HttpServlet implements Parameters {
                         "WHERE  m.title = \""+r1.getString("title") +"\" AND m.id = gim.movieId AND gim.genreId = g.id\n" +
                         "LIMIT 3";
                 ResultSet r2 = s2.executeQuery(q2);
+                out.println("<li>Genre:<ul>");
                 while(r2.next()) {
-                    out.println("<li>Genre: " + r2.getString("name")+" </li>");
+                    out.println("<li>" + r2.getString("name")+" </li>");
                 }
+                out.println("</ul></li>");
+                r2.close();
+                s2.close();
 
                 Statement s3 = connection.createStatement();
                 String q3 ="SELECT title, name\n" +
@@ -82,10 +87,16 @@ public class MovieListServlet extends HttpServlet implements Parameters {
                     String starName = r3.getString("name");
                     out.println("<li>Star: <a class=\"active\" href=\"SingleStarServlet?star="+starName+"\">" + r3.getString("name") +" </a></li>");
                 }
+                r3.close();
+                s3.close();
 
                 out.println("</ul>");
             }
             out.println("</ol>");
+
+            r1.close();
+            select.close();
+            connection.close();
 
 
         } catch (Exception e) {

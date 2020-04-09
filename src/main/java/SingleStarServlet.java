@@ -66,10 +66,15 @@ public class SingleStarServlet extends HttpServlet implements Parameters {
                 while(r2.next()) {
                     out.println("<li>Movie: " + r2.getString("title")+" </li>");
                 }
+                r2.close();
+                s2.close();
                 out.println("</ul>");
 
-
             }
+
+            r1.close();
+            select.close();
+            connection.close();
 
 
 
