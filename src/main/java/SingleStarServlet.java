@@ -64,7 +64,8 @@ public class SingleStarServlet extends HttpServlet implements Parameters {
                         "WHERE sim.movieId = m.id AND sim.starId = \""+id+"\"";
                 ResultSet r2 = s2.executeQuery(q2);
                 while(r2.next()) {
-                    out.println("<li>Movie: " + r2.getString("title")+" </li>");
+                    out.println("<li>Movie: " + "<a class=\"active\" href=\"movieServlet?title="
+                            + r2.getString("title")+"\">" + r2.getString("title")+" </li>");
                 }
                 out.println("</ul>");
 

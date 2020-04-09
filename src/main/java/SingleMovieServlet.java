@@ -46,6 +46,7 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
 
             while (resultSet.next()){
                 // get a movie from result set
+                String id = resultSet.getString("id");
                 int year = resultSet.getInt("year");
                 String director = resultSet.getString("director");
 
@@ -83,15 +84,36 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
                 out.println("<ul>");
                 while(starsResultSet.next()) {
                     String stars = starsResultSet.getString("name");
-                    out.print("<li>" + stars + "</li>");
+                    out.print("<li>Star: <a class=\"active\" href=\"SingleStarServlet?star="+stars+"\">" + stars +" </a></li>");
                 }
                 out.print("</ul></li>");
                 starsResultSet.close();
                 starsStatement.close();
 
-                out.println("<li>Rating: " + movieRating + "</li>");
+                if(movieRating == null) {
+                    //declare ratings statement
+                    Statement ratingStatement = connection.createStatement();
+                    //prepare ratings query
+                    String ratingQuery = "SELECT rating\n" +
+                            "FROM moviedb.movies as m, moviedb.ratings as r " +
+                            "where m.id = \"" + id + "\" and m.id = r.movieId";
+                    //execute stars query
+                    ResultSet ratingResultSet = ratingStatement.executeQuery(ratingQuery);
+                    out.println("<li>Rating: ");
+                    while (ratingResultSet.next()) {
+                        float rating = ratingResultSet.getFloat("rating");
+                        out.print(""+rating+ "</li>");
+                    }
+                    ratingResultSet.close();
+                    ratingStatement.close();
+                }
+                else {
+                    out.println("<li>Rating: " + movieRating + "</li>");
+                }
                 out.println("</ul>");
             }
+
+            out.println("<div align= \"right\"><h3> <- go back <h3></div>");
             out.println("</body>");
 
 
