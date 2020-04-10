@@ -1,8 +1,8 @@
 # Project 1 - cs122b-spring20-team-80 
 cs122b-spring20-team-80 created by GitHub Classroom
-- final submission: April 10th, 2020
+submitted on April 10th, 2020
 
-Implementation of the Movie List, Single Movie and Single Star page of the Fablix Application.
+- Implementation of the Movie List, Single Movie and Single Star page of the Fablix Application.
 
 ## Demo video URL
 
