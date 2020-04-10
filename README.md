@@ -35,6 +35,7 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
 
 ### Kinjal Reetoo 
   - Implemented Movie List and Single Star pages.
+  - Initial git setup and wrote README.md.
 
 ### Yasvi Patel 
   - Implemented Single Movie page, hyperlinks and jump requirements.
