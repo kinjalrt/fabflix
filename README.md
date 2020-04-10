@@ -19,9 +19,10 @@ Followed the exact same process of deployment as described on Canvas.
 ```bash
 git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80.git
 ```
-  3. Build war file inside repository.
+  3. Build war file inside project repository.
   
 ```bash
+cd /home/ubuntu/cs122b-spring20-team-80
 mvn package
 ```
   4. Copy newly built war file to Tomcat webapps folder.
