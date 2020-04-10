@@ -15,7 +15,7 @@ public class SingleMovieServlet extends HttpServlet implements Parameters {
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb?characterEncoding=latin1&useConfigs=maxPerformance";
 
         // set response mime type
-        response.setContentType("text/html");
+        response.setContentType("text/html;charset=utf-8");
 
         // get the printwriter for writing response
         PrintWriter out = response.getWriter();

@@ -1,3 +1,4 @@
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,7 @@ public class MovieListServlet extends HttpServlet implements Parameters {
 //         RequestDispatcher rd = request.getRequestDispatcher("index.html");
 
         // set response mime type
-        response.setContentType("text/html");
+        response.setContentType("text/html;charset=utf-8");
 
         String loginurl = "jdbc:mysql://localhost:3306/moviedb?characterEncoding=latin1&useConfigs=maxPerformance";
 

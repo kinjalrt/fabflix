@@ -15,7 +15,7 @@ public class SingleStarServlet extends HttpServlet implements Parameters {
         // change this to your own mysql username and password
 
         // set response mime type
-        response.setContentType("text/html");
+        response.setContentType("text/html;charset=utf-8");
       //  String loginurl = "jdbc:mysql://localhost:3306/moviedb?characterEncoding=latin1&useConfigs=maxPerformance";
 
         // get the printwriter for writing response
