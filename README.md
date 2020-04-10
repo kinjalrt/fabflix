@@ -37,5 +37,6 @@ Kinjal Reetoo
 
 Yasvi Patel 
   - Implemented Single Movie page, hyperlinks and jump requirements.
+  - Demo video and final deployment for grading.
   
 
