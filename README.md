@@ -1,6 +1,6 @@
 # Project 1 - cs122b-spring20-team-80 
 cs122b-spring20-team-80 created by GitHub Classroom
-submitted on April 10th, 2020
+submitted by Kinjal Reetoo and Yasvi Patel on April 10th, 2020
 
 - Implementation of the Movie List, Single Movie and Single Star page of the Fablix Application.
 
@@ -33,10 +33,10 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
 
 ## Contribution
 
-#### Kinjal Reetoo 
+### Kinjal Reetoo 
   - Implemented Movie List and Single Star pages.
 
-#### Yasvi Patel 
+### Yasvi Patel 
   - Implemented Single Movie page, hyperlinks and jump requirements.
   - Demo video and final deployment for grading.
   
