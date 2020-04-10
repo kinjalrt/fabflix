@@ -1,3 +1,7 @@
+CREATE schema moviedb;
+
+USE moviedb;
+
 CREATE TABLE movies (
 id varchar(10) not null,
 title varchar(100) not null,

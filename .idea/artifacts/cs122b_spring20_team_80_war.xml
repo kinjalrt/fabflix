@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="cs122b-spring20-team-80:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>cs122b-spring20-team-80</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="cs122b-spring20-team-80.war">
+      <element id="artifact" artifact-name="cs122b-spring20-team-80:war exploded" />
+    </root>
+  </artifact>
+</component>
