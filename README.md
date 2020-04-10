@@ -6,7 +6,7 @@ submitted on April 10th, 2020
 
 ## Demo video URL
 
-[link]https://youtu.be/Cd_2F8tFhRM
+[link](https://youtu.be/Cd_2F8tFhRM)
 
 
 ## Instruction of deployment
@@ -33,9 +33,9 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
 ## Contribution
 
 Kinjal Reetoo 
-  - Focus on Movie List and Single Star pages.
+  - Implemented Movie List and Single Star pages.
 
 Yasvi Patel 
-  - Focus on Single Movie page, hyperlinks and jump requirements.
+  - Implemented Single Movie page, hyperlinks and jump requirements.
   
 
