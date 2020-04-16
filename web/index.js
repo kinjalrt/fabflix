@@ -26,7 +26,12 @@ function handleStarResult(resultData) {
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
-        rowHTML += "<th>" + resultData[i]["title"] + "</th>";
+        // rowHTML += "<th>" + resultData[i]["title"] + "</th>";
+        rowHTML +=
+                '<th>'+
+                '<a href="single-movie.html?id=' + resultData[i]["movie_id"] + '">'
+                + resultData[i]["title"] +     // display star_name for the link text
+                '</a>' + '</th>';
         rowHTML += "<th>" + resultData[i]["year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["dir"] + "</th>";
         rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
