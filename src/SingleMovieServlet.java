@@ -86,14 +86,13 @@ public class SingleMovieServlet extends HttpServlet {
                 ResultSet rsg = genreStatement.executeQuery(genreQuery);
                 int genreCount = 0;
                 while(rsg.next()){
-                    genreCount++;
                     String g = rsg.getString("name");
-                    jsonObject.addProperty("movie_genre"+genreCount, g);
+                    jsonObject.addProperty("movie_genre"+(++genreCount), g);
                 }
                 jsonObject.addProperty("genre_count", genreCount);
 
                 //adding stars
-                String starsQuery = "SELECT s.name \n" +
+                String starsQuery = "SELECT s.name, s.id \n" +
                         "FROM moviedb.movies as m, moviedb.stars as s, moviedb.stars_in_movies as sm \n" +
                         "where title = \""+movieTitle+"\" and m.id = sm.movieId and sm.starId = s.id;";
 
@@ -103,7 +102,9 @@ public class SingleMovieServlet extends HttpServlet {
                 int starCount = 0;
                 while(rss.next()){
                     String s = rss.getString("name");
+                    String sid = rss.getString("id");
                     jsonObject.addProperty("movie_stars"+(++starCount), s);
+                    jsonObject.addProperty("movie_stars_id"+starCount, sid);
                 }
                 jsonObject.addProperty("stars_count", starCount);
 

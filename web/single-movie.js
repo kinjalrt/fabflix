@@ -84,10 +84,10 @@ function handleResult(resultData) {
         rowHTML += "<th>";
         for(var l = 1; l <= parseInt(resultData[i]["stars_count"]); l++)  {
             if(l == 1){
-                rowHTML += resultData[i]["movie_stars" + l];
+                rowHTML += '<a href="single-star.html?id=' + resultData[i]["movie_stars_id"+l] + '">' + resultData[i]["movie_stars"+l] + '</a>';
             }
             else {
-                rowHTML += ", " + resultData[i]["movie_stars" + l];
+                rowHTML += ", " + '<a href="single-star.html?id=' + resultData[i]["movie_stars_id"+l] + '">' + resultData[i]["movie_stars"+l] + '</a>';
             }
 
         }
@@ -100,6 +100,8 @@ function handleResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         movieTableBodyElement.append(rowHTML);
     }
+    let backElement = jQuery("#back");
+    backElement.append("<p align='right'><a href='index.html?'</a> ~ Back ~</p>")
 }
 
 /**
