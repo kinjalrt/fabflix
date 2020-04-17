@@ -62,38 +62,39 @@ function handleResult(resultData) {
     // Find the empty table body by id "movie_table_body"
     let movieTableBodyElement = jQuery("#movie_table_body");
 
+
     // Concatenate the html tags with resultData jsonObject to create table rows
     for (let i = 0; i < Math.min(10, resultData.length); i++) {
         let rowHTML = "";
+
         rowHTML += "<tr>";
 
-        rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
+        rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>";
 
-        rowHTML += "<th>";
+
+        rowHTML += "<td>";
         for(var k = 1; k <= parseInt(resultData[i]["genre_count"]); k++)  {
             if(k == 1){
                 rowHTML += resultData[i]["movie_genre" + k];
             }
             else {
-                rowHTML += ", " + resultData[i]["movie_genre" + k];
+                rowHTML += "<br /> " + resultData[i]["movie_genre" + k];
             }
-
         }
-        rowHTML += "</th>";
+        rowHTML += "</td>";
 
-        rowHTML += "<th>";
+        rowHTML += '<td>';
         for(var l = 1; l <= parseInt(resultData[i]["stars_count"]); l++)  {
             if(l == 1){
-                rowHTML += '<a href="single-star.html?id=' + resultData[i]["movie_stars_id"+l] + '">' + resultData[i]["movie_stars"+l] + '</a>';
+                rowHTML += '<a href="single-star.html?id=' + resultData[i]["movie_stars_id" + l] + '">' + resultData[i]["movie_stars" + l] + '</a>';
             }
             else {
-                rowHTML += ", " + '<a href="single-star.html?id=' + resultData[i]["movie_stars_id"+l] + '">' + resultData[i]["movie_stars"+l] + '</a>';
+                rowHTML += '<br /> '+'<a href="single-star.html?id=' + resultData[i]["movie_stars_id" + l] + '">' + resultData[i]["movie_stars" + l] + '</a>';
             }
-
         }
-        rowHTML += "</th>";
+        rowHTML += "</td>";
 
-        rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>" ;
+        rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>" ;
 
         rowHTML += "</tr>";
 
@@ -101,7 +102,7 @@ function handleResult(resultData) {
         movieTableBodyElement.append(rowHTML);
     }
     let backElement = jQuery("#back");
-    backElement.append("<p align='right'><a href='index.html?'</a> ~ Back ~</p>")
+    backElement.append("<p align='right'><a href='index.html?'</a> ~ Back ~</p>");
 }
 
 /**

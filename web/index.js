@@ -28,63 +28,63 @@ function handleStarResult(resultData) {
         rowHTML += "<tr>";
         // rowHTML += "<th>" + resultData[i]["title"] + "</th>";
         rowHTML +=
-                '<th>'+
+                '<td>'+
                 '<a href="single-movie.html?id=' + resultData[i]["movie_id"] + '">'
                 + resultData[i]["title"] +     // display star_name for the link text
-                '</a>' + '</th>';
-        rowHTML += "<th>" + resultData[i]["year"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["dir"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["rating"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["genre1"] + "</th>";
+                '</a>' + '</td>';
+        rowHTML += "<td>" + resultData[i]["year"] + "</td>";
+        rowHTML += "<td>" + resultData[i]["dir"] + "</td>";
+        rowHTML += "<td>" + resultData[i]["rating"] + "</td>";
+        rowHTML += "<td>" + resultData[i]["genre1"] + "</td>";
         rowHTML +=
-            "<th>" +
+            "<td>" +
             // Add a link to single-star.html with id passed with GET url parameter
             '<a href="single-star.html?id=' + resultData[i]["starid1"] + '">'
             + resultData[i]["starname1"] +     // display star_name for the link text
             '</a>' +
-            "</th>";
+            "</td>";
         rowHTML += "</tr>";
 
         rowHTML += "<tr>";
-        rowHTML += "<th></th>";
-        rowHTML += "<th></th>";
-        rowHTML += "<th></th>";
-        rowHTML += "<th></th>";
+        rowHTML += "<td></td>";
+        rowHTML += "<td></td>";
+        rowHTML += "<td></td>";
+        rowHTML += "<td></td>";
         if (resultData[i]["genre2"] != undefined)
-            rowHTML += "<th>" + resultData[i]["genre2"] + "</th>";
+            rowHTML += "<td>" + resultData[i]["genre2"] + "</td>";
         else
-            rowHTML += "<th></th>";
+            rowHTML += "<td></td>";
         if (resultData[i]["starname2"] != undefined)
             rowHTML +=
-                "<th>" +
+                "<td>" +
                 // Add a link to single-star.html with id passed with GET url parameter
                 '<a href="single-star.html?id=' + resultData[i]["starid2"] + '">'
                 + resultData[i]["starname2"] +     // display star_name for the link text
                 '</a>' +
-                "</th>";
+                "</td>";
         else
             rowHTML += "<th></th>";
         rowHTML += "</tr>";
 
         rowHTML += "<tr>";
-        rowHTML += "<th></th>";
-        rowHTML += "<th></th>";
-        rowHTML += "<th></th>";
-        rowHTML += "<th></th>";
+        rowHTML += "<td></td>";
+        rowHTML += "<td></td>";
+        rowHTML += "<td></td>";
+        rowHTML += "<td></td>";
         if (resultData[i]["genre3"] != undefined)
-            rowHTML += "<th>" + resultData[i]["genre3"] + "</th>";
+            rowHTML += "<td>" + resultData[i]["genre3"] + "</td>";
         else
-            rowHTML += "<th></th>";
+            rowHTML += "<td></td>";
         if (resultData[i]["starname3"] != undefined)
             rowHTML +=
-                "<th>" +
+                "<td>" +
                 // Add a link to single-star.html with id passed with GET url parameter
                 '<a href="single-star.html?id=' + resultData[i]["starid3"] + '">'
                 + resultData[i]["starname3"] +     // display star_name for the link text
                 '</a>' +
-                "</th>";
+                "</td>";
         else
-            rowHTML += "<th></th>";
+            rowHTML += "<td></td>";
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
