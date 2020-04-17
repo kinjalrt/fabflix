@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 // Declaring a WebServlet called SingleMovieServlet, which maps to url "/api/single-movie"
 @WebServlet(name = "SingleMovieServlet", urlPatterns = "/api/single-movie")
@@ -67,13 +68,44 @@ public class SingleMovieServlet extends HttpServlet {
                 float movieRating = rs.getFloat("rating");
 
                 // Create a JsonObject based on the data we retrieve from rs
-
                 JsonObject jsonObject = new JsonObject();
+
+
                 jsonObject.addProperty("movie_id", movieId);
                 jsonObject.addProperty("movie_title", movieTitle);
                 jsonObject.addProperty("movie_year", movieYear);
                 jsonObject.addProperty("movie_director", movieDirector);
                 jsonObject.addProperty("movie_rating", movieRating);
+
+                //adding genre
+                String genreQuery = "SELECT g.name \n" +
+                        "FROM moviedb.movies as m, moviedb.genres as g, moviedb.genres_in_movies as gm \n" +
+                        "where title = \""+movieTitle+"\" and m.id = gm.movieId and gm.genreId = g.id;";
+
+                Statement genreStatement = dbcon.createStatement();
+                ResultSet rsg = genreStatement.executeQuery(genreQuery);
+                int genreCount = 0;
+                while(rsg.next()){
+                    genreCount++;
+                    String g = rsg.getString("name");
+                    jsonObject.addProperty("movie_genre"+genreCount, g);
+                }
+                jsonObject.addProperty("genre_count", genreCount);
+
+                //adding stars
+                String starsQuery = "SELECT s.name \n" +
+                        "FROM moviedb.movies as m, moviedb.stars as s, moviedb.stars_in_movies as sm \n" +
+                        "where title = \""+movieTitle+"\" and m.id = sm.movieId and sm.starId = s.id;";
+
+
+                Statement starsStatement = dbcon.createStatement();
+                ResultSet rss = starsStatement.executeQuery(starsQuery);
+                int starCount = 0;
+                while(rss.next()){
+                    String s = rss.getString("name");
+                    jsonObject.addProperty("movie_stars"+(++starCount), s);
+                }
+                jsonObject.addProperty("stars_count", starCount);
 
                 jsonArray.add(jsonObject);
             }

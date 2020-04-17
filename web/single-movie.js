@@ -42,17 +42,17 @@ function handleResult(resultData) {
 
     // populate the star info h3
     // find the empty h3 body by id "movie_info"
-    let starInfoElement = jQuery("#movie_info");
+    let movieInfoElement = jQuery("#movie_info");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    starInfoElement.append("<p>Title: " + resultData[0]["movie_title"] + "</p>");
+    movieInfoElement.append("<p>Title: " + resultData[0]["movie_title"] + "</p>");
 
 
 
-    let dobInfoElement = jQuery("#year");
+    let yearInfoElement = jQuery("#year");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    dobInfoElement.append("Year: " + resultData[0]["movie_year"]);
+    yearInfoElement.append("Year: " + resultData[0]["movie_year"]);
 
 
 
@@ -66,10 +66,35 @@ function handleResult(resultData) {
     for (let i = 0; i < Math.min(10, resultData.length); i++) {
         let rowHTML = "";
         rowHTML += "<tr>";
-        // rowHTML += "<th>" + resultData[i]["movie_title"] + "</th>";
-        // rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
+
         rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
+
+        rowHTML += "<th>";
+        for(var k = 1; k <= parseInt(resultData[i]["genre_count"]); k++)  {
+            if(k == 1){
+                rowHTML += resultData[i]["movie_genre" + k];
+            }
+            else {
+                rowHTML += ", " + resultData[i]["movie_genre" + k];
+            }
+
+        }
+        rowHTML += "</th>";
+
+        rowHTML += "<th>";
+        for(var l = 1; l <= parseInt(resultData[i]["stars_count"]); l++)  {
+            if(l == 1){
+                rowHTML += resultData[i]["movie_stars" + l];
+            }
+            else {
+                rowHTML += ", " + resultData[i]["movie_stars" + l];
+            }
+
+        }
+        rowHTML += "</th>";
+
         rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>" ;
+
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
