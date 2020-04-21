@@ -41,6 +41,9 @@ public class MovieListServlet extends HttpServlet {
             String param_year = request.getParameter("year");
             String param_dir = request.getParameter("director");
             String param_star = request.getParameter("star");
+            String param_genre = request.getParameter("genre");
+            String param_gid = request.getParameter("gid");
+            String param_char = request.getParameter("char");
 
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
@@ -48,8 +51,29 @@ public class MovieListServlet extends HttpServlet {
 
             JsonArray jsonArray = new JsonArray();
 
-            //check if query empty
-            if( (param_dir.equals("")) && (param_star.equals("")) && (param_title.equals("")) && (param_year.equals(""))){
+            //get list of all genres for browsing
+            if(param_genre!=null && param_genre.equals("set")){
+                Statement statement = dbcon.createStatement();
+                String query  = "SELECT DISTINCT * FROM genres ORDER BY name";
+                ResultSet rs = statement.executeQuery(query);
+                while(rs.next()){
+                    int genre_id = rs.getInt("id");
+                    String genre_name = rs.getString("name");
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("genre_id", genre_id);
+                    jsonObject.addProperty("genre_name", genre_name);
+                    jsonArray.add(jsonObject);
+                }
+                out.write(jsonArray.toString());
+                response.setStatus(200);
+                rs.close();
+                statement.close();
+                dbcon.close();
+
+            }
+
+            //check if search query empty and no browsing by char/genre requested
+            else if(param_char==null && param_gid==null && param_genre==null && (param_dir.equals("")) && (param_star.equals("")) && (param_title.equals("")) && (param_year.equals(""))){
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("result", "empty query");
                 jsonArray.add(jsonObject);
@@ -57,34 +81,60 @@ public class MovieListServlet extends HttpServlet {
                 // set response status to 200 (OK)
                 response.setStatus(200);
             }
-
+            // if search query has parameters do following
             else {
 
                 Statement statement = dbcon.createStatement();
                 String query  = "";
 
-                if (param_year.equals("")) {
+
+                //search by genre
+                if(param_char != null && !param_char.equals("null") && !param_char.isEmpty()){
+                    if(param_char.equals("*")){
+                        query+="SELECT DISTINCT m.id, title, year, director, rating\n"+
+                        "FROM movies as m, ratings as r\n"+
+                        "WHERE m.id = r.movieId AND m.title REGEXP '^[^0-9A-Za-z]'\n"+
+                        "LIMIT 20;";
+                    }
+                    else{
+                        query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                                "FROM movies as m, ratings as r\n" +
+                                "WHERE m.id = r.movieId" + " AND m.title LIKE \"" + param_char + "%\" \n"+
+                                "LIMIT 20 \n";
+                    }
+
+                }
+                else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
+                    query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                            "FROM movies as m, ratings as r, genres_in_movies as gim\n" +
+                            "WHERE m.id = r.movieId" + " AND gim.genreId = \"" + param_gid + "\" AND m.id = gim.movieId \n"+
+                            "LIMIT 20 \n";
+                }
+                else if (param_year.equals("")) {
+                    // get list of movies with year param NOT specified
                     query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                             "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
-                            "WHERE m.title LIKE \"%" + param_title + "%\" AND m.id = r.movieId AND m.director LIKE \"%" + param_dir + "%\" " +
-                            "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"%" + param_star + "%\" \n" +
+                            "WHERE m.title LIKE \"" + param_title + "%\" AND m.id = r.movieId AND m.director LIKE \"" + param_dir + "%\" " +
+                            "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"" + param_star + "%\" \n" +
                             "ORDER BY rating DESC\n" +
                             "LIMIT 20 \n";
-                } else {
+
+                }
+                else if (!param_year.equals("")){
+                    // get list of movies w year param specified
                     query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                             "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
-                            "WHERE m.title LIKE \"%" + param_title + "%\" AND m.id = r.movieId AND m.year = \"" + param_year + "\" AND m.director LIKE \"%" + param_dir + "%\" " +
-                            "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"%" + param_star + "%\" " +
+                            "WHERE m.title LIKE \"" + param_title + "%\" AND m.id = r.movieId AND m.year = \"" + param_year + "\" AND m.director LIKE \"" + param_dir + "%\" " +
+                            "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"" + param_star + "%\" " +
                             "ORDER BY  rating DESC\n" +
                             "LIMIT 20 \n";
-                    ;
                 }
 
 
                 // Perform the query
                 ResultSet rs = statement.executeQuery(query);
 
-                //check if results > 0
+                //check if results of list of movies > 0
                 if (!rs.isBeforeFirst()) {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("result", "no results found for this query");
@@ -110,7 +160,7 @@ public class MovieListServlet extends HttpServlet {
                         jsonObject.addProperty("dir", dir);
                         jsonObject.addProperty("rating", rating);
 
-                        //output at most genres
+                        //output at most 3 genres
                         Statement s2 = dbcon.createStatement();
                         String q2 = "SELECT title, name\n" +
                                 "FROM movies as m, genres as g, genres_in_movies as gim\n" +
