@@ -95,11 +95,14 @@ let title = getParameterByName('title');
 let year = getParameterByName('year');
 let director = getParameterByName('director');
 let star = getParameterByName('star');
+let genre_id = getParameterByName('gid');
+let char = getParameterByName('char');
+
 
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 $.ajax({
     dataType: "json",
-    url: "api/top20?title="+title+"&year="+year+"&director="+director+"&star="+star,
+    url: "api/top20?title="+title+"&year="+year+"&director="+director+"&star="+star+"&gid="+genre_id+"&char="+char,
     method: "GET",
     success: (resultData) => handleStarResult(resultData)
 });
