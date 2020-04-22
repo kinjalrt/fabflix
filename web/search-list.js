@@ -19,10 +19,10 @@ function handleStarResult(resultData) {
     console.log("handleStarResult: populating star table from resultData");
 
 // Populate the star table
-// Find the empty table body by id "star_table_body"
-    let starTableBodyElement = jQuery("#movie_table_body");
+// Find the empty table body by id "movie_table_body"
+    let movieTableBodyElement = jQuery("#movie_table_body");
     if(resultData[0]["result"] != "success") {
-        starTableBodyElement.append(resultData[0]["result"]);
+        movieTableBodyElement.append(resultData[0]["result"]);
     }
     else {
         // Iterate through resultData, no more than 10 entries
@@ -42,11 +42,12 @@ function handleStarResult(resultData) {
             rowHTML += "<td>" + resultData[i]["rating"] + "</td>";
             rowHTML += "<td>";
             let count = 1;
+            //y - added hyperlink
             while (resultData[i]["genre" + count] != undefined) {
                 if (count == 1)
-                    rowHTML += resultData[i]["genre" + count];
+                    rowHTML += '<a href="search-list.html?gid=' + resultData[i]["gid" + count] + '">' + resultData[i]["genre" + count] + '</a>';
                 else
-                    rowHTML += "<br /> " + resultData[i]["genre" + count];
+                    rowHTML += '<br />' + '<a href="search-list.html?gid=' + resultData[i]["gid" + count] + '">' + resultData[i]["genre" + count] + '</a>';
                 count += 1;
             }
             rowHTML += "</td>";
@@ -63,12 +64,9 @@ function handleStarResult(resultData) {
             rowHTML += "</tr>";
 
             // Append the row created to the table body, which will refresh the page
-            starTableBodyElement.append(rowHTML);
+            movieTableBodyElement.append(rowHTML);
         }
     }
-
-
-
 }
 
 /**

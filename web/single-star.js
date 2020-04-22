@@ -45,7 +45,7 @@ function handleResult(resultData) {
     let starInfoElement = jQuery("#star_info");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    starInfoElement.append("<p>Star Name: " + resultData[0]["star_name"] + "</p>");
+    starInfoElement.append("<p align='center'>" + resultData[0]["star_name"] + "</p>");
 
 
 
@@ -77,8 +77,6 @@ function handleResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         movieTableBodyElement.append(rowHTML);
     }
-    let backElement = jQuery("#back");
-    backElement.append("<p align='right'><a href='index.html?'</a>~ Back ~</p>");
 }
 
 /**
