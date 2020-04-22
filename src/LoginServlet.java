@@ -53,10 +53,27 @@ public class LoginServlet extends HttpServlet {
                 // Login fail
                 responseJsonObject.addProperty("status", "fail");
 
-                // sample error messages. in practice, it is not a good idea to tell user which one is incorrect/not exist.
-                responseJsonObject.addProperty("message", "Invalid user or password");
+                Statement statement2 = dbcon.createStatement();
+                String query2  = "SELECT * FROM customers as c WHERE c.email = \""+email+"\" OR c.password = \""+password+"\";";
+                ResultSet rs2 = statement.executeQuery(query2);
 
+                // sample error messages. in practice, it is not a good idea to tell user which one is incorrect/not exist.
+                if(rs2.next()) {
+                    if(!rs2.getString("email").equals(email)) {
+                        responseJsonObject.addProperty("message", "Invalid email");
+                    } else {
+                        responseJsonObject.addProperty("message", "Invalid password");
+                    }
+                } else {
+                    responseJsonObject.addProperty("message", "Invalid email and password");
+                }
+                rs2.close();
+                statement2.close();
             }
+
+            rs.close();
+            statement.close();
+            dbcon.close();
         }
         catch (Exception e) {
             // write error message JSON object to output
@@ -66,8 +83,6 @@ public class LoginServlet extends HttpServlet {
             response.setStatus(500);
         }
         response.getWriter().write(responseJsonObject.toString());
-
-
 
     }
 }
