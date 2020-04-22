@@ -15,12 +15,12 @@ public class User {
 
 
 
-    public User(ResultSet rs) throws SQLException {
-        id = rs.getInt("id");
-        firstName = rs.getString("firstName");
-        lastName = rs.getString("lastName");
-        address = rs.getString("address");
-        email = rs.getString("email");
+    public User(int id, String firstName, String lastName, String address, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.email = email;
     }
 
 }
