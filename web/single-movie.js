@@ -42,12 +42,13 @@ function handleResult(resultData) {
 
     console.log("handleResult: populating movie info from resultData");
 
+
     // populate the star info h3
     // find the empty h3 body by id "movie_info"
     let movieInfoElement = jQuery("#movie_info");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    movieInfoElement.append("<p>Title: " + resultData[0]["movie_title"] + "</p>");
+    movieInfoElement.append("<p align='center'>" + resultData[0]["movie_title"] + "</p>");
 
 
 
@@ -103,12 +104,15 @@ function handleResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         movieTableBodyElement.append(rowHTML);
     }
+<<<<<<< HEAD
 
     let cartElement = jQuery("#add_to_cart_button");
     cartElement.append('<button onclick="addToCart(\'' + resultData[0]["movie_title"] + '\')"> Add to cart </button>')
 
     let backElement = jQuery("#back");
     backElement.append("<p align='right'><a href='index.html?'</a> ~ Back ~</p>");
+=======
+>>>>>>> d654cc90f6a1f501317a764d04c96c64bd1c7ba5
 }
 
 function addToCart(movieTitle){

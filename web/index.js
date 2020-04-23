@@ -35,19 +35,14 @@ function handleGenresResult(resultData) {
 
             // Concatenate the html tags with resultData jsonObject
             let rowHTML = "";
-            rowHTML += "<tr>";
-            // rowHTML += "<th>" + resultData[i]["title"] + "</th>";
-            rowHTML += '<td>' +
+            rowHTML += '<td style="width: 0">' +
             '<a href="search-list.html?gid=' + resultData[i]["genre_id"] + '">'
-            + resultData[i]["genre_name"] +     // display star_name for the link text
+            + resultData[i]["genre_name"] +     // display genre_name for the link text
             '</a>' + '</td>';
-
-            rowHTML += "</tr>";
 
             // Append the row created to the table body, which will refresh the page
             genresTableBodyElement.append(rowHTML);
-        }
-
+    }
 
 
 

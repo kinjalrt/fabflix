@@ -73,7 +73,8 @@ public class MovieListServlet extends HttpServlet {
             }
 
             //check if search query empty and no browsing by char/genre requested
-            else if(param_char==null && param_gid==null && param_genre==null && (param_dir.equals("")) && (param_star.equals("")) && (param_title.equals("")) && (param_year.equals(""))){
+            else if(param_char==null && param_gid==null && param_genre==null && (param_dir.equals(""))
+                    && (param_star.equals("")) && (param_title.equals("")) && (param_year.equals(""))){
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("result", "empty query");
                 jsonArray.add(jsonObject);
@@ -162,35 +163,43 @@ public class MovieListServlet extends HttpServlet {
                         jsonObject.addProperty("rating", rating);
 
                         //output at most 3 genres
+                        //y - added sorting
                         Statement s2 = dbcon.createStatement();
-                        String q2 = "SELECT title, name\n" +
+                        //y - added genre id
+                        String q2 = "SELECT title, name, g.id as id\n" +
                                 "FROM movies as m, genres as g, genres_in_movies as gim\n" +
                                 "WHERE  m.title = \"" + title + "\" AND m.id = gim.movieId AND gim.genreId = g.id\n" +
-                                "LIMIT 3";
+                                "ORDER BY name LIMIT 3";
                         ResultSet r2 = s2.executeQuery(q2);
                         String genre = "genre";
                         int incr = 1;
                         while (r2.next()) {
                             String g = r2.getString("name");
+                            int gid = r2.getInt("id");
                             jsonObject.addProperty(genre + incr, g);
+                            jsonObject.addProperty("gid" + incr , gid); //y - added genre id
                             incr += 1;
                         }
                         r2.close();
                         s2.close();
 
                         //output all stars for each film
+                        //y - added limit and ordering
                         Statement s3 = dbcon.createStatement();
-                        String q3 = "SELECT title, s.id as sid, name\n" +
-                                "FROM movies as m, stars_in_movies as sim, stars as s\n" +
-                                "WHERE  m.title = \"" + title + "\" AND m.id = sim.movieId AND sim.starId = s.id";
+                        String q3 = "SELECT title, f.starId, f.name, count(movieId)\n" +
+                                "FROM (SELECT title, s.id as starId, name FROM movies as m, stars_in_movies as sim, stars as s\n" +
+                                "\tWHERE  m.title = \"" + title + "\" AND m.id = sim.movieId AND sim.starId = s.id) as f\n" +
+                                "    NATURAL JOIN stars_in_movies\n" +
+                                "group by f.starId\n" +
+                                "order by count(movieId) desc, f.name\n" +
+                                "limit 3;";
                         ResultSet r3 = s3.executeQuery(q3);
                         String starname = "starname";
                         String starid = "starid";
                         int count = 1;
-                        //if (!r3.isBeforeFirst() == false )
                         while (r3.next()) {
                             String sname = r3.getString("name");
-                            String sid = r3.getString("sid");
+                            String sid = r3.getString("starId");
                             jsonObject.addProperty(starname + count, sname);
                             jsonObject.addProperty(starid + count, sid);
                             count += 1;
