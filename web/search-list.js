@@ -15,8 +15,8 @@ let search_form = $("#search_form");
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
  */
-function handleStarResult(resultData) {
-    console.log("handleStarResult: populating star table from resultData");
+function handleMovieResult(resultData) {
+    console.log("handleMovieResult: populating star table from resultData");
 
 // Populate the star table
 // Find the empty table body by id "movie_table_body"
@@ -98,11 +98,11 @@ let char = getParameterByName('char');
 let sort = getParameterByName('sort');
 
 
-// Makes the HTTP GET request and registers on success callback function handleStarResult
+// Makes the HTTP GET request and registers on success callback function handleMovieResult
 $.ajax({
     dataType: "json",
     url: "api/top20?title="+title+"&year="+year+"&director="+director+"&star="+star+"&gid="+genre_id+"&char="+char+"&sort="+sort,
     method: "GET",
-    success: (resultData) => handleStarResult(resultData)
+    success: (resultData) => handleMovieResult(resultData)
 });
 
