@@ -15,15 +15,25 @@ let search_form = $("#search_form");
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
  */
-function handleStarResult(resultData) {
-    console.log("handleStarResult: populating star table from resultData");
+function handleMovieResult(resultData) {
+    console.log("handleMovieResult: populating star table from resultData");
 
 // Populate the star table
 // Find the empty table body by id "movie_table_body"
     let movieTableBodyElement = jQuery("#movie_table_body");
-    if(resultData[0]["result"] != "success") {
+
+    let sortByTitle = jQuery("#sort_title");
+
+    var href = new URL(window.location.href);
+    href.searchParams.delete('sort');
+
+    sortByTitle.append('<a href="'+href+'&sort=title,rating">A</a> /'+' <a href="'+href+'&sort=title%20desc,rating%20desc">D</a>');
+
+    let sortByRating = jQuery("#sort_rating");
+    sortByRating.append('<a href="'+href+'&sort=rating,title">A</a> /'+' <a href="'+href+'&sort=rating%20desc,title%20desc">D</a>');
+
+    if(resultData[0]["result"] != "success")
         movieTableBodyElement.append(resultData[0]["result"]);
-    }
     else {
         // Iterate through resultData, no more than 10 entries
         for (let i = 0; i < Math.min(20, resultData.length); i++) {
@@ -95,14 +105,13 @@ let director = getParameterByName('director');
 let star = getParameterByName('star');
 let genre_id = getParameterByName('gid');
 let char = getParameterByName('char');
-let sort = getParameterByName('sort');
 
 
-// Makes the HTTP GET request and registers on success callback function handleStarResult
+// Makes the HTTP GET request and registers on success callback function handleMovieResult
 $.ajax({
     dataType: "json",
-    url: "api/top20?title="+title+"&year="+year+"&director="+director+"&star="+star+"&gid="+genre_id+"&char="+char+"&sort="+sort,
+    url: "api/top20?title="+title+"&year="+year+"&director="+director+"&star="+star+"&gid="+genre_id+"&char="+char,
     method: "GET",
-    success: (resultData) => handleStarResult(resultData)
+    success: (resultData) => handleMovieResult(resultData)
 });
 

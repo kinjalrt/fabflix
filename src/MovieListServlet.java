@@ -28,7 +28,7 @@ public class MovieListServlet extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/json"); // Response mime type
 
@@ -45,63 +45,49 @@ public class MovieListServlet extends HttpServlet {
             String param_char = request.getParameter("char");
             String param_sort = request.getParameter("sort");
 
-            if(param_sort == null || param_sort.equals("")){
-                param_sort = "title desc";
+            if(param_sort.equals("null") || param_sort.equals("")){
+                param_sort = "";
+            } else {
+                param_sort = "ORDER BY " + param_sort;
             }
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
-
             JsonArray jsonArray = new JsonArray();
-
 
             Statement statement = dbcon.createStatement();
             String query  = "";
 
-
             //search by letters
             if(param_char != null && !param_char.equals("null") && !param_char.isEmpty()){
                 if(param_char.equals("*")){
-                    query+="SELECT DISTINCT m.id, title, year, director, rating\n"+
-                    "FROM movies as m, ratings as r\n"+
-                    "WHERE m.id = r.movieId AND m.title REGEXP '^[^0-9A-Za-z]'\n"+
-                    "ORDER BY "+param_sort+ " LIMIT 20;";
+                    param_char = "REGEXP '^[^0-9A-Za-z]'";
                 }
                 else{
-                    query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
-                            "FROM movies as m, ratings as r\n" +
-                            "WHERE m.id = r.movieId" + " AND m.title LIKE \"" + param_char + "%\" \n"+
-                            "ORDER BY "+param_sort+" LIMIT 20 \n";
+                    param_char = "LIKE \""+param_char+"%\"";
                 }
-
+                query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                        "FROM movies as m, ratings as r\n" +
+                        "WHERE m.id = r.movieId" + " AND m.title " + param_char + " \n"+
+                        param_sort + "\nLIMIT 20 \n";
             }
             //search by genre
             else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
                 query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r, genres_in_movies as gim\n" +
                         "WHERE m.id = r.movieId" + " AND gim.genreId = \"" + param_gid + "\" AND m.id = gim.movieId \n"+
-                        "ORDER BY " + param_sort + " LIMIT 20 \n";
+                        param_sort + "\nLIMIT 20 \n";
             }
-            else if (param_year.equals("")) {
-                // get list of movies with year param NOT specified
+            else {
+                if (!param_year.equals("")){
+                    param_year = " AND m.year =\""+ param_year + "\"";
+                }
                 query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
-                        "WHERE m.title LIKE \"" + param_title + "%\" AND m.id = r.movieId AND m.director LIKE \"" + param_dir + "%\" " +
-                        "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"" + param_star + "%\" \n" +
-                        "ORDER BY rating DESC\n" +
-                        "LIMIT 20 \n";
-
-            }
-            else if (!param_year.equals("")){
-                // get list of movies w year param specified
-                query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
-                        "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
-                        "WHERE m.title LIKE \"" + param_title + "%\" AND m.id = r.movieId AND m.year = \"" + param_year + "\" AND m.director LIKE \"" + param_dir + "%\" " +
+                        "WHERE m.title LIKE \"" + param_title + "%\" AND m.id = r.movieId" + param_year + " AND m.director LIKE \"" + param_dir + "%\" " +
                         "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"" + param_star + "%\" " +
-                        "ORDER BY  rating DESC\n" +
-                        "LIMIT 20 \n";
+                        param_sort + "\nLIMIT 20 \n";
             }
-
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -111,12 +97,10 @@ public class MovieListServlet extends HttpServlet {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("result", "no results found for this query");
                 jsonArray.add(jsonObject);
-
             }
             else {
                 // Iterate through each row of rs
                 while (rs.next()) {
-
                     String movie_id = rs.getString("id");
                     String title = rs.getString("title");
                     int year = rs.getInt("year");
