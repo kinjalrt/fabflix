@@ -69,10 +69,11 @@ function updateQuantity(title, action){
 
 
 let item = getParameterByName('item');
+let action = getParameterByName('action');
 
 $.ajax({
     dataType: "json",
-    url: "api/cart?item="+item,
+    url: "api/cart?action="+action+"&item="+item,
     method: "GET",
     success: (resultData) => handleCartData(resultData)
 });

@@ -107,7 +107,7 @@ function handleResult(resultData) {
     }
 
     let addToCartElement = jQuery("#add_to_cart_button");
-    addToCartElement.append('<p> '+'<a href="shopping-cart.html?item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a>');
+    addToCartElement.append('<p> '+'<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a>');
 
 
 

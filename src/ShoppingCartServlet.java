@@ -32,6 +32,7 @@ public class ShoppingCartServlet extends HttpServlet {
         String item = request.getParameter("item");
         String action = request.getParameter("action");
         System.out.println(item);
+        System.out.println(action);
         HttpSession session = request.getSession();
 
         // get the previous items in a ArrayList
