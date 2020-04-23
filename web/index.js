@@ -43,9 +43,6 @@ function handleGenresResult(resultData) {
             // Append the row created to the table body, which will refresh the page
             genresTableBodyElement.append(rowHTML);
     }
-
-
-
 }
 
 /**
