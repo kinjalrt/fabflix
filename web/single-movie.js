@@ -15,6 +15,8 @@
  * @param target String
  * @returns {*}
  */
+
+
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -101,8 +103,33 @@ function handleResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         movieTableBodyElement.append(rowHTML);
     }
+
+    let cartElement = jQuery("#add_to_cart_button");
+    cartElement.append('<button onclick="addToCart(\'' + resultData[0]["movie_title"] + '\')"> Add to cart </button>')
+
     let backElement = jQuery("#back");
     backElement.append("<p align='right'><a href='index.html?'</a> ~ Back ~</p>");
+}
+
+function addToCart(movieTitle){
+    console.log("submit cart form");
+    /**
+     * When users click the submit button, the browser will not direct
+     * users to the url defined in HTML form. Instead, it will call this
+     * event handler when the event is triggered.
+     */
+    //cartEvent.preventDefault();
+
+    jQuery.ajax({
+        dataType: "json",  // Setting return data type
+        method: "GET",// Setting request method
+        url: "api/cart?item=" + movieTitle, // Setting request url, which is mapped by StarsServlet in Stars.java
+        success: handleCartResult // Setting callback function to handle data returned successfully by the SingleStarServlet
+    });
+}
+
+function handleCartResult(){
+    console.log("added to cart");
 }
 
 /**
@@ -119,3 +146,6 @@ jQuery.ajax({
     url: "api/single-movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
+
+
+//cartElement.submit(addToCart);
