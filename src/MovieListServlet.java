@@ -105,6 +105,7 @@ public class MovieListServlet extends HttpServlet {
                     }
 
                 }
+                //search by genre
                 else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
                     query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                             "FROM movies as m, ratings as r, genres_in_movies as gim\n" +
