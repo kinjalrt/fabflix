@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+</head>
+<h1 align='center'>Checkout</h1>
+
+<div>
+    <h2 style="float: left">Total price: $</h2>
+    <h2 style="float: left" id="total"></h2>
+</div>
+<br><br><br><br>
+
+<label><b>Enter payment information: </b></label>
+<br>
+<form ACTION="#" id="checkout_form" METHOD="get">
+    <label>First Name: </label>
+    <label>
+        <input name="first_name" placeholder="Enter first name" type="text">
+    </label>
+    <br>
+    <label>Last Name: </label>
+    <label>
+        <input name="last_name" placeholder="Enter last name" type="text">
+    </label>
+    <br>
+    <label>Credit card number: </label>
+    <label>
+        <input name="credit_card_number" placeholder="Enter credit card number" type="text">
+    </label>
+    <br>
+    <label>Credit card expiration date: </label>
+    <label>
+        <input name="expiration_date" placeholder="Enter expiration date" type="text">
+    </label>
+    <br>
+    <input type="submit" value="Place Order">
+</form>
+
+<h2 id="payment_outcome"></h2>
+
+
+
+<body>
+
+
+
+<!-- Load our own JS file -->
+<!-- The path is relative to index.html, since these two files are in the same directory -->
+<!-- Note the url does not contain a "/" in the beginning, which means the url is relative to current path
+     otherwise the url is relative to the root path-->
+<script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
+<script type='text/javascript' src='checkout.js'></script>
+</body>
+</html>

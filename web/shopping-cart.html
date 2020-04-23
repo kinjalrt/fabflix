@@ -1,10 +1,35 @@
+<!-- This page will be seen if you logged in -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Fablix</title>
 </head>
 <body>
+<h1 align = "center">Shopping Cart</h1>
 
+<table id=cart_table class="table table-striped">
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th>Title</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Update</th>
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=cart_table_body></tbody>
+</table>
+
+<h5 id="checkout_button"></h5>
+
+<p id="item_list"></p>
+
+<!-- include your own JS file -->
+<script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
+<script type='text/javascript' src='shopping-cart.js'></script>
 </body>
 </html>
