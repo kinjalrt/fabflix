@@ -52,7 +52,7 @@ function handleGenresResult(resultData) {
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 $.ajax({
     dataType: "json",
-    url: "api/top20?genre=set",
+    url: "api/index?genre=set",
     method: "GET",
     success: (resultData) => handleGenresResult(resultData)
 });

@@ -74,6 +74,8 @@ function handleResult(resultData) {
 
         rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>";
 
+        rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>" ;
+
 
         rowHTML += "<td>";
         for(var k = 1; k <= parseInt(resultData[i]["genre_count"]); k++)  {
@@ -97,22 +99,16 @@ function handleResult(resultData) {
         }
         rowHTML += "</td>";
 
-        rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>" ;
+
 
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page
         movieTableBodyElement.append(rowHTML);
     }
-<<<<<<< HEAD
 
     let cartElement = jQuery("#add_to_cart_button");
-    cartElement.append('<button onclick="addToCart(\'' + resultData[0]["movie_title"] + '\')"> Add to cart </button>')
-
-    let backElement = jQuery("#back");
-    backElement.append("<p align='right'><a href='index.html?'</a> ~ Back ~</p>");
-=======
->>>>>>> d654cc90f6a1f501317a764d04c96c64bd1c7ba5
+    cartElement.append('<button onclick="addToCart(\'' + resultData[0]["movie_title"] + '\')"> Add to cart </button>');
 }
 
 function addToCart(movieTitle){

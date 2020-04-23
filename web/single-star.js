@@ -45,7 +45,7 @@ function handleResult(resultData) {
     let starInfoElement = jQuery("#star_info");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    starInfoElement.append("<p align='center'>" + resultData[0]["star_name"] + "</p>");
+    starInfoElement.append('<p align="center">' + resultData[0]["star_name"] + '</p>');
 
 
 
