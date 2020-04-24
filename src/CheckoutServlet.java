@@ -61,13 +61,10 @@ public class CheckoutServlet extends HttpServlet {
                     "lastName = \""+ last_name + "\" AND expiration = \"" + exp +"\"";
             ResultSet rs = statement.executeQuery(query);
 
-            if(!rs.isBeforeFirst()){
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("result", "invalid");
-                jsonArray.add(jsonObject);
-                System.out.println("INVALID");
-            }
-            else{
+            System.out.println("EXECUTED QUERY");
+            if(rs.next()){
+                rs.beforeFirst();
+                System.out.println("VALID");
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("result", "valid");
                 jsonArray.add(jsonObject);
@@ -113,6 +110,15 @@ public class CheckoutServlet extends HttpServlet {
 
                 }
 
+                //empty cart after transaction complete
+                session.setAttribute("previousItems", null);
+
+            }
+            else{
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("result", "invalid");
+                    jsonArray.add(jsonObject);
+                    System.out.println("INVALID");
             }
 
             out.write(jsonArray.toString());

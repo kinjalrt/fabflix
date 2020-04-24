@@ -24,35 +24,42 @@ function getParameterByName(target) {
 function handleCartData(resultData) {
     console.log(resultData);
 
+    let statusMsgElement = $("#status_msg");
+    statusMsgElement.html("");
+    statusMsgElement.append(resultData[0]["result"]);
+
     let cartTableBody = $("#cart_table_body");
     cartTableBody.html("");
     // change it to html list
 
-    let total = 0;
+    if(typeof resultData[0]["cart_status"] === 'undefined'){
 
-    for (let i = 0; i < resultData.length; i++) {
-        // each item will be in a bullet point
-        let rowHTML = "";
-        rowHTML += "<tr>";
-        // rowHTML += "<th>" + resultData[i]["title"] + "</th>";
-        rowHTML += "<td>" + resultData[i]["title"] + "</td>";
-        rowHTML += "<td>" + resultData[i]["quantity"] + "</td>";
-        rowHTML += "<td>" + "$"+ 15*resultData[i]["quantity"] + "</td>";
-        total += 15*resultData[i]["quantity"];
-        let action = "";
-        action = "add";
-        rowHTML += "<td>" + '<button onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Add a copy </button>' + "</td>";
-        action = "remove";
-        rowHTML += "<td>" + '<button onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Remove a copy </button>' + "</td>";
-        action = "del";
-        rowHTML += "<td>" + '<button onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Delete from shopping cart </button>' + "</td>";
-        rowHTML += "</tr>";
-        cartTableBody.append(rowHTML);
+        let total = 0;
+
+        for (let i = 0; i < resultData.length; i++) {
+            // each item will be in a bullet point
+            let rowHTML = "";
+            rowHTML += "<tr>";
+            // rowHTML += "<th>" + resultData[i]["title"] + "</th>";
+            rowHTML += "<td>" + resultData[i]["title"] + "</td>";
+            rowHTML += "<td>" + resultData[i]["quantity"] + "</td>";
+            rowHTML += "<td>" + "$" + 15 * resultData[i]["quantity"] + "</td>";
+            total += 15 * resultData[i]["quantity"];
+            let action = "";
+            action = "add";
+            rowHTML += "<td>" + '<button onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Add a copy </button>' + "</td>";
+            action = "remove";
+            rowHTML += "<td>" + '<button onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Remove a copy </button>' + "</td>";
+            action = "del";
+            rowHTML += "<td>" + '<button onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Delete from shopping cart </button>' + "</td>";
+            rowHTML += "</tr>";
+            cartTableBody.append(rowHTML);
+        }
+
+        let checkoutButtonElement = $("#checkout_button");
+        checkoutButtonElement.html("");
+        checkoutButtonElement.append('<a href="checkout.html?total=' + total + '"> Proceed to checkout </a>');
     }
-
-    let checkoutButtonElement = $("#checkout_button");
-    checkoutButtonElement.html("");
-    checkoutButtonElement.append('<a href="checkout.html?total=' + total + '"> Proceed to checkout </a>');
 
     // clear the old array and show the new array in the frontend
 }

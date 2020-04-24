@@ -71,6 +71,7 @@ function handleMovieResult(resultData) {
                 index += 1;
             }
             rowHTML += "</td>";
+            rowHTML += "<td>" + '<a href="shopping-cart.html?action=add&item=' + resultData[i]["title"] + '">' + "Add to cart" + '</a>' + "</td>";
             rowHTML += "</tr>";
 
             // Append the row created to the table body, which will refresh the page

@@ -41,7 +41,13 @@ function handlePaymentResult(resultData) {
    console.log("checkout complete");
     let paymentOutcome = jQuery("#payment_outcome");
     paymentOutcome.html("");
-    paymentOutcome.append(resultData[0]["result"]);
+    if(resultData[0]["result"] === "invalid"){
+        paymentOutcome.append("Invalid payment information. Please re-enter payment information.");
+    }
+    else{
+        window.location.replace("index.html");
+    }
+
 }
 
 checkout_form.submit(handlePaymentInfo);

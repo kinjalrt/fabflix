@@ -38,12 +38,16 @@ public class ShoppingCartServlet extends HttpServlet {
         // get the previous items in a ArrayList
         HashMap<String, Integer> previousItems = (HashMap<String, Integer>) session.getAttribute("previousItems");
 
+        String result = "";
+
         if(action!=null && action.equals("remove")){
             synchronized (previousItems) {
                     int prev = previousItems.get(item);
                     previousItems.replace(item, prev-1);
+                    result = "Successfully deleted a copy of "+ item +" from shopping cart";
                     if(previousItems.get(item) == 0){
                         previousItems.remove(item);
+                        result = "Successfully removed "+ item +" from shopping cart";
                     }
             }
         }
@@ -51,6 +55,7 @@ public class ShoppingCartServlet extends HttpServlet {
             synchronized (previousItems) {
                 previousItems.remove(item);
             }
+            result = "Successfully removed "+ item +" from shopping cart";
         }
         else if(action!=null && action.equals("add")) {
             if (previousItems == null) {
@@ -69,16 +74,26 @@ public class ShoppingCartServlet extends HttpServlet {
                     }
                 }
             }
+            result = "Successfully added a copy of "+ item +" to shopping cart";
         }
         System.out.println(previousItems);
 
-        for (Map.Entry mapElement : previousItems.entrySet()) {
+        if(previousItems.size()>0) {
+            for (Map.Entry mapElement : previousItems.entrySet()) {
+                JsonObject jsonObject = new JsonObject();
+                String key = (String) mapElement.getKey();
+                int value = ((int) mapElement.getValue());
+                jsonObject.addProperty("title", key);
+                jsonObject.addProperty("quantity", value);
+                jsonObject.addProperty("result", result);
+                System.out.println(key + " : " + value);
+                jsonArray.add(jsonObject);
+            }
+        }
+        else{
             JsonObject jsonObject = new JsonObject();
-            String key = (String)mapElement.getKey();
-            int value = ((int)mapElement.getValue());
-            jsonObject.addProperty("title", key);
-            jsonObject.addProperty("quantity", value);
-            System.out.println(key + " : " + value);
+            jsonObject.addProperty("cart_status", "empty");
+            jsonObject.addProperty("result", result);
             jsonArray.add(jsonObject);
         }
         out.write(jsonArray.toString());
