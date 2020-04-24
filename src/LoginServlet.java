@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
@@ -46,6 +47,8 @@ public class LoginServlet extends HttpServlet {
                 String address = rs.getString("address");
 
                 request.getSession().setAttribute("user", new User(id, firstName, lastName, address, email));
+
+
 
                 responseJsonObject.addProperty("status", "success");
                 responseJsonObject.addProperty("message", "success");

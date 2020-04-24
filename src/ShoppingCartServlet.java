@@ -52,7 +52,7 @@ public class ShoppingCartServlet extends HttpServlet {
                 previousItems.remove(item);
             }
         }
-        else {
+        else if(action!=null && action.equals("add")) {
             if (previousItems == null) {
                 previousItems = new HashMap<String, Integer>();
                 previousItems.put(item, 1);

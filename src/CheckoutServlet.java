@@ -11,9 +11,17 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -47,6 +55,7 @@ public class CheckoutServlet extends HttpServlet {
             String exp = request.getParameter("expiration_date");
             System.out.println(first_name+ " " + last_name+ " " + CCN +" "+ exp);
 
+            //check if credit card info valid
             Statement statement = dbcon.createStatement();
             String query  = "SELECT * FROM creditcards WHERE id = \"" + CCN + "\" AND firstName = \"" + first_name + "\" AND " +
                     "lastName = \""+ last_name + "\" AND expiration = \"" + exp +"\"";
@@ -54,15 +63,56 @@ public class CheckoutServlet extends HttpServlet {
 
             if(!rs.isBeforeFirst()){
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("result", "invalid information");
+                jsonObject.addProperty("result", "invalid");
                 jsonArray.add(jsonObject);
                 System.out.println("INVALID");
             }
             else{
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("result", "valid information");
+                jsonObject.addProperty("result", "valid");
                 jsonArray.add(jsonObject);
-                System.out.println("BOKE HINATA BOKE");
+
+                //if payment info valid add transaction to sales table
+                HttpSession session = request.getSession();
+                User current = (User)session.getAttribute("user");
+                int customerId = current.getId();
+                System.out.println(current.getId());
+
+                HashMap<String, Integer> cart = (HashMap<String, Integer>) session.getAttribute("previousItems");
+
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDateTime now = LocalDateTime.now();
+                String date = dtf.format(now);
+                System.out.println(date);
+
+                //each distinct movie bought by user corresponds to new row in sales table
+                for (Map.Entry mapElement : cart.entrySet()){
+                    String title = (String)mapElement.getKey();
+                    int quantity = ((int)mapElement.getValue());
+                    System.out.println(((String)mapElement.getKey()) + " " + ((int)mapElement.getValue()));
+
+                    Statement statement2 = dbcon.createStatement();
+                    String query2 = "SELECT id FROM movies WHERE title = \""+ title +"\";";
+                    ResultSet rs2 = statement2.executeQuery(query2);
+                    String movieId = "";
+                    while (rs2.next()){
+                        movieId = rs2.getString("id");
+                    }
+                    System.out.println(movieId);
+
+                    String query3 = "INSERT INTO sales (customerId,movieId,saleDate,quantity) VALUES (?, ?, ?, ?);";
+                    PreparedStatement preparedStmt = dbcon.prepareStatement(query3);
+                    preparedStmt.setInt (1, customerId);
+                    preparedStmt.setString (2, movieId);
+                    preparedStmt.setString (3, date);
+                    preparedStmt.setInt (4, quantity);
+                    preparedStmt.execute();
+
+                    rs2.close();
+                    statement2.close();
+
+                }
+
             }
 
             out.write(jsonArray.toString());
