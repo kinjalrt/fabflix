@@ -47,8 +47,6 @@ function handleResult(resultData) {
     // append two html <p> created to the h3 body, which will refresh the page
     starInfoElement.append('<p align="center">' + resultData[0]["star_name"] + '</p>');
 
-
-
     let dobInfoElement = jQuery("#dob");
 
     // append two html <p> created to the h3 body, which will refresh the page

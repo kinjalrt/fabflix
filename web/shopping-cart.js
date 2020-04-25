@@ -23,7 +23,6 @@ function getParameterByName(target) {
  */
 function handleCartData(resultData) {
     console.log(resultData);
-
     let statusMsgElement = $("#status_msg");
     statusMsgElement.html("");
     statusMsgElement.append(resultData[0]["result"]);

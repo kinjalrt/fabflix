@@ -38,6 +38,7 @@ function handlePaymentInfo(checkoutEvent) {
 }
 
 function handlePaymentResult(resultData) {
+    //displays error msg if transaction info invalid or redirects to confirmation page if transaction valid
    console.log("checkout complete");
     let paymentOutcome = jQuery("#payment_outcome");
     paymentOutcome.html("");
@@ -45,7 +46,8 @@ function handlePaymentResult(resultData) {
         paymentOutcome.append("Invalid payment information. Please re-enter payment information.");
     }
     else{
-        window.location.replace("index.html");
+        console.log("valid transaction");
+        window.location.replace("confirmation-page.html");
     }
 
 }

@@ -29,17 +29,19 @@ public class ShoppingCartServlet extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
         JsonArray jsonArray = new JsonArray();
+        //get movie param and action to perform
         String item = request.getParameter("item");
         String action = request.getParameter("action");
         System.out.println(item);
         System.out.println(action);
         HttpSession session = request.getSession();
 
-        // get the previous items in a ArrayList
+        //retrieve the previous items in the current session's shopping cart ArrayList
         HashMap<String, Integer> previousItems = (HashMap<String, Integer>) session.getAttribute("previousItems");
 
         String result = "";
 
+        //perform if action is to decrement quantity of a movie
         if(action!=null && action.equals("remove")){
             synchronized (previousItems) {
                     int prev = previousItems.get(item);
@@ -51,12 +53,14 @@ public class ShoppingCartServlet extends HttpServlet {
                     }
             }
         }
+        //perform if action is to del all copies of a movie from shopping cart
         else if(action!=null && action.equals("del")){
             synchronized (previousItems) {
                 previousItems.remove(item);
             }
             result = "Successfully removed "+ item +" from shopping cart";
         }
+        //perform if action is to add new movie or increment quantity
         else if(action!=null && action.equals("add")) {
             if (previousItems == null) {
                 previousItems = new HashMap<String, Integer>();
@@ -78,6 +82,7 @@ public class ShoppingCartServlet extends HttpServlet {
         }
         System.out.println(previousItems);
 
+        //put all key-value (movie-quantity) pairs of hash map in json objects to be added to json array
         if(previousItems.size()>0) {
             for (Map.Entry mapElement : previousItems.entrySet()) {
                 JsonObject jsonObject = new JsonObject();
@@ -90,6 +95,7 @@ public class ShoppingCartServlet extends HttpServlet {
                 jsonArray.add(jsonObject);
             }
         }
+        //perform if hash map (= shopping cart) is empty
         else{
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("cart_status", "empty");

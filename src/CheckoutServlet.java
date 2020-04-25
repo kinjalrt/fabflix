@@ -49,6 +49,7 @@ public class CheckoutServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
             JsonArray jsonArray = new JsonArray();
 
+            //get customer info from transaction form
             String first_name = request.getParameter("first_name");
             String last_name = request.getParameter("last_name");
             String CCN = request.getParameter("credit_card_number");
@@ -62,6 +63,7 @@ public class CheckoutServlet extends HttpServlet {
             ResultSet rs = statement.executeQuery(query);
 
             System.out.println("EXECUTED QUERY");
+            //execute if customer info valid
             if(rs.next()){
                 rs.beforeFirst();
                 System.out.println("VALID");
@@ -69,7 +71,7 @@ public class CheckoutServlet extends HttpServlet {
                 jsonObject.addProperty("result", "valid");
                 jsonArray.add(jsonObject);
 
-                //if payment info valid add transaction to sales table
+                //add transaction to sales table in db
                 HttpSession session = request.getSession();
                 User current = (User)session.getAttribute("user");
                 int customerId = current.getId();
@@ -82,7 +84,7 @@ public class CheckoutServlet extends HttpServlet {
                 String date = dtf.format(now);
                 System.out.println(date);
 
-                //each distinct movie bought by user corresponds to new row in sales table
+                //each distinct movie bought by user corresponds to new row in sales table with different transactionID but same customerID
                 for (Map.Entry mapElement : cart.entrySet()){
                     String title = (String)mapElement.getKey();
                     int quantity = ((int)mapElement.getValue());
@@ -110,11 +112,12 @@ public class CheckoutServlet extends HttpServlet {
 
                 }
 
-                //empty cart after transaction complete
+                //empty shopping cart after transaction complete
                 session.setAttribute("previousItems", null);
 
             }
             else{
+                //execute if customer info invalid
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("result", "invalid");
                     jsonArray.add(jsonObject);
