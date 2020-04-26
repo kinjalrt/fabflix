@@ -44,12 +44,27 @@ public class MovieListServlet extends HttpServlet {
             String param_gid = request.getParameter("gid");
             String param_char = request.getParameter("char");
             String param_sort = request.getParameter("sort");
+            String param_num = request.getParameter("num");
+            String param_first_record = request.getParameter("firstRecord");
+
+
 
             if(param_sort.equals("null") || param_sort.equals("")){
                 param_sort = "";
             } else {
                 param_sort = "ORDER BY " + param_sort;
             }
+            if(param_num.equals("null") || param_num.equals("")){
+                param_num = "LIMIT 20";
+            } else {
+                param_num = "LIMIT " + param_num;
+            }
+            if(param_first_record.equals("null") || param_first_record.equals("") || Integer.parseInt(param_first_record) < 0){
+                param_first_record = "";
+            } else {
+                param_first_record = "OFFSET " + param_first_record;
+            }
+
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
 
@@ -69,14 +84,14 @@ public class MovieListServlet extends HttpServlet {
                 query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r\n" +
                         "WHERE m.id = r.movieId" + " AND m.title " + param_char + " \n"+
-                        param_sort + "\nLIMIT 20 \n";
+                        param_sort + "\n"+param_num +"\n"+param_first_record;
             }
             //search by genre
             else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
                 query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r, genres_in_movies as gim\n" +
                         "WHERE m.id = r.movieId" + " AND gim.genreId = \"" + param_gid + "\" AND m.id = gim.movieId \n"+
-                        param_sort + "\nLIMIT 20 \n";
+                        param_sort + "\n"+param_num +"\n"+param_first_record;
             }
             else {
                 if (!param_year.equals("")){
@@ -86,7 +101,7 @@ public class MovieListServlet extends HttpServlet {
                         "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
                         "WHERE m.title LIKE \"" + param_title + "%\" AND m.id = r.movieId" + param_year + " AND m.director LIKE \"" + param_dir + "%\" " +
                         "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"" + param_star + "%\" " +
-                        param_sort + "\nLIMIT 20 \n";
+                        param_sort + "\n"+param_num +"\n"+param_first_record;
             }
 
             // Perform the query
@@ -115,6 +130,7 @@ public class MovieListServlet extends HttpServlet {
                     jsonObject.addProperty("year", year);
                     jsonObject.addProperty("dir", dir);
                     jsonObject.addProperty("rating", rating);
+
 
                     //output at most 3 genres
                     //y - added sorting

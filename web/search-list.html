@@ -26,7 +26,33 @@
 <h1 align = "center">Movie List</h1>
 
 
-<p>Sort By: Title ~ <h id="sort_title"></h> | Rating ~ <h id="sort_rating"></h></p>
+<p>
+    <div class="dropdown d-inline-block" >
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            Sort By
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item" type="button" onclick="sortBy('Title','A')">Title Ascending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Title','D')">Title Descending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Rating','A')">Rating Ascending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Rating','D')">Rating Descending</button>
+
+        </div>
+    </div>
+    <div class="dropdown d-inline-block" align ="right">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            N
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item" type="button" onclick="displayedRecord('10')">10</button>
+            <button class="dropdown-item" type="button" onclick="displayedRecord('25')">25</button>
+            <button class="dropdown-item" type="button" onclick="displayedRecord('50')">50</button>
+            <button class="dropdown-item" type="button" onclick="displayedRecord('100')">100</button>
+        </div>
+    </div>
+    <div class="d-inline-block"><button id="prevButton" type="button" class="btn btn-info" onclick="pagination('prev')"><< Prev</button></div>
+    <div class="d-inline-block"><button id="nextButton" type="button" class="btn btn-info" onclick="pagination('next')">Next >></button></div>
+</p>
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table id=movie_table class="table table-striped">
     <!-- Create a table header -->

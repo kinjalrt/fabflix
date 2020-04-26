@@ -16,24 +16,16 @@ let search_form = $("#search_form");
  * @param resultData jsonObject
  */
 function handleMovieResult(resultData) {
-    console.log("handleMovieResult: populating star table from resultData");
+    console.log("handleMovieResult: populating movie table from resultData");
 
-// Populate the star table
-// Find the empty table body by id "movie_table_body"
     let movieTableBodyElement = jQuery("#movie_table_body");
+    if(firstRecord == null || firstRecord == 0)
+        document.getElementById("prevButton").disabled = true;
 
-    let sortByTitle = jQuery("#sort_title");
-
-    var href = new URL(window.location.href);
-    href.searchParams.delete('sort');
-
-    sortByTitle.append('<a href="'+href+'&sort=title,rating">A</a> /'+' <a href="'+href+'&sort=title%20desc,rating%20desc">D</a>');
-
-    let sortByRating = jQuery("#sort_rating");
-    sortByRating.append('<a href="'+href+'&sort=rating,title">A</a> /'+' <a href="'+href+'&sort=rating%20desc,title%20desc">D</a>');
-
-    if(resultData[0]["result"] != "success")
+    // Find the empty table body by id "movie_table_body"
+    if(resultData[0]["result"] != "success") {
         movieTableBodyElement.append(resultData[0]["result"]);
+    }
     else {
         // Iterate through resultData, no more than 10 entries
         for (let i = 0; i < Math.min(20, resultData.length); i++) {
@@ -80,10 +72,55 @@ function handleMovieResult(resultData) {
     }
 }
 
+function sortBy(type, sort) {
+    var sp = new URL(window.location.href);
+    if(type == 'Title' && sort == 'A'){
+        sp.searchParams.set('sort','title,rating');
+    }
+    else if(type == 'Title' && sort == 'D'){
+        sp.searchParams.set('sort','title desc,rating');
+    }
+    else if(type == 'Rating' && sort == 'A'){
+        sp.searchParams.set('sort','rating,title');
+    }
+    else if(type == 'Rating' && sort == 'D'){
+        sp.searchParams.set('sort','rating desc,title');
+    }
+    window.open(sp,"_self");
+}
+
+function displayedRecord(n) {
+    var sp = new URL(window.location.href);
+    sp.searchParams.set('num',n);
+    window.open(sp,"_self");
+}
+
+function pagination(action) {
+    var sp = new URL(window.location.href);
+    var change = 0;
+    var changeBy = 10;
+    if(num != null)
+        changeBy = parseInt(num);
+    if(action == 'prev'){
+        if(firstRecord != null && firstRecord != 0 && (firstRecord-changeBy) >= 0){
+            change = parseInt(firstRecord) - changeBy;
+        }
+    }
+    else if(action == 'next'){
+        if(firstRecord != null){
+            change = parseInt(firstRecord) + parseInt(changeBy);
+        } else{
+            change = changeBy;
+        }
+
+    }
+    sp.searchParams.set('firstRecord', change);
+    window.open(sp,"_self");
+}
+
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
-
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -107,13 +144,21 @@ let star = getParameterByName('star');
 let genre_id = getParameterByName('gid');
 let char = getParameterByName('char');
 let sort = getParameterByName('sort');
-
+let num = getParameterByName('num');
+let firstRecord = getParameterByName('firstRecord');
 
 // Makes the HTTP GET request and registers on success callback function handleMovieResult
 $.ajax({
     dataType: "json",
-    url: "api/top20?title="+title+"&year="+year+"&director="+director+"&star="+star+"&gid="+genre_id+"&char="+char+"&sort="+sort,
+    url: "api/top20?title="+title+"&year="+year+"&director="+director+"&star="+star+"&gid="
+        +genre_id+"&char="+char+"&sort="+sort+"&num="+num+"&firstRecord="+firstRecord,
     method: "GET",
-    success: (resultData) => handleMovieResult(resultData)
+    success: (resultData) => handleMovieResult(resultData),
+    error: function() {
+        if(firstRecord > 0) {
+            jQuery("#movie_table_body").append("<p>No results found. You have reached the end of your search results!</p>");
+            document.getElementById("nextButton").disabled = true;
+        }
+    }
 });
 
