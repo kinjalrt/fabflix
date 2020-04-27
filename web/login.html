@@ -9,14 +9,33 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Login to Fablix</title>
+    <title>Login</title>
 </head>
 <body>
-<h2>Login to Fablix</h2>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a class="navbar-brand" href="#">FABFLIX</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.html?">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Trending Movies</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="login.html?">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="shopping-cart.html?">Cart</a>
+        </li>
+    </ul>
+</nav>
+<h1>Login to Fablix</h1>
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
 <form id="login_form" method="post" action="#">
-    <div style="width:800px;">
+    <div>
         <label>
             <input name="email" class="form-control" placeholder="Enter Email" type="text">
         </label>
