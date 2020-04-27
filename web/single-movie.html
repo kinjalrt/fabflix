@@ -28,7 +28,7 @@
             <a class="nav-link" href="index.html?">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Movie List</a>
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Trending Movies</a>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -60,8 +60,8 @@
     <tbody id=movie_table_body></tbody>
 </table>
 
-<h4 align="center" id ="add_to_cart_button"></h4>
-<h4 align="center" id ="back"></h4>
+<div class="d-inline-block" id ="add_to_cart_button"></div>
+<div class="d-inline-block" ><button class="btn btn-primary" onclick="backClick()">Back to Result</button></div>
 
 
 <!-- Load jQuery and Bootstrap JS -->

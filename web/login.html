@@ -3,6 +3,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <title>Login to Fablix</title>
 </head>
 <body>
@@ -10,17 +16,17 @@
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
 <form id="login_form" method="post" action="#">
-    <label><b>Email</b></label>
-    <label>
-        <input name="email" placeholder="Enter Email" type="text">
-    </label>
-    <br>
-    <label><b>Password</b></label>
-    <label>
-        <input name="password" placeholder="Enter Password" type="password">
-    </label>
-    <br>
-    <input type="submit" value="Login">
+    <div style="width:800px;">
+        <label>
+            <input name="email" class="form-control" placeholder="Enter Email" type="text">
+        </label>
+        <br>
+        <label>
+            <input name="password" class="form-control" placeholder="Enter Password" type="password">
+        </label>
+        <br>
+    </div>
+    <div class="d-inline-block"><button class="btn btn-primary" type="submit">Login</button></div>
 </form>
 
 <div id="login_error_message"></div>

@@ -76,6 +76,10 @@ function handleResult(resultData) {
         movieTableBodyElement.append(rowHTML);
     }
 }
+function backClick(){
+    var sp = new URL(sessionStorage.getItem("movieList"));
+    window.open(sp,"_self");
+}
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser\

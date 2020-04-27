@@ -32,16 +32,15 @@ function handleGenresResult(resultData) {
 
         // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < resultData.length; i++) {
+        // Concatenate the html tags with resultData jsonObject
+        let rowHTML = "";
+        rowHTML += '<td style="width: 0">' +
+        '<a href="search-list.html?gid=' + resultData[i]["genre_id"] + '">'
+        + resultData[i]["genre_name"] +     // display genre_name for the link text
+        '</a>' + '</td>';
 
-            // Concatenate the html tags with resultData jsonObject
-            let rowHTML = "";
-            rowHTML += '<td style="width: 0">' +
-            '<a href="search-list.html?gid=' + resultData[i]["genre_id"] + '">'
-            + resultData[i]["genre_name"] +     // display genre_name for the link text
-            '</a>' + '</td>';
-
-            // Append the row created to the table body, which will refresh the page
-            genresTableBodyElement.append(rowHTML);
+        // Append the row created to the table body, which will refresh the page
+        genresTableBodyElement.append(rowHTML);
     }
 }
 

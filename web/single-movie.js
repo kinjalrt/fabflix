@@ -107,17 +107,15 @@ function handleResult(resultData) {
     }
 
     let addToCartElement = jQuery("#add_to_cart_button");
-<<<<<<< HEAD
-    addToCartElement.append('<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a>');
 
-
-=======
-   // addToCartElement.append('<p> '+'<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a></p>');
-    addToCartElement.append('<button onclick=\"window.location.href = \'shopping-cart.html?action=add&item=\'+\'' + resultData[0]["movie_title"] + '\';\">Add to cart</button>');
->>>>>>> 3fc3c411262c88f611ee83d4f6420354c53e7cca
-
+    console.log(sessionStorage.getItem("movieList"));
+    // addToCartElement.append('<p> '+'<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a></p>');
+    addToCartElement.append('<button class="btn btn-primary" onclick=\"window.location.href = \'shopping-cart.html?action=add&item=\'+\'' + resultData[0]["movie_title"] + '\';\">Add to cart</button>');
 }
-
+function backClick(){
+    var sp = new URL(sessionStorage.getItem("movieList"));
+    window.open(sp,"_self");
+}
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser\

@@ -22,6 +22,7 @@ function handleMovieResult(resultData) {
     if(firstRecord == null || firstRecord == 0)
         document.getElementById("prevButton").disabled = true;
 
+    sessionStorage.setItem("movieList",window.location.href);
     // Find the empty table body by id "movie_table_body"
     if(resultData[0]["result"] != "success") {
         movieTableBodyElement.append(resultData[0]["result"]);
