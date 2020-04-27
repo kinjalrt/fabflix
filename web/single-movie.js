@@ -80,10 +80,10 @@ function handleResult(resultData) {
         rowHTML += "<td>";
         for(var k = 1; k <= parseInt(resultData[i]["genre_count"]); k++)  {
             if(k == 1){
-                rowHTML += resultData[i]["movie_genre" + k];
+                rowHTML += '<a href="search-list.html?gid=' + resultData[i]["movie_genre_id" + k] + '">' + resultData[i]["movie_genre" + k] + '</a>'
             }
             else {
-                rowHTML += "<br /> " + resultData[i]["movie_genre" + k];
+                rowHTML += '<br />' + '<a href="search-list.html?gid=' + resultData[i]["movie_genre_id" + k] + '">' + resultData[i]["movie_genre" + k] + '</a>';
             }
         }
         rowHTML += "</td>";
