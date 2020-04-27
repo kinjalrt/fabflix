@@ -1,12 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Fablix</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Order Confirmation</title>
 </head>
 <body>
 
-<h2>Transaction succeeded. Thank you for your purchase!</h2>
-<h4><a href="index.html?">Back to browsing page</a></h4>
+<h2 align="center">Transaction succeeded :) Thank you for your purchase!</h2>
+<br/>
+<h4 align="center"><a href="index.html?">Back to browsing page</a></h4>
+
+<h3>Order Details: </h3>
+<br/>
+<h4 id="sale_id"></h4>
+<table id=order_table class="table table-striped">
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th>Sale ID</th>
+        <th>Title</th>
+        <th>Quantity</th>
+        <th>Price</th>
+
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=order_table_body></tbody>
+</table>
+<h4 id="total_price"></h4>
+
+
+<script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
+<script type='text/javascript' src='confirmation-page.js'></script>
 </body>
 </html>

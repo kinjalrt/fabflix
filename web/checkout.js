@@ -1,6 +1,6 @@
 let total = getParameterByName('total');
 let total_element = jQuery("#total");
-total_element.append(total);
+total_element.append("Total: $"+total.toString());
 let checkout_form = $("#checkout_form");
 
 
@@ -46,7 +46,16 @@ function handlePaymentResult(resultData) {
         paymentOutcome.append("Invalid payment information. Please re-enter payment information.");
     }
     else{
-        console.log("valid transaction");
+        console.log("valid transaction here");
+        var res = JSON.stringify(resultData);
+        window.localStorage.setItem('response', res);
+        window.location = 'confirmation-page.html';
+
+        for (let i = 0; i < resultData.length; i++){
+            sessionStorage.setItem('key', 'value');
+            console.log(resultData[i]["saleID"]);
+
+        }
         window.location.replace("confirmation-page.html");
     }
 

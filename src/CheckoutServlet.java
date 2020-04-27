@@ -67,9 +67,6 @@ public class CheckoutServlet extends HttpServlet {
             if(rs.next()){
                 rs.beforeFirst();
                 System.out.println("VALID");
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("result", "valid");
-                jsonArray.add(jsonObject);
 
                 //add transaction to sales table in db
                 HttpSession session = request.getSession();
@@ -86,6 +83,9 @@ public class CheckoutServlet extends HttpServlet {
 
                 //each distinct movie bought by user corresponds to new row in sales table with different transactionID but same customerID
                 for (Map.Entry mapElement : cart.entrySet()){
+
+                    JsonObject jsonObject = new JsonObject();
+
                     String title = (String)mapElement.getKey();
                     int quantity = ((int)mapElement.getValue());
                     System.out.println(((String)mapElement.getKey()) + " " + ((int)mapElement.getValue()));
@@ -106,6 +106,22 @@ public class CheckoutServlet extends HttpServlet {
                     preparedStmt.setString (3, date);
                     preparedStmt.setInt (4, quantity);
                     preparedStmt.execute();
+
+
+                    //retrieve each sale
+                    Statement statement4 = dbcon.createStatement();
+                    String query4 = "SELECT id FROM sales ORDER BY id DESC LIMIT 1;";
+                    ResultSet rs4 = statement4.executeQuery(query4);
+                    String saleID = "";
+                    while (rs4.next()){
+                        saleID = rs4.getString("id");
+                    }
+                    System.out.println(saleID);
+                    jsonObject.addProperty("title", title);
+                    jsonObject.addProperty("saleID", saleID);
+                    jsonObject.addProperty("quantity", quantity);
+
+                    jsonArray.add(jsonObject);
 
                     rs2.close();
                     statement2.close();

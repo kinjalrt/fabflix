@@ -1,13 +1,24 @@
 <!-- This page will be seen if you logged in -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Fablix</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Checkout</title>
 </head>
 <body>
 <h1 align = "center">Shopping Cart</h1>
-<h3 id="status_msg"></h3>
+<br/>
+
+
+<h4 id="status_msg"></h4>
+<br/>
 <table id=cart_table class="table table-striped">
     <!-- Create a table header -->
     <thead>
@@ -16,7 +27,10 @@
         <th>Title</th>
         <th>Quantity</th>
         <th>Price</th>
-        <th>Update</th>
+        <th> </th>
+        <th> </th>
+        <th> </th>
+
     </tr>
     </thead>
     <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
@@ -24,7 +38,11 @@
     <tbody id=cart_table_body></tbody>
 </table>
 
-<h5 id="checkout_button"></h5>
+
+<h4 id="total_price"></h4>
+<br/>
+
+<h5 align="center" id="checkout_button"></h5>
 
 <p id="item_list"></p>
 
