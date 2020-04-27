@@ -27,6 +27,12 @@ function handleCartData(resultData) {
     statusMsgElement.html("");
     statusMsgElement.append(resultData[0]["result"]);
 
+    let totalPriceElement = $("#total_price");
+    totalPriceElement.html("");
+    let checkoutButtonElement = $("#checkout_button");
+    checkoutButtonElement.html("");
+
+
     let cartTableBody = $("#cart_table_body");
     cartTableBody.html("");
     // change it to html list
@@ -56,7 +62,7 @@ function handleCartData(resultData) {
         }
         console.log(total);
 
-        if(total>=15) {
+        if(total>=0) {
             let totalPriceElement = $("#total_price");
             totalPriceElement.html("");
             // let totalElement = "";
