@@ -27,7 +27,7 @@
             <a class="nav-link" href="index.html?">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Trending Movies</a>
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Movies</a>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -39,37 +39,35 @@
         </li>
     </ul>
 </nav>
+<br>
+
 <h1 align="center">Movie Search</h1>
-<form id="search_form" action="search-list.html" method="GET">
+<form id="search_form" class="form-inline justify-content-center" action="search-list.html" method="GET">
 
-    <label for="title">Title: </label><input type="text" id="title" name="title"><br>
+    <label for="title" class="mr-sm-2">Title: </label><input type="text" id="title" class="form-control mb-2 mr-sm-2" name="title"><br>
 
-    <label for="year">Year: </label><input type="text" id="year" name="year"><br>
+    <label for="year" class="mr-sm-2"> Year: </label><input type="text" id="year" class="form-control mb-2 mr-sm-2" name="year"><br>
 
-    <label for="year">Director: </label><input type="text" id="director" name="director"><br>
+    <label for="year" class="mr-sm-2"> Director: </label><input type="text" id="director" class="form-control mb-2 mr-sm-2" name="director"><br>
 
-    <label for="star">Star: </label><input type="text" id="star" name="star"><br>
+    <label for="star" class="mr-sm-2"> Star: </label><input type="text" id="star" class="form-control mb-2 mr-sm-2" name="star"><br>
 
-    <button type="SUBMIT" class="btn btn-primary">Search</button>
+    <button type="SUBMIT" class="btn btn-primary mb-2"> Search</button>
 
 </form>
-
 <br>
-
-<h2>Browse </h2>
-<h4 id="list_characters"></h4>
 <br>
-<table id=genres_table class="table table-striped">
-    <thead>
-    <tr>
-        <th><h2>Genres</h2></th>
-    </tr>
-    </thead>
-
-    <!-- Table body is left empty here, will be populated with the data retrieved with single-star.js -->
-    <!-- single-star.js will find this html element by it's id "movie_table_body" -->
-    <tbody id=genres_table_body></tbody>
-</table>
+<h2 align="center">Browse</h2>
+<div class="card-deck mx-auto text-center">
+    <div class="card">
+        <div class="card-header text-center"><h4>Characters</h4></div>
+        <div class="card-body text-center" id="list_characters"></div>
+    </div>
+    <div class="card">
+        <div class="card-header text-center"><h4>Genres</h4></div>
+        <div class="card-body text-center" id="genres_table_body"></div>
+    </div>
+</div>
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

@@ -19,7 +19,7 @@
             <a class="nav-link" href="index.html?">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Trending Movies</a>
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Movies</a>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -31,24 +31,28 @@
         </li>
     </ul>
 </nav>
-<h1>Login to Fablix</h1>
+<br>
+<br>
+<br>
+<div class="card mx-auto text-center" style="width: 18rem;">
+<div class="card-header"><h1>Login to Fablix</h1></div>
 <!-- Set the method to POST to avoid showing the username/password in the URL
      The default action is disabled to allow your own implementation. -->
-<form id="login_form" method="post" action="#">
-    <div>
-        <label>
-            <input name="email" class="form-control" placeholder="Enter Email" type="text">
-        </label>
-        <br>
-        <label>
-            <input name="password" class="form-control" placeholder="Enter Password" type="password">
-        </label>
-        <br>
-    </div>
+<div class="card-body">
+<form id="login_form" class="justify-content-center" method="post" action="#">
+    <label>
+        <input name="email" class="form-control" placeholder="Enter Email" type="text">
+    </label>
+    <br>
+    <label>
+        <input name="password" class="form-control" placeholder="Enter Password" type="password">
+    </label>
+    <br>
     <div class="d-inline-block"><button class="btn btn-primary" type="submit">Login</button></div>
 </form>
-
-<div id="login_error_message"></div>
+</div>
+<div class="card-footer" id="login_error_message"></div>
+</div>
 
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

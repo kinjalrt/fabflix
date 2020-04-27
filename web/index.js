@@ -14,15 +14,16 @@
  * @param resultData jsonObject
  */
 function handleGenresResult(resultData) {
-    console.log("handleStarResult: populating genres table from resultData");
+    console.log("handleGenreResult: populating genres table from resultData");
 
     let charactersElement = jQuery("#list_characters");
     let all_chars = '*0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    let charsHTML = "";
+    let charsHTML = "<p class='card-text'>";
     for (let i = 0; i < all_chars.length; i++){
         charsHTML += '<a href="search-list.html?char=' + all_chars[i] + '">' + all_chars[i] + '</a>';
         charsHTML += "&nbsp;&nbsp;&nbsp;";
     }
+    charsHTML += "</p>"
     charactersElement.append(charsHTML);
 
 
@@ -31,17 +32,15 @@ function handleGenresResult(resultData) {
     let genresTableBodyElement = jQuery("#genres_table_body");
 
         // Iterate through resultData, no more than 10 entries
+    let rowHTML = "<p class='card-text'>";
     for (let i = 0; i < resultData.length; i++) {
         // Concatenate the html tags with resultData jsonObject
-        let rowHTML = "";
-        rowHTML += '<td style="width: 0">' +
-        '<a href="search-list.html?gid=' + resultData[i]["genre_id"] + '">'
-        + resultData[i]["genre_name"] +     // display genre_name for the link text
-        '</a>' + '</td>';
-
-        // Append the row created to the table body, which will refresh the page
-        genresTableBodyElement.append(rowHTML);
+        rowHTML += '<a href="search-list.html?gid=' + resultData[i]["genre_id"] + '">'
+        + resultData[i]["genre_name"] +  '</a>';
+        rowHTML += "&nbsp;&nbsp;&nbsp;";
     }
+    rowHTML += "</p>"
+    genresTableBodyElement.append(rowHTML);
 }
 
 /**

@@ -19,7 +19,7 @@
             <a class="nav-link" href="index.html?">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Trending Movies</a>
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Movies</a>
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -31,35 +31,41 @@
         </li>
     </ul>
 </nav>
+<br>
+
 <h1 align='center'>Checkout</h1>
 
 <br/>
-<h4 id="total"></h4>
+<h4 align="center" id="total"></h4>
 <br/>
-<h4>Please enter payment information: </h4>
-<form ACTION="#" id="checkout_form" METHOD="get">
-    <label>First Name: </label>
-    <label>
-        <input name="first_name" placeholder="First Name" type="text">
-    </label>
-    <br>
-    <label>Last Name: </label>
-    <label>
-        <input name="last_name" placeholder="Last Name" type="text">
-    </label>
-    <br>
-    <label>Credit card number: </label>
-    <label>
-        <input name="credit_card_number" placeholder="CCN" type="text">
-    </label>
-    <br>
-    <label>Credit card expiration date (in the form YYYY-MM-DD):  </label>
-    <label>
-        <input name="expiration_date" placeholder="YYYY-MM-DD" type="text">
-    </label>
-    <br>
-    <input type="submit" value="Place Order">
-</form>
+<div class="card mx-auto text-center">
+    <div class="card-header" ><h4 align="center">Please Enter Your Payment Information: </h4></div>
+    <div class="card-body" >
+        <form ACTION="#" id="checkout_form" METHOD="get">
+            <label>First Name: </label>
+            <label>
+                <input name="first_name" placeholder="First Name" type="text">
+            </label>
+            <br>
+            <label>Last Name: </label>
+            <label>
+                <input name="last_name" placeholder="Last Name" type="text">
+            </label>
+            <br>
+            <label>Credit card number: </label>
+            <label>
+                <input name="credit_card_number" placeholder="CCN" type="text">
+            </label>
+            <br>
+            <label>Credit card expiration date (in the form YYYY-MM-DD):  </label>
+            <label>
+                <input name="expiration_date" placeholder="YYYY-MM-DD" type="text">
+            </label>
+            <br>
+            <input class="btn btn-primary" type="submit" value="Place Order">
+        </form>
+    </div>
+</div>
 <br/>
 <h4 align="center" id="payment_outcome"></h4>
 
