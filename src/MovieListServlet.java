@@ -99,8 +99,8 @@ public class MovieListServlet extends HttpServlet {
                 }
                 query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
-                        "WHERE m.title LIKE \"" + param_title + "%\" AND m.id = r.movieId" + param_year + " AND m.director LIKE \"" + param_dir + "%\" " +
-                        "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"" + param_star + "%\" " +
+                        "WHERE m.title LIKE \"%" + param_title + "%\" AND m.id = r.movieId" + param_year + " AND m.director LIKE \"%" + param_dir + "%\" " +
+                        "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"%" + param_star + "%\" " +
                         param_sort + "\n"+param_num +"\n"+param_first_record;
             }
 
