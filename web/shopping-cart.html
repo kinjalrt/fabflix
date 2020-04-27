@@ -1,0 +1,73 @@
+<!-- This page will be seen if you logged in -->
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Checkout</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a class="navbar-brand" href="#">FABFLIX</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.html?">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Movies</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="login.html?">Login</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="shopping-cart.html?">Cart</a>
+        </li>
+    </ul>
+</nav>
+<br>
+
+<h1 align = "center">Shopping Cart</h1>
+<br/>
+
+
+<h5 align="center" id="status_msg"></h5>
+<br/>
+<table id=cart_table class="table table-striped">
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th>Title</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th> </th>
+
+
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=cart_table_body></tbody>
+</table>
+
+
+<h4 id="total_price"></h4>
+<br/>
+
+<h5 align="center" id="checkout_button"></h5>
+
+<p id="item_list"></p>
+
+<!-- include your own JS file -->
+<script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
+<script type='text/javascript' src='shopping-cart.js'></script>
+</body>
+</html>
