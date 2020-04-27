@@ -52,11 +52,11 @@ function handleCartData(resultData) {
             total += 15 * resultData[i]["quantity"];
             let action = "";
             action = "add";
-            rowHTML += "<td>" + '<button class=\"btn btn-primary\" onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Add a copy </button>' + "</td>";
+            rowHTML += "<td class='ml auto'>" + '<button class=\"btn btn-primary\" onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Add a Copy </button>' + " ";
             action = "remove";
-            rowHTML += "<td>" + '<button class=\"btn btn-primary\" onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Remove a copy </button>' + "</td>";
+            rowHTML += " " + '<button class=\"btn btn-primary\" onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Remove a Copy </button>' + " ";
             action = "del";
-            rowHTML += "<td>" + '<button class=\"btn btn-primary\" onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Delete from shopping cart </button>' + "</td>";
+            rowHTML += " " + '<button class=\"btn btn-primary\" onclick="updateQuantity(\'' + resultData[i]["title"] + '\', \'' + action + '\')"> Delete from Cart </button>' + "</td>";
             rowHTML += "</tr>";
             cartTableBody.append(rowHTML);
         }
@@ -72,7 +72,7 @@ function handleCartData(resultData) {
             let checkoutButtonElement = $("#checkout_button");
             checkoutButtonElement.html("");
            // checkoutButtonElement.append('<a href="checkout.html?total=' + total + '"> Proceed to checkout </a>');
-            checkoutButtonElement.append('<button class=\"btn btn-primary\" onclick=\"window.location.href = \'checkout.html?total=\'+\'' + total + '\';\">Proceed to checkout</button>');
+            checkoutButtonElement.append('<button class=\"btn btn-primary\" onclick=\"window.location.href = \'checkout.html?total=\'+\'' + total + '\';\">Proceed to Checkout</button>');
 
         }
         else{
