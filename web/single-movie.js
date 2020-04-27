@@ -48,7 +48,7 @@ function handleResult(resultData) {
     let movieInfoElement = jQuery("#movie_info");
 
     // append two html <p> created to the h3 body, which will refresh the page
-    movieInfoElement.append("<p align='center'>" + resultData[0]["movie_title"] + "</p>");
+    movieInfoElement.append(resultData[0]["movie_title"]);
 
 
 
@@ -107,7 +107,7 @@ function handleResult(resultData) {
     }
 
     let addToCartElement = jQuery("#add_to_cart_button");
-    addToCartElement.append('<p> '+'<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a></p>');
+    addToCartElement.append('<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a>');
 
 
 
