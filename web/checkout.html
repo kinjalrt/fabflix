@@ -1,44 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Checkout</title>
 </head>
 <h1 align='center'>Checkout</h1>
 
-<div>
-    <h2 style="float: left">Total price: $</h2>
-    <h2 style="float: left" id="total"></h2>
-</div>
-<br><br><br><br>
+<br/>
 
-<label><b>Please enter payment information: </b></label>
-<br>
+<h4 id="total"></h4>
+
+<br/>
+<h4>Please enter payment information: </h4>
 <form ACTION="#" id="checkout_form" METHOD="get">
     <label>First Name: </label>
     <label>
-        <input name="first_name" placeholder="Enter first name" type="text">
+        <input name="first_name" placeholder="First Name" type="text">
     </label>
     <br>
     <label>Last Name: </label>
     <label>
-        <input name="last_name" placeholder="Enter last name" type="text">
+        <input name="last_name" placeholder="Last Name" type="text">
     </label>
     <br>
     <label>Credit card number: </label>
     <label>
-        <input name="credit_card_number" placeholder="Enter credit card number" type="text">
+        <input name="credit_card_number" placeholder="CCN" type="text">
     </label>
     <br>
     <label>Credit card expiration date (in the form YYYY-MM-DD):  </label>
     <label>
-        <input name="expiration_date" placeholder="Enter expiration date" type="text">
+        <input name="expiration_date" placeholder="YYYY-MM-DD" type="text">
     </label>
     <br>
     <input type="submit" value="Place Order">
 </form>
-
-<h2 id="payment_outcome"></h2>
+<br/>
+<h4 align="center" id="payment_outcome"></h4>
 
 
 

@@ -46,10 +46,10 @@ public class ShoppingCartServlet extends HttpServlet {
             synchronized (previousItems) {
                     int prev = previousItems.get(item);
                     previousItems.replace(item, prev-1);
-                    result = "Successfully deleted a copy of "+ item +" from shopping cart";
+                    result = "Successfully removed a copy of "+ item +" from shopping cart!";
                     if(previousItems.get(item) == 0){
                         previousItems.remove(item);
-                        result = "Successfully removed "+ item +" from shopping cart";
+                        result = "Successfully removed "+ item +" from shopping cart!";
                     }
             }
         }
@@ -58,7 +58,7 @@ public class ShoppingCartServlet extends HttpServlet {
             synchronized (previousItems) {
                 previousItems.remove(item);
             }
-            result = "Successfully removed "+ item +" from shopping cart";
+            result = "Successfully removed "+ item +" from shopping cart!";
         }
         //perform if action is to add new movie or increment quantity
         else if(action!=null && action.equals("add")) {
@@ -78,7 +78,7 @@ public class ShoppingCartServlet extends HttpServlet {
                     }
                 }
             }
-            result = "Successfully added a copy of "+ item +" to shopping cart";
+            result = "Successfully added a copy of "+ item +" to shopping cart!";
         }
         System.out.println(previousItems);
 
