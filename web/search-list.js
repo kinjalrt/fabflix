@@ -63,6 +63,7 @@ function handleMovieResult(resultData) {
                 index += 1;
             }
             rowHTML += "</td>";
+           // rowHTML +=  '<td><button onclick=\"window.location.href = \'shopping-cart.html?action=add&item=\'+\'' + resultData[i]["title"] + '\';\">Add to CARF</button></td>';
             rowHTML += "<td>" + '<a href="shopping-cart.html?action=add&item=' + resultData[i]["title"] + '">' + "Add to cart" + '</a>' + "</td>";
             rowHTML += "</tr>";
 

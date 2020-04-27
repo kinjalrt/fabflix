@@ -107,9 +107,8 @@ function handleResult(resultData) {
     }
 
     let addToCartElement = jQuery("#add_to_cart_button");
-    addToCartElement.append('<p> '+'<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a></p>');
-
-
+   // addToCartElement.append('<p> '+'<a href="shopping-cart.html?action=add&item=' + resultData[0]["movie_title"] + '">' + "Add to cart" + '</a></p>');
+    addToCartElement.append('<button onclick=\"window.location.href = \'shopping-cart.html?action=add&item=\'+\'' + resultData[0]["movie_title"] + '\';\">Add to cart</button>');
 
 }
 
@@ -128,6 +127,3 @@ jQuery.ajax({
     url: "api/single-movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 });
-
-
-//cartElement.submit(addToCart);

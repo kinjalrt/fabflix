@@ -52,10 +52,9 @@ function handlePaymentResult(resultData) {
         window.location = 'confirmation-page.html';
 
         for (let i = 0; i < resultData.length; i++){
-            sessionStorage.setItem('key', 'value');
             console.log(resultData[i]["saleID"]);
-
         }
+
         window.location.replace("confirmation-page.html");
     }
 

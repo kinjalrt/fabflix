@@ -59,13 +59,15 @@ function handleCartData(resultData) {
         if(total>=15) {
             let totalPriceElement = $("#total_price");
             totalPriceElement.html("");
-            let totalElement = "";
-            totalElement += "Total: $" + total;
-            totalPriceElement.append(totalElement);
+            // let totalElement = "";
+            // totalElement += "Total: $" + total;
+            totalPriceElement.append("Total: $" + total);
 
             let checkoutButtonElement = $("#checkout_button");
             checkoutButtonElement.html("");
-            checkoutButtonElement.append('<a href="checkout.html?total=' + total + '"> Proceed to checkout </a>');
+           // checkoutButtonElement.append('<a href="checkout.html?total=' + total + '"> Proceed to checkout </a>');
+            checkoutButtonElement.append('<button onclick=\"window.location.href = \'checkout.html?total=\'+\'' + total + '\';\">Proceed to checkout</button>');
+
         }
         else{
             let totalPriceElement = $("#total_price");
@@ -74,8 +76,6 @@ function handleCartData(resultData) {
             checkoutButtonElement.html("");
         }
     }
-
-    // clear the old array and show the new array in the frontend
 }
 
 function updateQuantity(title, action){
