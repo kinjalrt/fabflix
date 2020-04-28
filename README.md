@@ -6,7 +6,9 @@ submitted by Kinjal Reetoo and Yasvi Patel on April 10th, 2020.
 
 ## Demo video URL
 
-[link](https://youtu.be/Cd_2F8tFhRM)
+[Project 2 - Developing Fablix Website](https://www.youtube.com/watch?v=C_lelf4wlZE)
+
+[Project 1 - Set up AWS, MySQL, JDBC, Tomcat, Start Fablix](https://youtu.be/Cd_2F8tFhRM)
 
 ## Substring matching design
 
@@ -35,7 +37,6 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
 ```
   5. Launch the app from the Tomcat manager page on localhost.
 
-## Substring Matching Protocol
 
 ## Contribution
 
