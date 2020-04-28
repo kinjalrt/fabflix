@@ -6,9 +6,9 @@ submitted by Kinjal Reetoo and Yasvi Patel on April 10th, 2020.
 
 ## Demo video URL
 
-[Project 2 - Developing Fablix Website](https://www.youtube.com/watch?v=C_lelf4wlZE)
+- [Project 2 - Developing Fablix Website](https://www.youtube.com/watch?v=C_lelf4wlZE)
 
-[Project 1 - Set up AWS, MySQL, JDBC, Tomcat, Start Fablix](https://youtu.be/Cd_2F8tFhRM)
+- [Project 1 - Set up AWS, MySQL, JDBC, Tomcat, Start Fablix](https://youtu.be/Cd_2F8tFhRM)
 
 ## Substring matching design
 
