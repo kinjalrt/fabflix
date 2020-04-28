@@ -8,6 +8,10 @@ submitted by Kinjal Reetoo and Yasvi Patel on April 10th, 2020.
 
 [link](https://youtu.be/Cd_2F8tFhRM)
 
+## Substring matching design
+
+We used the mysql command  LIKE "%ABC%"  for the movie title, director name and star name parameters; this command is case insensitive and finds any string that contains the pattern ABC anywhere in the string. For the year parameter we used exact match.
+
 
 ## Instruction of deployment
 
