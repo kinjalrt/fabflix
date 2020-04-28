@@ -29,8 +29,7 @@ function handleMovieResult(resultData) {
     }
     else {
         // Iterate through resultData, no more than 10 entries
-        for (let i = 0; i < Math.min(20, resultData.length); i++) {
-
+        for (let i = 0; i < resultData.length; i++) {
             // Concatenate the html tags with resultData jsonObject
             let rowHTML = "";
             rowHTML += "<tr>";
