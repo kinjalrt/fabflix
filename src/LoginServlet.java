@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
@@ -34,44 +36,43 @@ public class LoginServlet extends HttpServlet {
         try{
             Connection dbcon = dataSource.getConnection();
             Statement statement = dbcon.createStatement();
-            String query  = "SELECT * FROM customers as c WHERE c.email = \""+email+"\" AND c.password = \""+password+"\";";
+        //    String query  = "SELECT * FROM customers as c WHERE c.email = \""+email+"\" AND c.password = \""+password+"\";";
+            String query = String.format("SELECT * from customers where email='%s'", email);
             ResultSet rs = statement.executeQuery(query);
 
+            boolean success = false;
             if(rs.next()){
-                //login success:
+                //email exists
 
+                String encryptedPassword = rs.getString("password");
+                success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+                System.out.println(success);
                 //set this user into the session
-                int id = rs.getInt("id");
-                String firstName = rs.getString("firstName");
-                String lastName = rs.getString("lastName");
-                String address = rs.getString("address");
+                if(success) {
+                    //both email and password correct
+                    int id = rs.getInt("id");
+                    String firstName = rs.getString("firstName");
+                    String lastName = rs.getString("lastName");
+                    String address = rs.getString("address");
 
-                request.getSession().setAttribute("user", new User(id, firstName, lastName, address, email));
+                    request.getSession().setAttribute("user", new User(id, firstName, lastName, address, email));
 
 
-
-                responseJsonObject.addProperty("status", "success");
-                responseJsonObject.addProperty("message", "success");
-            } else{
-                // Login fail
-                responseJsonObject.addProperty("status", "fail");
-
-                Statement statement2 = dbcon.createStatement();
-                String query2  = "SELECT * FROM customers as c WHERE c.email = \""+email+"\" OR c.password = \""+password+"\";";
-                ResultSet rs2 = statement.executeQuery(query2);
-
-                // sample error messages. in practice, it is not a good idea to tell user which one is incorrect/not exist.
-                if(rs2.next()) {
-                    if(!rs2.getString("email").equals(email)) {
-                        responseJsonObject.addProperty("message", "Invalid email");
-                    } else {
-                        responseJsonObject.addProperty("message", "Invalid password");
-                    }
-                } else {
-                    responseJsonObject.addProperty("message", "Invalid email and password");
+                    responseJsonObject.addProperty("status", "success");
+                    responseJsonObject.addProperty("message", "success");
                 }
-                rs2.close();
-                statement2.close();
+                else{
+                    //email correct but password incorrect
+                    responseJsonObject.addProperty("status", "fail");
+                    responseJsonObject.addProperty("message", "Invalid password");
+                }
+            } else{
+                // email does not exist
+                // Login fail
+                System.out.println("email does not exist");
+                responseJsonObject.addProperty("status", "fail");
+                responseJsonObject.addProperty("message", "Invalid email");
+
             }
 
             rs.close();
