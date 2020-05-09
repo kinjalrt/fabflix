@@ -91,15 +91,15 @@ public class MovieListServlet extends HttpServlet {
                 statement = dbcon.prepareStatement(query);
                 statement.setString(++param_index, "%"+param_title+"%");
                 if(!add_year.equals(" ")){
-                    statement.setString(++param_index, add_year);
+                    statement.setInt(++param_index, Integer.parseInt(param_year));
                 }
                 statement.setString(++param_index, "%"+param_dir+"%");
                 statement.setString(++param_index, "%"+param_star+"%");
             }
 
-            if(!sort_string.equals(" ")){
-                statement.setString(++param_index, param_sort);
-            }
+//            if(!sort_string.equals(" ")){
+//                statement.setString(++param_index, param_sort);
+//            }
             if(!num_string.equals(" LIMIT 20\n")){
                 statement.setInt(++param_index, Integer.parseInt(param_num));
             }
@@ -241,7 +241,7 @@ public class MovieListServlet extends HttpServlet {
         if(param_sort.equals("null") || param_sort.equals("")){
             return " ";
         } else {
-            return " ORDER BY ?\n";
+            return " ORDER BY "+param_sort+"\n";
         }
     }
 }
