@@ -10,11 +10,11 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 
-// Declaring a WebServlet called StarsServlet, which maps to url "/api/stars"
+// Declaring a WebServlet called MovieListServlet, which maps to url "/api/top20"
 @WebServlet(name = "MovieListServlet", urlPatterns = "/api/top20")
 public class MovieListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -68,7 +68,6 @@ public class MovieListServlet extends HttpServlet {
 
             JsonArray jsonArray = new JsonArray();
 
-            Statement statement = dbcon.createStatement();
             String query  = "";
 
             //search by letters
@@ -79,23 +78,24 @@ public class MovieListServlet extends HttpServlet {
                 else{
                     param_char = "LIKE \""+param_char+"%\"";
                 }
-                query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r\n" +
-                        "WHERE m.id = r.movieId" + " AND m.title " + param_char + " \n"+
+                        "WHERE m.id = r.movieId AND m.title " + param_char + " \n"+
                         param_sort + "\n"+param_num +"\n"+param_first_record;
+
             }
             //search by genre
             else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
-                query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r, genres_in_movies as gim\n" +
-                        "WHERE m.id = r.movieId" + " AND gim.genreId = \"" + param_gid + "\" AND m.id = gim.movieId \n"+
+                        "WHERE m.id = r.movieId AND gim.genreId = \"" + param_gid + "\" AND m.id = gim.movieId \n"+
                         param_sort + "\n"+param_num +"\n"+param_first_record;
             }
             else {
                 if (!param_year.equals("")){
                     param_year = " AND m.year =\""+ param_year + "\"";
                 }
-                query += "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
                         "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
                         "WHERE m.title LIKE \"%" + param_title + "%\" AND m.id = r.movieId" + param_year + " AND m.director LIKE \"%" + param_dir + "%\" " +
                         "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE \"%" + param_star + "%\" " +
@@ -103,7 +103,8 @@ public class MovieListServlet extends HttpServlet {
             }
 
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
 
             //check if results of list of movies > 0
             if (!rs.isBeforeFirst()) {
@@ -131,14 +132,13 @@ public class MovieListServlet extends HttpServlet {
 
 
                     //output at most 3 genres
-                    //y - added sorting
-                    Statement s2 = dbcon.createStatement();
-                    //y - added genre id
                     String q2 = "SELECT title, name, g.id as id\n" +
                             "FROM movies as m, genres as g, genres_in_movies as gim\n" +
-                            "WHERE  m.title = \"" + title + "\" AND m.id = gim.movieId AND gim.genreId = g.id\n" +
+                            "WHERE  m.title = ? AND m.id = gim.movieId AND gim.genreId = g.id\n" +
                             "ORDER BY name LIMIT 3";
-                    ResultSet r2 = s2.executeQuery(q2);
+                    PreparedStatement s2 = dbcon.prepareStatement(q2);
+                    s2.setString(1, title);
+                    ResultSet r2 = s2.executeQuery();
                     String genre = "genre";
                     int incr = 1;
                     while (r2.next()) {
@@ -152,16 +152,16 @@ public class MovieListServlet extends HttpServlet {
                     s2.close();
 
                     //output all stars for each film
-                    //y - added limit and ordering
-                    Statement s3 = dbcon.createStatement();
                     String q3 = "SELECT title, f.starId, f.name, count(movieId)\n" +
                             "FROM (SELECT title, s.id as starId, name FROM movies as m, stars_in_movies as sim, stars as s\n" +
-                            "\tWHERE  m.title = \"" + title + "\" AND m.id = sim.movieId AND sim.starId = s.id) as f\n" +
+                            "\tWHERE  m.title = ? AND m.id = sim.movieId AND sim.starId = s.id) as f\n" +
                             "    NATURAL JOIN stars_in_movies\n" +
                             "group by f.starId\n" +
                             "order by count(movieId) desc, f.name\n" +
                             "limit 3;";
-                    ResultSet r3 = s3.executeQuery(q3);
+                    PreparedStatement s3 = dbcon.prepareStatement(q3);
+                    s3.setString(1, title);
+                    ResultSet r3 = s3.executeQuery();
                     String starname = "starname";
                     String starid = "starid";
                     int count = 1;

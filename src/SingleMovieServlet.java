@@ -80,10 +80,11 @@ public class SingleMovieServlet extends HttpServlet {
                 //adding genre
                 String genreQuery = "SELECT g.name, g.id \n" +
                         "FROM moviedb.movies as m, moviedb.genres as g, moviedb.genres_in_movies as gm \n" +
-                        "where title = \""+movieTitle+"\" and m.id = gm.movieId and gm.genreId = g.id ORDER BY name LIMIT 3;";
+                        "where title = ? and m.id = gm.movieId and gm.genreId = g.id ORDER BY name;";
+                PreparedStatement genreStatement = dbcon.prepareStatement(genreQuery);
+                genreStatement.setString(1, movieTitle);
+                ResultSet rsg = genreStatement.executeQuery();
 
-                Statement genreStatement = dbcon.createStatement();
-                ResultSet rsg = genreStatement.executeQuery(genreQuery);
                 int genreCount = 0;
                 while(rsg.next()){
                     String g = rsg.getString("name");
@@ -96,15 +97,13 @@ public class SingleMovieServlet extends HttpServlet {
                 //adding stars
                 String starsQuery = "SELECT title, f.starId, f.name, count(movieId)\n" +
                         "FROM (SELECT title, s.id as starId, name FROM movies as m, stars_in_movies as sim, stars as s\n" +
-                        "\tWHERE  m.title = \"" + movieTitle + "\" AND m.id = sim.movieId AND sim.starId = s.id) as f\n" +
-                        "    NATURAL JOIN stars_in_movies\n" +
-                        "group by f.starId\n" +
-                        "order by count(movieId) desc, f.name\n" +
-                        "limit 3;";
+                        "\tWHERE  m.title = ? AND m.id = sim.movieId AND sim.starId = s.id) as f\n" +
+                        "NATURAL JOIN stars_in_movies\n group by f.starId\n" +
+                        "order by count(movieId) desc, f.name;";
+                PreparedStatement starStatement = dbcon.prepareStatement(starsQuery);
+                starStatement.setString(1, movieTitle);
+                ResultSet rss = starStatement.executeQuery();
 
-
-                Statement starsStatement = dbcon.createStatement();
-                ResultSet rss = starsStatement.executeQuery(starsQuery);
                 int starCount = 0;
                 while(rss.next()){
                     String s = rss.getString("name");

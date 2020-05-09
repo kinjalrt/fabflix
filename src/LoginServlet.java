@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -25,25 +27,41 @@ public class LoginServlet extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+
+
+    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         JsonObject responseJsonObject = new JsonObject();
 
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
+        //recaptcha verification
+        try {
+            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+        }
+        catch (Exception e){
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", "Recaptcha verification error");
+            response.getWriter().write(responseJsonObject.toString());
+            return;
+        }
         //checking for the email and password in the database
         try{
             Connection dbcon = dataSource.getConnection();
-            Statement statement = dbcon.createStatement();
         //    String query  = "SELECT * FROM customers as c WHERE c.email = \""+email+"\" AND c.password = \""+password+"\";";
-            String query = String.format("SELECT * from customers where email='%s'", email);
-            ResultSet rs = statement.executeQuery(query);
+            String query = "SELECT * from customers where email=?";
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
 
             boolean success = false;
             if(rs.next()){
                 //email exists
-
                 String encryptedPassword = rs.getString("password");
                 success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
                 System.out.println(success);
@@ -81,6 +99,7 @@ public class LoginServlet extends HttpServlet {
         }
         catch (Exception e) {
             // write error message JSON object to output
+            responseJsonObject.addProperty("status", "fail");
             responseJsonObject.addProperty("message", e.getMessage());
 
             // set reponse status to 500 (Internal Server Error)
