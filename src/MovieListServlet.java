@@ -101,10 +101,10 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(++param_index, param_sort);
             }
             if(!num_string.equals(" LIMIT 20\n")){
-                statement.setString(++param_index, param_num);
+                statement.setInt(++param_index, Integer.parseInt(param_num));
             }
             if(!first_record.equals(" ")){
-                statement.setString(++param_index, param_first_record);
+                statement.setInt(++param_index, Integer.parseInt(param_first_record));
             }
 
             // Perform the query
