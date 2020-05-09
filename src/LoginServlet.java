@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -52,10 +53,11 @@ public class LoginServlet extends HttpServlet {
         //checking for the email and password in the database
         try{
             Connection dbcon = dataSource.getConnection();
-            Statement statement = dbcon.createStatement();
         //    String query  = "SELECT * FROM customers as c WHERE c.email = \""+email+"\" AND c.password = \""+password+"\";";
-            String query = String.format("SELECT * from customers where email='%s'", email);
-            ResultSet rs = statement.executeQuery(query);
+            String query = "SELECT * from customers where email=?";
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
 
             boolean success = false;
             if(rs.next()){
