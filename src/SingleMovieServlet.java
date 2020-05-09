@@ -80,7 +80,7 @@ public class SingleMovieServlet extends HttpServlet {
                 //adding genre
                 String genreQuery = "SELECT g.name, g.id \n" +
                         "FROM moviedb.movies as m, moviedb.genres as g, moviedb.genres_in_movies as gm \n" +
-                        "where title = \""+movieTitle+"\" and m.id = gm.movieId and gm.genreId = g.id ORDER BY name LIMIT 3;";
+                        "where title = \""+movieTitle+"\" and m.id = gm.movieId and gm.genreId = g.id ORDER BY name;";
 
                 Statement genreStatement = dbcon.createStatement();
                 ResultSet rsg = genreStatement.executeQuery(genreQuery);
@@ -99,8 +99,7 @@ public class SingleMovieServlet extends HttpServlet {
                         "\tWHERE  m.title = \"" + movieTitle + "\" AND m.id = sim.movieId AND sim.starId = s.id) as f\n" +
                         "    NATURAL JOIN stars_in_movies\n" +
                         "group by f.starId\n" +
-                        "order by count(movieId) desc, f.name\n" +
-                        "limit 3;";
+                        "order by count(movieId) desc, f.name;";
 
 
                 Statement starsStatement = dbcon.createStatement();
