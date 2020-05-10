@@ -181,19 +181,9 @@ public class SAXParserMovies extends DefaultHandler {
         }
 
 
-     //   System.out.println(maxId);
-
-
         System.out.println();
     }
 
-    private void addFilmToDB(DirectorFilms Film) throws Exception {
-
-      //  Statement select = dbcon.createStatement();
-
-
-
-    }
 
     //Event Handlers
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {

@@ -20,18 +20,17 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class SAXParserCast extends DefaultHandler {
 
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
-
-
+    private static Connection connection = null;
     private String currentMovie;
-    ArrayList<String> listActors;
+    private Pair<String, String> currentPair;
+    private String currentMovieId = "";
+    ArrayList<Pair<String, String>> listRelations;
     private String tempVal;
 
     //to maintain context
 
     public SAXParserCast() {
-        listActors = new ArrayList<String>();
+        listRelations = new ArrayList<Pair<String, String>>();
     }
 
     public void runExample() throws Exception {
@@ -72,74 +71,43 @@ public class SAXParserCast extends DefaultHandler {
      * Iterate through the list and print
      * the contents
      */
-    private void printData() throws Exception {
+    private void printData(ArrayList<Pair<String, String>> batch) throws Exception {
 
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection connection = DriverManager.getConnection("jdbc:" + "mysql" + ":///" + "moviedb" + "?autoReconnect=true&useSSL=false",
-                "mytestuser", "mypassword");
-        if (connection != null) {
-            System.out.println("Connection established!!");
-        }
-
-        System.out.println(currentMovie);
+        PreparedStatement psInsertRecord=null;
+        String sqlInsertRecord="INSERT INTO stars_in_movies_test (starId,movieId) VALUES(?, ?)";
 
 
-            //get movieId
-            String query0 = "select id from movies_test where title = ?;";
-            PreparedStatement ps0 = connection.prepareStatement(query0);
-            ps0.setString (1, currentMovie);
-            ResultSet rs0 = ps0.executeQuery();
-            String movieId = "";
+        try {
 
-            //if movie in db
-            if (rs0.next()){
-                movieId = rs0.getString("id");
-                System.out.println(currentMovie+" "+movieId);
+            connection.setAutoCommit(false);
+            psInsertRecord = connection.prepareStatement(sqlInsertRecord);
 
-                //for each actor
-                for(String a : listActors){
+            for (Pair<String, String> p : batch) {
+                String mId = p.getL();
+                String sId = p.getR();
 
-                    String query1 = "select id from stars_test where name = ?;";
-                    PreparedStatement ps1 = connection.prepareStatement(query1);
-                    ps1.setString (1, a);
-                    ResultSet rs1 = ps1.executeQuery();
-                    String starId = "";
-
-                    //if star in db
-                    if(rs1.next()){
-                        starId = rs1.getString("id");
-                        System.out.println(a+" "+starId);
-
-                        String query6 = "INSERT INTO stars_in_movies_test (starId,movieId) SELECT ?, ? FROM DUAL " +
-                                "WHERE NOT EXISTS (SELECT * FROM stars_in_movies_test WHERE starId = ? AND movieId = ? LIMIT 1);";
-                        PreparedStatement ps6 = connection.prepareStatement(query6);
-                        ps6.setString (1, starId);
-                        ps6.setString(2, movieId);
-                        ps6.setString (3, starId);
-                        ps6.setString(4, movieId);
-                        ps6.execute();
-                        ps6.close();
-
-                    }
-                    else{
-                        System.out.println("Star \""+a+"\" does not exist in database; ignoring star-movie mapping " + a + "-" + currentMovie);
-
-                    }
-                    rs1.close();
-                    ps1.close();
-
-                }
-
-            } else{
-                System.out.println("Movie \""+currentMovie+"\" does not exist in database");
+                psInsertRecord.setString(1, sId);
+                psInsertRecord.setString(2, mId);
+                psInsertRecord.addBatch();
+                //System.out.println("there: "+mId +" "+sId);
 
             }
+            psInsertRecord.executeBatch();
+            connection.commit();
 
-        rs0.close();
-        ps0.close();
-        connection.close();
+        } catch (SQLException e) {
+           // System.out.println("Movie-star relation already exists in db -> "+ e.getMessage());
+           // e.printStackTrace();
+          //  System.out.println(e.getMessage());
+        }
 
-        System.out.println();
+        try {
+            if(psInsertRecord!=null) psInsertRecord.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+       // System.out.println();
     }
 
 
@@ -150,8 +118,18 @@ public class SAXParserCast extends DefaultHandler {
         tempVal = "";
         if (qName.equalsIgnoreCase("filmc")) {
             //array of all films for current director
-            listActors = new ArrayList<String>();
+           // System.out.println("size: "+listRelations.size());
+            if(listRelations.size()>100) {
+              //  System.out.println("nagisaaa");
+                try {
+                    printData(listRelations);
+                } catch (Exception e) {
+                  //  e.printStackTrace();
+                }
+                listRelations = new ArrayList<Pair<String, String>>();
+            }
             currentMovie = "";
+            currentMovieId ="";
         }
 
     }
@@ -164,38 +142,117 @@ public class SAXParserCast extends DefaultHandler {
 
         if (qName.equalsIgnoreCase("t")) {
             //add it to the list
-            currentMovie = tempVal;
+            //use pairs (movieid, starid)
+            //if this is a new movie check if in db + retrieve id if it is -> once each
+            if(currentMovie.equals("")){
+                try{
+                    currentMovie = tempVal;
+                    String query0 = "select id from movies_test where title = ?;";
+                    PreparedStatement ps0 = connection.prepareStatement(query0);
+                    ps0.setString (1, currentMovie);
+                    ResultSet rs0 = ps0.executeQuery();
+                    if(rs0.next()){
+                        currentMovieId = rs0.getString("id");
+                        currentPair = new Pair(currentMovieId, "");
+
+                    }
+                    else{
+                     //   System.out.println("Movie "+currentMovie+" does not exist in database -> ignoring all movie-star mapping related to this movie");
+                    }
+                    rs0.close();
+                    ps0.close();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
         }
         else if (qName.equalsIgnoreCase("a")) {
-            try {
-                if(tempVal.equals("sa") || tempVal.equals("s a")){
-                    System.out.println("EXCEPTION \""+ tempVal +"\"- actor name not specified for movie \""+ currentMovie +"\"; ignoring this actor-movie mapping");
-                }
-                else{
-                    listActors.add(tempVal);
-                }
-            }catch (Exception e){
-                //specify for which movie?
-                System.out.println("EXCEPTION \""+ tempVal +"\" - invalid data \""+ currentMovie+"\"");
 
+            if(!currentPair.getL().equals("")) {
+                String currentStar = tempVal;
+                try {
+                    if (currentStar.equals("sa") || currentStar.equals("s a") || currentStar.equals("") || currentStar.equals(" ")) {
+                     //   System.out.println("EXCEPTION \"" + currentStar + "\"- actor name not specified for movie \"" + currentMovie + "\"; ignoring this actor-movie mapping");
+                    }
+                    else {
+                        //check if actor in db;
+                        try {
+
+                            String query1 = "select id from stars_test where name = ?;";
+                            PreparedStatement ps1 = connection.prepareStatement(query1);
+                            ps1.setString (1, currentStar);
+                            ResultSet rs1 = ps1.executeQuery();
+                            String starId = "";
+                            if(rs1.next()){
+                                starId = rs1.getString("id");
+                                currentPair.setR(starId);
+                                listRelations.add(currentPair);
+                          //      System.out.println("here: "+currentPair.getL()+ " "+currentPair.getR());
+                                currentPair = new Pair(currentMovieId, "");
+
+                            }
+                            else{
+                       //         System.out.println("Star \""+currentStar+"\" does not exist in database; ignoring movie-star mapping " + currentMovie + "-" + currentStar);
+
+                            }
+                            rs1.close();
+                            ps1.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                } catch (Exception e) {
+                    //System.out.println("EXCEPTION \"" + tempVal + "\" - invalid star data for \"" + currentMovie + "\"");
+
+                }
             }
         }
         else if(qName.equalsIgnoreCase("filmc")){
-            try {
-                printData();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            for(Pair<String, String> p : listRelations){
+//                System.out.println("please: "+p.getL()+ " "+ p.getR());
+//            }
+            currentMovie = "";
+            currentMovieId="";
+            currentPair = new Pair("", "");
+           // System.out.println("size: "+listRelations.size());
+
         }
+        else if(qName.equalsIgnoreCase("casts")){
+            System.out.println("no");
+            try {
+//                for(Pair<String, String> p : listRelations){
+//                System.out.println("please: "+p.getL()+ " "+ p.getR());
+//                }
+                printData(listRelations);
+            } catch (Exception e) {
+               // e.printStackTrace();
+            }
 
-
-
+        }
     }
+
+
 
     public static void main(String[] args) throws Exception {
 
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        connection = DriverManager.getConnection("jdbc:" + "mysql" + ":///" + "moviedb" + "?autoReconnect=true&useSSL=false",
+                "mytestuser", "mypassword");
+        if (connection != null) {
+            System.out.println("Connection established!!");
+        }
+
         SAXParserCast spe = new SAXParserCast();
         spe.runExample();
+
+        connection.close();
+
     }
 
 }
