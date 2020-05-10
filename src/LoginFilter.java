@@ -17,6 +17,10 @@ public class LoginFilter implements Filter {
         allowedURIs.add("login.html");
         allowedURIs.add("login.js");
         allowedURIs.add("api/login");
+        allowedURIs.add("api/adlogin");
+        allowedURIs.add("admin-login.js");
+        allowedURIs.add("admin-login.html");
+
     }
 
     @Override

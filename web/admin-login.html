@@ -10,7 +10,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="//www.google.com/recaptcha/api.js"></script>
 
-    <title>Login</title>
+    <title>Employee Login</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
@@ -24,10 +24,10 @@
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link" href="admin-login.html?">Staff</a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link" href="login.html?">Login</a>
         </li>
         <li class="nav-item">
@@ -39,30 +39,30 @@
 <br>
 <br>
 <div class="card mx-auto text-center" style="width: 23rem;">
-<div class="card-header text-white bg-primary"><h1>Login to Fablix</h1></div>
-<!-- Set the method to POST to avoid showing the username/password in the URL
-     The default action is disabled to allow your own implementation. -->
-<div class="card-body" style="width: auto;">
-<form id="login_form" class="justify-content-center" method="post" action="#">
-    <label>
-        <input name="email" class="form-control" placeholder="Enter Email" type="text">
-    </label>
-    <br>
-    <label>
-        <input name="password" class="form-control" placeholder="Enter Password" type="password">
-    </label>
-    <br>
-    <div align="center" class="g-recaptcha" data-sitekey="6Lfan_QUAAAAAGrE9VOelC7Nl6xVtbqRmHETz1Fo"></div>
-    <br>
-    <div class="d-inline-block"><button class="btn btn-primary" type="submit">Login</button></div>
-</form>
-</div>
-<div class="card-footer text-white bg-primary" id="login_error_message"></div>
+    <div class="card-header text-white bg-primary"><h1>Fablix Staff Login</h1></div>
+    <!-- Set the method to POST to avoid showing the username/password in the URL
+         The default action is disabled to allow your own implementation. -->
+    <div class="card-body" style="width: auto;">
+        <form id="login_form" class="justify-content-center" method="post" action="#">
+            <label>
+                <input name="email" class="form-control" placeholder="Enter Email" type="text">
+            </label>
+            <br>
+            <label>
+                <input name="password" class="form-control" placeholder="Enter Password" type="password">
+            </label>
+            <br>
+            <div align="center" class="g-recaptcha" data-sitekey="6Lfan_QUAAAAAGrE9VOelC7Nl6xVtbqRmHETz1Fo"></div>
+            <br>
+            <div class="d-inline-block"><button class="btn btn-primary" type="submit">Admin Login</button></div>
+        </form>
+    </div>
+    <div class="card-footer text-white bg-primary" id="login_error_message"></div>
 </div>
 
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- include our own JS file -->
-<script src="./login.js"></script>
+<script src="./admin-login.js"></script>
 </body>
 </html>

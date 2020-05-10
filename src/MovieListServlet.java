@@ -97,9 +97,6 @@ public class MovieListServlet extends HttpServlet {
                 statement.setString(++param_index, "%"+param_star+"%");
             }
 
-//            if(!sort_string.equals(" ")){
-//                statement.setString(++param_index, param_sort);
-//            }
             if(!num_string.equals(" LIMIT 20\n")){
                 statement.setInt(++param_index, Integer.parseInt(param_num));
             }
@@ -113,7 +110,7 @@ public class MovieListServlet extends HttpServlet {
             //check if results of list of movies > 0
             if (!rs.isBeforeFirst()) {
                 JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("result", "no results found for this query");
+                jsonObject.addProperty("result", "No results found for this query");
                 jsonArray.add(jsonObject);
             }
             else {
