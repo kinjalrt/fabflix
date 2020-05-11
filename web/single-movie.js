@@ -49,16 +49,10 @@ function handleResult(resultData) {
 
     // append two html <p> created to the h3 body, which will refresh the page
     movieInfoElement.append(resultData[0]["movie_title"]);
-
-
-
     let yearInfoElement = jQuery("#year");
 
     // append two html <p> created to the h3 body, which will refresh the page
     yearInfoElement.append("Year: " + resultData[0]["movie_year"]);
-
-
-
     console.log("handleResult: populating movie info table from resultData");
 
     // Populate the movie table

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 @WebFilter(filterName = "LoginFilter", urlPatterns = "/*")
 public class LoginFilter implements Filter {
     private final ArrayList<String> allowedURIs = new ArrayList<>();
+    private final ArrayList<String> staffURIs = new ArrayList<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -20,6 +21,10 @@ public class LoginFilter implements Filter {
         allowedURIs.add("api/adlogin");
         allowedURIs.add("admin-login.js");
         allowedURIs.add("admin-login.html");
+
+        staffURIs.add("dashboard.html");
+        staffURIs.add("api/dashboard");
+        staffURIs.add("dashboard.js");
     }
 
     @Override
@@ -38,17 +43,23 @@ public class LoginFilter implements Filter {
         }
         // Redirect to login page if the "user" attribute doesn't exist in session
         if(httpRequest.getSession().getAttribute("user") == null) {
-            if(httpRequest.getRequestURI().endsWith("dashboard.html"))
+            if(this.isNotAllowedWithoutStaffLogin(httpRequest.getRequestURI())) {
                 httpResponse.sendRedirect("admin-login.html");
+            }
             else
                 httpResponse.sendRedirect("login.html");
         }
-        else if(httpRequest.getRequestURI().endsWith("dashboard.html") && ((User)httpRequest.getSession().getAttribute("user")).getType() != "employee"){
+        else if(this.isNotAllowedWithoutStaffLogin(httpRequest.getRequestURI()) &&
+                ((User)httpRequest.getSession().getAttribute("user")).getType() != "employee"){
             httpResponse.sendRedirect("admin-login.html");
         }
         else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
+    }
+
+    private boolean isNotAllowedWithoutStaffLogin(String requestURI){
+        return staffURIs.stream().anyMatch(requestURI.toLowerCase()::endsWith);
     }
 
     private boolean isUrlAllowedWithoutLogin(String requestURI){
