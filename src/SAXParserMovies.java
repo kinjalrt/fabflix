@@ -297,7 +297,7 @@ public class SAXParserMovies extends DefaultHandler {
                 }
             }
         } catch (IOException e) {
-            //exception handling left as an exercise for the reader
+            e.printStackTrace();
         }
 
 

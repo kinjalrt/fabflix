@@ -165,67 +165,68 @@ public class SAXParserStars extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        if (qName.equalsIgnoreCase("stagename")) {
-            //add it to the list
-            currentStar = tempVal;
-            tempPair = new Pair("", 0);
+        try(FileWriter fw = new FileWriter("ParserStars.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)) {
 
-            //check if movie already in db
-            try{
-                String query0 = "select * from stars_test where name = ?;";
-                PreparedStatement ps0 = connection.prepareStatement(query0);
-                ps0.setString(1, currentStar);
-                ResultSet rs0 = ps0.executeQuery();
+            if (qName.equalsIgnoreCase("stagename")) {
+                //add it to the list
+                currentStar = tempVal;
+                tempPair = new Pair("", 0);
 
-                if(rs0.next()){
-                   // System.out.println(currentStar + " already in db");
+                //check if movie already in db
+                try {
+                    String query0 = "select * from stars_test where name = ?;";
+                    PreparedStatement ps0 = connection.prepareStatement(query0);
+                    ps0.setString(1, currentStar);
+                    ResultSet rs0 = ps0.executeQuery();
+
+                    if (rs0.next()) {
+                        out.println("Star \""+currentStar+"\" already in database");
+                        // System.out.println(currentStar + " already in db");
+                    } else {
+                        tempPair.setL(currentStar);
+                    }
+                    rs0.close();
+                    ps0.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-                else{
-                    tempPair.setL(currentStar);
+
+            } else if (qName.equalsIgnoreCase("dob")) {
+                try {
+                    currentDob = (Integer.parseInt(tempVal));
+                    //update pair only if movie not in db else ignore
+                    if (!tempPair.getL().equals("")) {
+                        tempPair.setR(currentDob);
+                    }
+                } catch (Exception e) {
+                    if (tempVal.equals("")) {
+                        out.println("Warning -> date of birth unknown for star \""+currentStar+"\" -> setting dob as null");
+                        //   System.out.println("EXCEPTION \""+ tempVal +"\"- date of birth unknown for star \""+ currentStar +"\"; setting dob as null");
+                    } else {
+                        out.println("Warning -> invalid date of birth \""+ tempVal +"\" for star \""+currentStar+"\" -> setting dob as null");
+                        //   System.out.println("EXCEPTION \""+ tempVal +"\" - invalid date of birth data for star \""+ currentStar +"\"; setting dob as null");
+                    }
                 }
-                rs0.close();
-                ps0.close();
+
+            } else if (qName.equalsIgnoreCase("actor")) {
+                if (!tempPair.getL().equals("")) {
+                    listActors.add(tempPair);
+                    //  System.out.println(tempPair.getL() + " " + tempPair.getR() + " " + listActors.size());
+                }
+
+            } else if (qName.equalsIgnoreCase("actors")) {
+                // System.out.println("no");
+                try {
+                    printData(listActors);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
-        else if (qName.equalsIgnoreCase("dob")) {
-            try {
-                currentDob = (Integer.parseInt(tempVal));
-                //update pair only if movie not in db else ignore
-                if(!tempPair.getL().equals("")){
-                    tempPair.setR(currentDob);
-                }
-            }catch (Exception e){
-                if(tempVal.equals("*")){
-                //    System.out.println("EXCEPTION \""+ tempVal +"\"- date of birth unknown for star \""+ currentStar +"\"; setting dob as null");
-                }
-                else if(tempVal.equals("")){
-                 //   System.out.println("EXCEPTION \""+ tempVal +"\"- date of birth unknown for star \""+ currentStar +"\"; setting dob as null");
-                }
-                else{
-                 //   System.out.println("EXCEPTION \""+ tempVal +"\" - invalid date of birth data for star \""+ currentStar +"\"; setting dob as null");
-                }
-            }
-
-        }
-        else if(qName.equalsIgnoreCase("actor")){
-            if(!tempPair.getL().equals("")) {
-                listActors.add(tempPair);
-              //  System.out.println(tempPair.getL() + " " + tempPair.getR() + " " + listActors.size());
-            }
-
-        }
-        else if(qName.equalsIgnoreCase("actors")){
-           // System.out.println("no");
-            try {
-                printData(listActors);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        }catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -233,7 +234,7 @@ public class SAXParserStars extends DefaultHandler {
     public static void main(String[] args) throws Exception {
 
         try {
-            PrintWriter out = new PrintWriter("ParserStars.txt");
+            File file = new File("ParserStars.txt");
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             connection = DriverManager.getConnection("jdbc:" + "mysql" + ":///" + "moviedb" + "?autoReconnect=true&useSSL=false",
@@ -244,13 +245,11 @@ public class SAXParserStars extends DefaultHandler {
 
             SAXParserStars spe = new SAXParserStars();
             spe.runExample();
-            out.println("koro");
             connection.close();
 
-            out.close();
 
-        } catch (IOException exception) {
-            System.out.println("FILE ERROR OCCURRED -> " + exception);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
