@@ -36,26 +36,29 @@ public class DashboardServlet extends HttpServlet {
 
         try {
             Connection dbcon = dataSource.getConnection();
-            String query = "";
+
 
             if (!star.equals("null") && !birthYearString.equals("null")) {
                 System.out.println(star);
                 String new_id = this.findId(dbcon,"stars", "nm");
                 String check_id = this.checkIfAlreadyInTable(dbcon, star,"stars");
-                if(check_id != "") {
-                    query = "insert into stars (id,name,birthYear) values (?,?,?)";
+                System.out.println(check_id);
+                if(check_id.equals("")) {
+                    String query = "insert into stars (id,name,birthYear) values(?,?,?)";
                     PreparedStatement statement = dbcon.prepareStatement(query);
                     statement.setString(1, new_id);
                     statement.setString(2, star);
-                    if(birthYearString != "") {
+                    if(!birthYearString.equals("")) {
                         int birthYear = Integer.parseInt(birthYearString);
                         statement.setInt(3, birthYear);
                     }
                     else
                         statement.setNull(3,java.sql.Types.INTEGER);
+                    statement.execute();
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("status", "Successfully added "+star+" at id: "+new_id);
                     jsonArray.add(jsonObject);
+                    statement.close();
                 }
                 else{
                     JsonObject jsonObject = new JsonObject();
@@ -82,22 +85,30 @@ public class DashboardServlet extends HttpServlet {
     private String findId(Connection dbcon, String table, String pref) throws SQLException {
         String starId_query = "select max(id) from "+table;
         PreparedStatement starId_statement = dbcon.prepareStatement(starId_query);
-        ResultSet resultSet = starId_statement.executeQuery();
+        ResultSet find_resultSet = starId_statement.executeQuery();
         String id = "";
-        while (resultSet.next()){
-            id = pref + Integer.parseInt(resultSet.getString("max(id)").substring(2))+1;
+        while (find_resultSet.next()){
+            id = pref + (Integer.parseInt(find_resultSet.getString("max(id)").substring(2))+1);
         }
+        find_resultSet.close();
+        starId_statement.close();
         return id;
     }
     private String checkIfAlreadyInTable(Connection dbcon, String name, String table) throws SQLException {
-        String query = "select * from "+table+" where name like ";
-        PreparedStatement statement = dbcon.prepareStatement(query);
-        statement.setString(1, "%"+name+"%");
-        ResultSet resultSet = statement.executeQuery();
-        String id = "";
-        if (resultSet.next())
-            return resultSet.getString("id");
-        else
+        String query = "select * from "+table+" where name like ?";
+        PreparedStatement check_statement = dbcon.prepareStatement(query);
+        check_statement.setString(1, "%"+name+"%");
+        ResultSet check_resultSet = check_statement.executeQuery();
+        if (check_resultSet.next()) {
+            String id = check_resultSet.getString("id");
+            check_resultSet.close();
+            check_statement.close();
+            return id;
+        }
+        else {
+            check_resultSet.close();
+            check_statement.close();
             return "";
+        }
     }
 }

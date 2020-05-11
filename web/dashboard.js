@@ -18,6 +18,7 @@ function handleResult(resultData) {
 
     console.log("handle result")
     let feedback = $("#status");
+    feedback.html("");
     feedback.append(resultData[0]["status"]);
 }
 
