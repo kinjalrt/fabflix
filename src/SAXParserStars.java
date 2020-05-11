@@ -71,11 +71,11 @@ public class SAXParserStars extends DefaultHandler {
 
 
         PreparedStatement psInsertRecord=null;
-        String sqlInsertRecord="INSERT INTO stars_test (id,name,birthYear) VALUES(?, ?, ?)";
+        String sqlInsertRecord="INSERT INTO stars (id,name,birthYear) VALUES(?, ?, ?)";
 
         //get max id in db
         String biggestId = "";
-        String maxIdQuery = "select substring(max(id), 3) as id from stars_test;";
+        String maxIdQuery = "select substring(max(id), 3) as id from stars;";
         PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
         ResultSet rs = maxIdStatement.executeQuery();
         while (rs.next()) {
@@ -176,7 +176,7 @@ public class SAXParserStars extends DefaultHandler {
 
                 //check if movie already in db
                 try {
-                    String query0 = "select * from stars_test where name = ?;";
+                    String query0 = "select * from stars where name = ?;";
                     PreparedStatement ps0 = connection.prepareStatement(query0);
                     ps0.setString(1, currentStar);
                     ResultSet rs0 = ps0.executeQuery();

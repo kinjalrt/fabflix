@@ -1,3 +1,4 @@
+CREATE schema moviedb;
 USE moviedb;
 
 CREATE TABLE movies (
