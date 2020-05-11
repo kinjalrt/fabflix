@@ -6,15 +6,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * This IndexServlet is declared in the web annotation below,
@@ -34,8 +31,6 @@ public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json"); // Response mime type
 
-
-
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
         try {
@@ -43,14 +38,13 @@ public class IndexServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
             String param_genre = request.getParameter("genre");
 
-
             JsonArray jsonArray = new JsonArray();
 
             //get list of all genres for browsing
             if(param_genre!=null && param_genre.equals("set")){
-                Statement statement = dbcon.createStatement();
                 String query  = "SELECT DISTINCT * FROM genres ORDER BY name";
-                ResultSet rs = statement.executeQuery(query);
+                PreparedStatement statement = dbcon.prepareStatement(query);
+                ResultSet rs = statement.executeQuery();
                 while(rs.next()){
                     int genre_id = rs.getInt("id");
                     String genre_name = rs.getString("name");
@@ -64,7 +58,6 @@ public class IndexServlet extends HttpServlet {
                 rs.close();
                 statement.close();
                 dbcon.close();
-
             }
 
             //check if search query empty and no browsing by char/genre requested
@@ -76,7 +69,6 @@ public class IndexServlet extends HttpServlet {
                 // set response status to 200 (OK)
                 response.setStatus(200);
             }
-
         } catch (Exception e) {
 
             // write error message JSON object to output
@@ -86,7 +78,6 @@ public class IndexServlet extends HttpServlet {
 
             // set reponse status to 500 (Internal Server Error)
             response.setStatus(500);
-
         }
         out.close();
 

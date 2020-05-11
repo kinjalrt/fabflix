@@ -13,8 +13,8 @@ import java.sql.ResultSet;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 
-@WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "AdminLoginServlet", urlPatterns = "/api/adlogin")
+public class AdminLoginServlet extends HttpServlet {
     private static final long serialVersionUID = 4L;
 
     // Create a dataSource which registered in web.xml
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         //checking for the email and password in the database
         try{
             Connection dbcon = dataSource.getConnection();
-            String query = "SELECT * from customers where email=?";
+            String query = "SELECT * from employees where email=?";
             PreparedStatement statement = dbcon.prepareStatement(query);
             statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
@@ -64,13 +64,8 @@ public class LoginServlet extends HttpServlet {
                 if(success) {
 
                     //both email and password correct
-                    int id = rs.getInt("id");
-                    String firstName = rs.getString("firstName");
-                    String lastName = rs.getString("lastName");
-                    String address = rs.getString("address");
-
-                    request.getSession().setAttribute("user", new User(id, firstName, lastName, address, email));
-
+                    String name = rs.getString("fullName");
+                    request.getSession().setAttribute("user", new User(name, email));
 
                     responseJsonObject.addProperty("status", "success");
                     responseJsonObject.addProperty("message", "success");
@@ -84,7 +79,7 @@ public class LoginServlet extends HttpServlet {
             } else{
 
                 // email does not exist
-                // Login fail
+                //Admin Login fail
                 System.out.println("email does not exist");
                 responseJsonObject.addProperty("status", "fail");
                 responseJsonObject.addProperty("message", "Invalid email");
