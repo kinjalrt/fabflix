@@ -71,11 +71,11 @@ public class SAXParserStars extends DefaultHandler {
 
 
         PreparedStatement psInsertRecord=null;
-        String sqlInsertRecord="INSERT INTO stars_test2 (id,name,birthYear) VALUES(?, ?, ?)";
+        String sqlInsertRecord="INSERT INTO stars_test (id,name,birthYear) VALUES(?, ?, ?)";
 
         //get max id in db
         String biggestId = "";
-        String maxIdQuery = "select substring(max(id), 3) as id from stars_test2;";
+        String maxIdQuery = "select substring(max(id), 3) as id from stars_test;";
         PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
         ResultSet rs = maxIdStatement.executeQuery();
         while (rs.next()) {
@@ -106,10 +106,10 @@ public class SAXParserStars extends DefaultHandler {
                 psInsertRecord.setString(2, name);
                 if(dob!=0) {
                     psInsertRecord.setInt(3, dob);
-                    System.out.println("Inserting " + starId + " " + name + " " + dob);
+                  //  System.out.println("Inserting " + starId + " " + name + " " + dob);
                 }else{
                     psInsertRecord.setString(3, null);
-                    System.out.println("Inserting (dob null) " + starId + " " + name + " " + dob);
+                 //   System.out.println("Inserting (dob null) " + starId + " " + name + " " + dob);
                 }
                 psInsertRecord.addBatch();
 
@@ -130,7 +130,7 @@ public class SAXParserStars extends DefaultHandler {
             e.printStackTrace();
         }
 
-        System.out.println();
+      //  System.out.println();
     }
 
 
@@ -142,7 +142,7 @@ public class SAXParserStars extends DefaultHandler {
         if (qName.equalsIgnoreCase("actor")) {
             //create new list every 100 actor
             if(listActors.size()==100) {
-                System.out.println("reset");
+             //   System.out.println("reset");
 
                 try {
                     printData(listActors);
@@ -172,13 +172,13 @@ public class SAXParserStars extends DefaultHandler {
 
             //check if movie already in db
             try{
-                String query0 = "select * from stars_test2 where name = ?;";
+                String query0 = "select * from stars_test where name = ?;";
                 PreparedStatement ps0 = connection.prepareStatement(query0);
                 ps0.setString(1, currentStar);
                 ResultSet rs0 = ps0.executeQuery();
 
                 if(rs0.next()){
-                    System.out.println(currentStar + " already in db");
+                   // System.out.println(currentStar + " already in db");
                 }
                 else{
                     tempPair.setL(currentStar);
@@ -200,13 +200,13 @@ public class SAXParserStars extends DefaultHandler {
                 }
             }catch (Exception e){
                 if(tempVal.equals("*")){
-                    System.out.println("EXCEPTION \""+ tempVal +"\"- date of birth unknown for star \""+ currentStar +"\"; setting dob as null");
+                //    System.out.println("EXCEPTION \""+ tempVal +"\"- date of birth unknown for star \""+ currentStar +"\"; setting dob as null");
                 }
                 else if(tempVal.equals("")){
-                    System.out.println("EXCEPTION \""+ tempVal +"\"- date of birth unknown for star \""+ currentStar +"\"; setting dob as null");
+                 //   System.out.println("EXCEPTION \""+ tempVal +"\"- date of birth unknown for star \""+ currentStar +"\"; setting dob as null");
                 }
                 else{
-                    System.out.println("EXCEPTION \""+ tempVal +"\" - invalid date of birth data for star \""+ currentStar +"\"; setting dob as null");
+                 //   System.out.println("EXCEPTION \""+ tempVal +"\" - invalid date of birth data for star \""+ currentStar +"\"; setting dob as null");
                 }
             }
 
@@ -214,12 +214,12 @@ public class SAXParserStars extends DefaultHandler {
         else if(qName.equalsIgnoreCase("actor")){
             if(!tempPair.getL().equals("")) {
                 listActors.add(tempPair);
-                System.out.println(tempPair.getL() + " " + tempPair.getR() + " " + listActors.size());
+              //  System.out.println(tempPair.getL() + " " + tempPair.getR() + " " + listActors.size());
             }
 
         }
         else if(qName.equalsIgnoreCase("actors")){
-            System.out.println("no");
+           // System.out.println("no");
             try {
                 printData(listActors);
             } catch (Exception e) {
@@ -232,17 +232,28 @@ public class SAXParserStars extends DefaultHandler {
 
     public static void main(String[] args) throws Exception {
 
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        connection = DriverManager.getConnection("jdbc:" + "mysql" + ":///" + "moviedb" + "?autoReconnect=true&useSSL=false",
-                "mytestuser", "mypassword");
-        if (connection != null) {
-            System.out.println("Connection established!!");
+        try {
+            PrintWriter out = new PrintWriter("ParserStars.txt");
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            connection = DriverManager.getConnection("jdbc:" + "mysql" + ":///" + "moviedb" + "?autoReconnect=true&useSSL=false",
+                    "mytestuser", "mypassword");
+            if (connection != null) {
+                System.out.println("Connection established!!");
+            }
+
+            SAXParserStars spe = new SAXParserStars();
+            spe.runExample();
+            out.println("koro");
+            connection.close();
+
+            out.close();
+
+        } catch (IOException exception) {
+            System.out.println("FILE ERROR OCCURRED -> " + exception);
         }
 
-        SAXParserStars spe = new SAXParserStars();
-        spe.runExample();
 
-        connection.close();
     }
 
 }

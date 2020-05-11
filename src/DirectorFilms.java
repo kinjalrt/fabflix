@@ -9,7 +9,9 @@ public class DirectorFilms {
 
     private int movieYear = 0;
 
-    private ArrayList<String> movieGenres = new ArrayList<String>();
+    private String director = "";
+
+    private ArrayList<Integer> movieGenres = new ArrayList<Integer>();
 
 
     public DirectorFilms(){
@@ -23,6 +25,12 @@ public class DirectorFilms {
         this.movieYear = year;
     }
 
+    public void setDirector(String d) {
+        this.director = d;
+    }
+
+    public String getDirector() { return director; }
+
     public String getMovieTitle() {
         return movieTitle;
     }
@@ -31,65 +39,12 @@ public class DirectorFilms {
         this.movieTitle = title;
     }
 
-    public ArrayList<String> getMovieGenres() {
+    public ArrayList<Integer> getMovieGenres() {
         return movieGenres;
     }
 
-    public void addMovieGenre(String genre) {
-        if(genre.equals("Susp")) {
-            movieGenres.add("Thriller");
-        }
-        else if(genre.equals("CnR")){
-            movieGenres.add("Cops and Robbers");
-        }
-        else if(genre.equals("Dram")){
-            movieGenres.add("Drama");
-        }
-        else if(genre.equals("West")){
-            movieGenres.add("Western");
-        }
-        else if(genre.equals("Myst")){
-            movieGenres.add("Mystery");
-        }
-        else if(genre.equals("S.F.")){
-            movieGenres.add("Sci-Fi");
-        }
-        else if(genre.equals("Advt")){
-            movieGenres.add("Adventure");
-        }
-        else if(genre.equals("Horr")){
-            movieGenres.add("Horror");
-        }
-        else if(genre.equals("Romt")){
-            movieGenres.add("Romance");
-        }
-        else if(genre.equals("Comd")){
-            movieGenres.add("Comedy");
-        }
-        else if(genre.equals("Musc")){
-            movieGenres.add("Musical");
-        }
-        else if(genre.equals("Docu")){
-            movieGenres.add("Documentary");
-        }
-        else if(genre.equals("Porn")){
-            movieGenres.add("Adult");
-        }
-        else if (genre.equals("Noir")){
-            movieGenres.add("Black");
-        }
-        else if(genre.equals("BioP")){
-            movieGenres.add("Biography");
-        }
-        else if(genre.equals("TV")){
-            movieGenres.add("TV-Show");
-        }
-        else if(genre.equals("TVs")){
-            movieGenres.add("TV-Series");
-        }
-        else if(genre.equals("TVm")){
-            movieGenres.add("TV-Miniseries");
-        }
+    public void addMovieGenre(int genre) {
+        movieGenres.add(genre);
     }
 
     public String getId() {
@@ -103,10 +58,12 @@ public class DirectorFilms {
     public String toString() {
         String s = "Title:" + getMovieTitle() + "\n";
         s += "Year:" + getMovieYear() + "\n";
+        s+= "Director: " + getDirector() + "\n";
         s+= "Genres: ";
-        for(String g : getMovieGenres()){
+        for(int g : getMovieGenres()){
             s += g +", ";
         }
+        s += "\n";
         return s;
     }
 

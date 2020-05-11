@@ -1,5 +1,3 @@
-CREATE schema moviedb;
-
 USE moviedb;
 
 CREATE TABLE movies (
@@ -20,8 +18,9 @@ primary key (id)
 CREATE TABLE stars_in_movies (
 starId varchar(10) not null,
 movieId varchar(10) not null,
-foreign key (starID) references stars(id),
-foreign key (movieID) references movies(id)
+foreign key (starId) references stars(id),
+foreign key (movieId) references movies(id),
+primary key (starId, movieId)
 );
 
 CREATE TABLE genres (
@@ -34,7 +33,8 @@ CREATE TABLE genres_in_movies(
 genreId integer not null,
 movieId varchar(10) not null,
 foreign key (genreId) references genres(id),
-foreign key (movieId) references movies(id)
+foreign key (movieId) references movies(id),
+primary key (genreId, movieId)
 );
 
 CREATE TABLE creditcards(
@@ -62,6 +62,7 @@ id integer not null auto_increment,
 customerId integer not null,
 movieId varchar(10) not null, 
 saleDate date not null,
+quantity integer default 1,
 primary key(id),
 foreign key (customerId) references customers(id),
 foreign key (movieId) references movies(id)

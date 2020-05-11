@@ -72,127 +72,115 @@ public class SAXParserMovies extends DefaultHandler {
      * Iterate through the list and print
      * the contents
      */
-    private void printData() throws Exception {
-
-        System.out.println("Director Name: " + director);
+    private void printData(ArrayList<DirectorFilms> batch) throws Exception {
 
         // for each film:
-            // check if year and genre and title all exist
+            // check if year and genre and title all exist - done
             // if so get highest movie id and create new movie id
             // insert in movies tables
             // deal with genres_in_movies
 
 
-        // for each film:
-        for(DirectorFilms film : listDirectorFilms){
 
-            // check if year and genre and title all exist
-            if (!film.getMovieTitle().equals("NKD") && film.getMovieYear()!=0 && film.getMovieGenres().size()>0){
-                System.out.println(film.toString());
+        PreparedStatement psInsertRecord=null;
+        String sqlInsertRecord="INSERT INTO movies_test (id,title,year,director) VALUES(?, ?, ?, ?)";
 
-
-                //check if movie in movies table -> if it is get movieID and go to genres directly
-                String query0 = "select id from movies_test where title = ?;";
-                PreparedStatement ps0 = connection.prepareStatement(query0);
-                ps0.setString (1, film.getMovieTitle());
-                ResultSet rs0 = ps0.executeQuery();
-                String maxId = "";
-
-                if (rs0.next()){
-                    //movie already exists in table -> retrieve movie id
-                    maxId = rs0.getString("id");
-                    System.out.println("MOVIEID "+ maxId);
-
-                }
-                else{
-                    //movie does not exist in table:
-                    //get highest movie id and create new movie id
-                    String maxIdQuery = "select concat(\"tt\", (substring(max(id), 3)+1)) as id from movies_test;";
-                    PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
-                    ResultSet rs = maxIdStatement.executeQuery();
-                    while(rs.next()){
-                        maxId = rs.getString("id");
-                    }
-                    rs.close();
-                    maxIdStatement.close();
-
-                    //add movie to movies table if not already on there
-                    String query3 = "INSERT INTO movies_test (id,title,year,director)\n" +
-                            "SELECT ?, ?, ?, ? FROM DUAL \n" +
-                            " WHERE NOT EXISTS (SELECT * FROM movies_test       \n" +
-                            " WHERE title = ? LIMIT 1);";
-                    PreparedStatement preparedStmt = connection.prepareStatement(query3);
-                    preparedStmt.setString (1, maxId);
-                    preparedStmt.setString (2, film.getMovieTitle());
-                    preparedStmt.setInt (3, film.getMovieYear());
-                    preparedStmt.setString (4, director);
-                    preparedStmt.setString (5, film.getMovieTitle());
-                    preparedStmt.execute();
-                    preparedStmt.close();
-
-                }
-                rs0.close();
-                ps0.close();
+        PreparedStatement psInsertRecordGenres =null;
+        String sqlInsertRecordGenres = "INSERT INTO genres_in_movies_test (genreId,movieId) SELECT ?, ? FROM DUAL" +
+                " WHERE NOT EXISTS (SELECT * FROM genres_in_movies_test WHERE genreId = ? AND movieId = ? LIMIT 1);";
+              //  "INSERT INTO genres_in_movies_test (genreId,movieId) values(?, ?)";
 
 
-                //genres
-                //for each genre in that movie:
-                for (String genre : film.getMovieGenres()){
-                    //if genre not in genres table add
-                    String query4 = "INSERT INTO genres_test (name) SELECT ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM genres_test WHERE name = ? LIMIT 1);";
-                    PreparedStatement ps4 = connection.prepareStatement(query4);
-                    ps4.setString (1, genre);
-                    ps4.setString (2, genre);
-                    ps4.execute();
-                    ps4.close();
+        //get max id in db
+        String biggestId = "";
+        String maxIdQuery = "select substring(max(id), 3) as id from movies_test;";
+        PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
+        ResultSet rs = maxIdStatement.executeQuery();
+        while (rs.next()) {
+            biggestId = rs.getString("id");
+        }
+        int maxId = (Integer.parseInt(biggestId));
+        rs.close();
+        maxIdStatement.close();
 
-                    //get genreID
-                    String query5 = "select id from genres_test where name = ?;";
-                    PreparedStatement ps5 = connection.prepareStatement(query5);
-                    ps5.setString (1, genre);
-                    ResultSet rs5 = ps5.executeQuery();
-                    int genreId = 0;
-                    while(rs5.next()){
-                        genreId = rs5.getInt("id");
-                        System.out.println("GENRE "+ genreId);
-                    }
-                    rs5.close();
-                    ps5.close();
 
-                    //add movieID + genreID to genres_in_movies
-                    String query6 = "INSERT INTO genres_in_movies (genreId,movieId) SELECT ?, ? FROM DUAL " +
-                            "WHERE NOT EXISTS (SELECT * FROM genres_in_movies WHERE genreId = ? AND movieId = ? LIMIT 1);";
-                    PreparedStatement ps6 = connection.prepareStatement(query6);
-                    ps6.setInt (1, genreId);
-                    ps6.setString(2, maxId);
-                    ps6.setInt (3, genreId);
-                    ps6.setString(4, maxId);
-                    ps6.execute();
-                    ps6.close();
 
+        try {
+
+            connection.setAutoCommit(false);
+            psInsertRecord=connection.prepareStatement(sqlInsertRecord);
+            psInsertRecordGenres=connection.prepareStatement(sqlInsertRecordGenres);
+
+
+            for(DirectorFilms film : batch){
+               // System.out.println("pls " + film.toString());
+                String title = film.getMovieTitle();
+                int year = film.getMovieYear();
+                String director = film.getDirector();
+
+
+                //create new movie id
+                maxId = maxId + 1;
+                String movieId = "tt"+(maxId);
+
+                //insert movie
+                psInsertRecord.setString(1, movieId);
+                psInsertRecord.setString(2, title);
+                psInsertRecord.setInt(3, year);
+                psInsertRecord.setString(4, director);
+                psInsertRecord.addBatch();
+
+                //insert genre-movie
+                for(int g : film.getMovieGenres()) {
+                    psInsertRecordGenres.setInt(1, g);
+                    psInsertRecordGenres.setString(2, movieId);
+                    psInsertRecordGenres.setInt(3, g);
+                    psInsertRecordGenres.setString(4, movieId);
+                    psInsertRecordGenres.addBatch();
 
                 }
 
-                System.out.println("ADDED");
+                psInsertRecordGenres.executeBatch();
 
 
             }
+            psInsertRecord.executeBatch();
+            connection.commit();
+
+        } catch (SQLException e) {
+            System.out.println("kenma"+e.getMessage());//e.printStackTrace();
 
         }
 
+        try {
+            if(psInsertRecord!=null) psInsertRecord.close();
+            if(psInsertRecordGenres!=null) psInsertRecordGenres.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
-        System.out.println();
+
     }
+
 
 
     //Event Handlers
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         //reset
         tempVal = "";
+
         if (qName.equalsIgnoreCase("directorfilms")) {
+
             //array of all films for current director
-            listDirectorFilms = new ArrayList<DirectorFilms>();
             director = "null";
+            if(listDirectorFilms.size()>5){
+                try {
+                    printData(listDirectorFilms);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                listDirectorFilms = new ArrayList<DirectorFilms>();
+            }
         }
         else if(qName.equalsIgnoreCase("film")){
             tempMovie = new DirectorFilms();
@@ -205,53 +193,251 @@ public class SAXParserMovies extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        if (qName.equalsIgnoreCase("film")) {
-            //add it to the list
-            listDirectorFilms.add(tempMovie);
+        try(FileWriter fw = new FileWriter("ParserMovies.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
 
-        } else if (qName.equalsIgnoreCase("t")) {
-            tempMovie.setMovieTitle(tempVal);
-        } else if (qName.equalsIgnoreCase("year")) {
-            try {
-                tempMovie.setMovieYear(Integer.parseInt(tempVal));
-            }catch (Exception e){
-                //specify for which movie?
-                System.out.println("EXCEPTION - inconsistent data movie year: " + tempVal);
+            if (qName.equalsIgnoreCase("t")) {
+                tempMovie.setMovieTitle(tempVal);
+                tempMovie.setDirector(director);
             }
-        } else if (qName.equalsIgnoreCase("cat")) {
-            tempMovie.addMovieGenre(tempVal);
+            else if (qName.equalsIgnoreCase("year")) {
+                try {
+                    tempMovie.setMovieYear(Integer.parseInt(tempVal));
+                }catch (Exception e){
+                    //specify for which movie?
+                    out.println("Invalid year data \"" + tempVal + "\" for movie \""+ tempMovie.getMovieTitle()+"\"");
+                  //  System.out.println("EXCEPTION - invalid movie year data for : " + tempVal);
+                }
+            }
+            else if (qName.equalsIgnoreCase("cat")) {
+                if(!tempVal.equals("")) {
+                    int g = translateGenre(tempVal);
+                    if(g!=0){
+                        tempMovie.addMovieGenre(g);
+
+                    }
+                    else{
+                        out.println("Genre \""+ tempVal +"\" unrecognizable for movie \""+ tempMovie.getMovieTitle()+"\"");
+                      //  System.out.println("Genre type invalid for " + tempMovie.getMovieTitle());
+                    }
+                }
+
+            }
+            else if(qName.equalsIgnoreCase("dirname")){
+                director = tempVal;
+                //tempMovie.setDirector(director);
+            }
+            else if (qName.equalsIgnoreCase("film")){
+              //  System.out.println("add" + tempMovie.getMovieTitle() + " "+ tempMovie.getDirector());
+
+                //check if movie has >= 1 genre and year!=0
+                    if((!tempMovie.getDirector().equals("null")) && tempMovie.getMovieGenres().size()>0 && tempMovie.getMovieYear()!=0 && (!tempMovie.getMovieTitle().equals("NKT"))) {
+                        try {
+                            //check if movie in db
+                            String mid = "";
+                            String query0 = "select id from movies_test where title = ? and year = ? and director = ?;";
+                            PreparedStatement ps0 = connection.prepareStatement(query0);
+                            ps0.setString(1, tempMovie.getMovieTitle());
+                            ps0.setInt(2, tempMovie.getMovieYear());
+                            ps0.setString(3, tempMovie.getDirector());
+                            ResultSet rs0 = ps0.executeQuery();
+                            if (rs0.next()) {
+                                out.println("Movie \""+ tempMovie.getMovieTitle()+"\" already in database");
+                             //   System.out.println("movie already in db");
+                             //   System.out.println(tempMovie.toString());
+                                mid = rs0.getString("id");
+                                //add missing genres if any
+                                for(int g : tempMovie.getMovieGenres()) {
+                                    //SET PRIMARY KEYS FOR BOTH IDS IN GENRES_IN_MOVIES
+                                    try{
+                                        String query10 = "INSERT INTO genres_in_movies_test (genreId,movieId) VALUES (?, ?);";
+                                        PreparedStatement ps10 = connection.prepareStatement(query10);
+                                        ps10.setInt (1, g);
+                                        ps10.setString (2, mid);
+                                        ps10.execute();
+                                        ps10.close();
+                                       // System.out.println(g+ " "+ mid);
+
+                                    } catch (SQLException e) {
+                                       // System.out.println("nagisa"+e.getMessage());
+                                       // e.printStackTrace();
+                                    }
+
+                                }
+                               // System.out.println();
+
+                            } else {
+                                listDirectorFilms.add(tempMovie);
+                               // System.out.println("adding : "+ tempMovie.toString());
+                            }
+                            rs0.close();
+                            ps0.close();
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        if(tempMovie.getDirector().equals("null")){
+                            out.println("No director associated with movie \""+ tempMovie.getMovieTitle()+"\"");
+                        }else if (tempMovie.getMovieGenres().size()==0){
+                            out.println("Zero genre associated with movie \""+ tempMovie.getMovieTitle()+"\"; movie should have at least 1 genre");
+                        } else if (tempMovie.getMovieTitle().equals("NKT")){
+                            out.println("NKT - movie title unknown");
+                        }
+                    }
+            }
+
+            else if(qName.equalsIgnoreCase("movies")){
+                try {
+                    printData(listDirectorFilms);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
         }
-        else if(qName.equalsIgnoreCase("dirname")){
-            director = tempVal;
-        }
-        else if(qName.equalsIgnoreCase("directorfilms")){
+
+
+    }
+
+    private int translateGenre(String genreParam){
+
+        String genre = genreParam.trim();
+        //add genre to genres tables if not exist
+        if(genre.equals("CnR") || genre.equals("Noir") || genre.equals("TVm") || genre.equals("TV") || genre.equals("TVs")){
             try {
-                printData();
-            } catch (Exception e) {
+                String query5 = "select * from genres_test where name = ?;";
+                PreparedStatement ps5 = connection.prepareStatement(query5);
+                ps5.setString(1, genre);
+                ResultSet rs5 = ps5.executeQuery();
+                int genreId = 0;
+                if (rs5.next()) {
+                    // System.out.println("GENRE " + genreId);
+                }else{
+                    //if genre not in genres table
+                    String query4 = "INSERT INTO genres_test (name) VALUES (?);";
+                    PreparedStatement ps4 = connection.prepareStatement(query4);
+                    ps4.setString (1, genre);
+                    ps4.execute();
+                    ps4.close();
+
+                }
+                rs5.close();
+                ps5.close();
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
+        String translatedGenre = "";
 
+        if(genre.equals("Susp")) {
+            translatedGenre = "Thriller";
+        }
+        else if(genre.equals("CnR")){
+            translatedGenre = "Cops and Robbers";
+        }
+        else if(genre.equals("Dram")){
+            translatedGenre = "Drama";
+        }
+        else if(genre.equals("West")){
+            translatedGenre = "Western";
+        }
+        else if(genre.equals("Myst")){
+            translatedGenre = "Mystery";
+        }
+        else if(genre.equals("S.F.") || genre.equals("ScFi")){
+            translatedGenre = "Sci-Fi";
+        }
+        else if(genre.equals("Advt")){
+            translatedGenre = "Adventure";
+        }
+        else if(genre.equals("Actn")){
+            translatedGenre = "Action";
+        }
+        else if(genre.equals("Horr")){
+            translatedGenre  = "Horror";
+        }
+        else if(genre.equals("Romt")){
+            translatedGenre = "Romance";
+        }
+        else if(genre.equals("Comd")){
+            translatedGenre = "Comedy";
+        }
+        else if(genre.equals("Musc")){
+            translatedGenre = "Musical";
+        }
+        else if(genre.equals("Docu")){
+            translatedGenre = "Documentary";
+        }
+        else if(genre.equals("Porn")){
+            translatedGenre = "Adult";
+        }
+        else if (genre.equals("Noir")){
+            translatedGenre = "Black";
+        }
+        else if(genre.equals("BioP")){
+            translatedGenre = "Biography";
+        }
+        else if(genre.equals("TV")){
+            translatedGenre = "TV-Show";
+        }
+        else if(genre.equals("TVs")){
+            translatedGenre = "TV-Series";
+        }
+        else if(genre.equals("TVm")){
+            translatedGenre = "TV-Miniseries";
+        }
 
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String jdbcURL="jdbc:mysql://localhost:3306/moviedb";
+        //return associated genre id
+        int genreId = 0;
         try {
-            connection = DriverManager.getConnection(jdbcURL,"mytestuser", "mypassword");
+            String query7 = "select id from genres_test where name = ?;";
+            PreparedStatement ps7 = connection.prepareStatement(query7);
+            ps7.setString(1, translatedGenre);
+            ResultSet rs7 = ps7.executeQuery();
+            while (rs7.next()) {
+                genreId = rs7.getInt("id");
+              //  System.out.println("GENRE " + genreId);
+            }
+            rs7.close();
+            ps7.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        SAXParserMovies spe = new SAXParserMovies();
-        spe.runExample();
-
-        connection.close();
+        return genreId;
 
     }
 
-}
+
+
+
+
+    public static void main(String[] args) throws Exception {
+
+        try {
+            File file = new File("ParserMovies.txt");
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            connection = DriverManager.getConnection("jdbc:" + "mysql" + ":///" + "moviedb" + "?autoReconnect=true&useSSL=false",
+                    "mytestuser", "mypassword");
+            if (connection != null) {
+                System.out.println("Connection established!!");
+            }
+
+            SAXParserMovies spe = new SAXParserMovies();
+            spe.runExample();
+
+            connection.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    }
 

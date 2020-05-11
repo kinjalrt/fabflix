@@ -96,7 +96,7 @@ public class SAXParserCast extends DefaultHandler {
             connection.commit();
 
         } catch (SQLException e) {
-           // System.out.println("Movie-star relation already exists in db -> "+ e.getMessage());
+          //  System.out.println("Movie-star relation already exists in db -> "+ e.getMessage());
            // e.printStackTrace();
           //  System.out.println(e.getMessage());
         }
