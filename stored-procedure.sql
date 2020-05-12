@@ -1,3 +1,4 @@
+use moviedb;
 DELIMITER $$
 create procedure add_movie(IN mdirector varchar(100), mid varchar(10), mtitle varchar(100), myear int, mstar varchar(100), mgenre varchar(32))
 BEGIN
@@ -22,5 +23,3 @@ select @sid, @gid;
 END
 $$
 DELIMITER ;
-
-drop procedure add_movie;
