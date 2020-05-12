@@ -97,10 +97,12 @@ public class DashboardServlet extends HttpServlet {
                     String ids = "";
                     int index = 0;
                     while (rs.next()) {
-                        ids += rs.getString(++index) + " ";
+                        ids += ", genre id: " + rs.getInt("@gid");
+                        ids += ", star id: " + rs.getString("@sid");
                     }
+
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("status", "Movie Added Successfully at ids: "+ movieId + " " + ids);
+                    jsonObject.addProperty("status", "Movie Added Successfully at movie id: "+ movieId + ids);
                     jsonArray.add(jsonObject);
 
                 }
