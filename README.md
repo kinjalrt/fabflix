@@ -6,7 +6,7 @@ submitted by Kinjal Reetoo and Yasvi Patel on May 12th, 2020.
 
 ## Demo video URL
 
-- [Project 3 - reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing](https://youtu.be/i-rnuu_XVmY)
+- [Project 3 - reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing](https://youtu.be/Xy-2g7unQCI)
 
 - [Project 2 - Developing Fablix Website](https://www.youtube.com/watch?v=C_lelf4wlZE)
 
