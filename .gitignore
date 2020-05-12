@@ -131,6 +131,7 @@ fabric.properties
 ### Java ###
 # Compiled class file
 *.class
+./src/RecaptchaConstants.java
 
 # Log file
 *.log
