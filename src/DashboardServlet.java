@@ -100,7 +100,7 @@ public class DashboardServlet extends HttpServlet {
                         ids += rs.getString(++index) + " ";
                     }
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("status", "Movie Added Successfully "+ movieId + ids);
+                    jsonObject.addProperty("status", "Movie Added Successfully at ids: "+ movieId + " " + ids);
                     jsonArray.add(jsonObject);
 
                 }
@@ -210,7 +210,7 @@ public class DashboardServlet extends HttpServlet {
     }
 
     private String checkIfAlreadyInTable(Connection dbcon, String name, String table) throws SQLException {
-        String query = "select * from" +table+ "where name like ?";
+        String query = "select * from " +table+ " where name like ?";
         PreparedStatement check_statement = dbcon.prepareStatement(query);
         check_statement.setString(1, "%"+name+"%");
         ResultSet check_resultSet = check_statement.executeQuery();
