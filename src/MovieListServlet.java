@@ -123,7 +123,7 @@ public class MovieListServlet extends HttpServlet {
 
                     String q0 = "SELECT rating\n" +
                             "FROM movies as m, ratings as r \n" +
-                            "WHERE  m.id = ? AND m.id = r.rating; ";
+                            "WHERE  m.id = ? AND m.id = r.movieId; ";
                     PreparedStatement s0 = dbcon.prepareStatement(q0);
                     s0.setString(1, movie_id);
                     ResultSet r0 = s0.executeQuery();
