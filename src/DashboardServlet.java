@@ -9,10 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = "/api/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -34,10 +31,12 @@ public class DashboardServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         JsonArray jsonArray = new JsonArray();
 
+        boolean isStarAddUsed = false;
+
         try {
             Connection dbcon = dataSource.getConnection();
 
-
+            //Add star
             if (!star.equals("null") && !birthYearString.equals("null")) {
                 System.out.println(star);
                 String new_id = this.findId(dbcon,"stars", "nm");
@@ -65,13 +64,55 @@ public class DashboardServlet extends HttpServlet {
                     jsonObject.addProperty("status", "Star already exists at "+check_id);
                     jsonArray.add(jsonObject);
                 }
+                isStarAddUsed = true;
 
             } else {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("status", "");
                 jsonArray.add(jsonObject);
+                isStarAddUsed = true;
             }
+            //end - Add star
+
+            //display metadata
+            if(!isStarAddUsed){
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("status", "");
+                jsonArray.add(jsonObject);
+            }
+            PreparedStatement tableStatement = dbcon.prepareStatement("show tables");
+            ResultSet rsTables = tableStatement.executeQuery();
+            while (rsTables.next()) {
+                JsonObject jsonObjectTables = new JsonObject();
+                String tableName = rsTables.getString("Tables_in_moviedb");
+                jsonObjectTables.addProperty("table_name", tableName);
+                PreparedStatement queryStatement = dbcon.prepareStatement("describe "+tableName);
+                ResultSet resultSet = queryStatement.executeQuery();
+
+                int count = 0;
+                while(resultSet.next()){
+                    String nullable = "";
+                    String key = "";
+                    if(resultSet.getString("Null").equals("NO"))
+                        nullable = "NOT NULL";
+                    if(!resultSet.getString("Key").equals(""))
+                        key = "(PRIMARY KEY)";
+                    String name = String.format("%s %s",resultSet.getString("Field"), key);
+                    String type = String.format("%s %s",resultSet.getString("Type"),nullable);
+
+                    jsonObjectTables.addProperty("attr_name"+(++count),name);
+                    jsonObjectTables.addProperty("attr_type"+count,type);
+                }
+                jsonObjectTables.addProperty("col_count",count);
+
+                jsonArray.add(jsonObjectTables);
+            }
+
+            //end - display metadata
+            rsTables.close();
+            tableStatement.close();
             dbcon.close();
+
         } catch (Exception e){
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("status", "Oops! Something went wrong");

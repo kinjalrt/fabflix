@@ -20,6 +20,39 @@ function handleResult(resultData) {
     let feedback = $("#status");
     feedback.html("");
     feedback.append(resultData[0]["status"]);
+    let dashboardTableBodyElement = jQuery("#dashboard_table_body");
+    for (let i = 1; i < resultData.length; i++) {
+        let rowHTML = "";
+        rowHTML += "<tr>";
+        //add table name
+        rowHTML += "<td>" + resultData[i]["table_name"] + "</td>";
+
+        //add Atttributes
+        rowHTML += "<td>";
+        let colCount = 0;
+        while(resultData[i]["col_count"] != colCount){
+            if(colCount === 0)
+                rowHTML+= resultData[i]["attr_name"+(++colCount)];
+            else
+                rowHTML += "<br>" + resultData[i]["attr_name"+(++colCount)];
+        }
+        rowHTML += "</td>";
+
+        //add Type
+        rowHTML += "<td>";
+        colCount = 0;
+        while(resultData[i]["col_count"] != colCount){
+            if(colCount === 0)
+                rowHTML+= resultData[i]["attr_type"+(++colCount)];
+            else
+                rowHTML += "<br>" + resultData[i]["attr_type"+(++colCount)];
+        }
+        rowHTML += "</td>";
+
+        rowHTML += "</tr>";
+        // Append the row created to the table body, which will refresh the page
+        dashboardTableBodyElement.append(rowHTML);
+    }
 }
 
 function getParameterByName(target) {
