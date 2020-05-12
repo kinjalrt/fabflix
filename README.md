@@ -65,9 +65,9 @@ Following files contain all queries with prepared statements.
     - This reduces the running time to ~1/2 minutes depending on the file being parsed and the number of inconsistencies being reported for each 
 
 - Limit the number of sql queries as much as possible; a few minor strategies were employed in order to try to limit the number of queries, including:
-        - Since we insert data into the tables by batches of 100, when creating a new id, instead of retrieving the current maxId for each movie or star, we retrieve it once for the first movie/star in the batch and keep incrementing the id by +1 for the next 99 movies/stars in this batch.
-        - Instead of checking for duplicates for genres_in_movies and stars_in_movies using “select” statements, we set both existing fields in both tables (genres_in_movies(genreId, movieId) and stars_in_movies(starId, movieId)) as primary keys. Therefore when the user tries to insert an already existing genreId-movieId or starId-movieId mapping in one of these tables, a MySQLException is thrown, from which we can get the error message with the associated values that caused the error.
-    - In total, these query optimization techniques saved us ~1min, or less depending on the parsers. 
+    - Since we insert data into the tables by batches of 100, when creating a new id, instead of retrieving the current maxId for each movie or star, we retrieve it once for the first movie/star in the batch and keep incrementing the id by +1 for the next 99 movies/stars in this batch.
+    - Instead of checking for duplicates for genres_in_movies and stars_in_movies using “select” statements, we set both existing fields in both tables (genres_in_movies(genreId, movieId) and stars_in_movies(starId, movieId)) as primary keys. Therefore when the user tries to insert an already existing genreId-movieId or starId-movieId mapping in one of these tables, a MySQLException is thrown, from which we can get the error message with the associated values that caused the error.
+  - In total, these query optimization techniques saved us ~1min, or less depending on the parsers. 
 
 ## Inconsistent data report from parsing/seperate file generated from code.
 
