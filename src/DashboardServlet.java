@@ -27,11 +27,17 @@ public class DashboardServlet extends HttpServlet {
         response.setContentType("application/json"); // Response mime type
         String star = request.getParameter("star");
         String birthYearString = request.getParameter("birthYear");
+        String director = request.getParameter("director");
+        String movieYearString = request.getParameter("movieYear");
+        String title = request.getParameter("title");
+        String movieStar = request.getParameter("movieStar");
+        String movieGenre = request.getParameter("movieGenre");
+
 
         PrintWriter out = response.getWriter();
         JsonArray jsonArray = new JsonArray();
 
-        boolean isStarAddUsed = false;
+        boolean isStatusSet = false;
 
         try {
             Connection dbcon = dataSource.getConnection();
@@ -64,18 +70,55 @@ public class DashboardServlet extends HttpServlet {
                     jsonObject.addProperty("status", "Star already exists at "+check_id);
                     jsonArray.add(jsonObject);
                 }
-                isStarAddUsed = true;
+                isStatusSet = true;
 
-            } else {
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("status", "");
-                jsonArray.add(jsonObject);
-                isStarAddUsed = true;
             }
             //end - Add star
 
+            //add movie procedure
+            else if(isAddMovie(director,title,movieYearString,movieStar,movieGenre)) {
+                int movieYear = Integer.parseInt(movieYearString);
+                String checkId = checkIfMovieAlreadyInTable(dbcon,title,director,movieYear);
+                if(checkId.equals("")) {
+                    String movieId = findId(dbcon, "movies", "tt");
+
+                    //check if star or genre already exists and get their id
+
+                    String query = "call add_movie(?,?,?,?,?,?)";
+                    CallableStatement add_movie_procedure = dbcon.prepareCall(query);
+                    add_movie_procedure.setString(1, director);
+                    add_movie_procedure.setString(2, movieId);
+                    add_movie_procedure.setString(3, title);
+                    add_movie_procedure.setInt(4, movieYear);
+                    add_movie_procedure.setString(5, movieStar);
+                    add_movie_procedure.setString(6, movieGenre);
+
+                    ResultSet rs = add_movie_procedure.executeQuery();
+                    while (rs.next()) {
+                        System.out.println(rs.getString(1));
+                    }
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("status", "Movie Added Successfully");
+                    jsonArray.add(jsonObject);
+
+                }
+                else{
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("status", "Movie already exists at "+checkId);
+                    jsonArray.add(jsonObject);
+                }
+                isStatusSet = true;
+            }
+            else {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("status", "");
+                jsonArray.add(jsonObject);
+                isStatusSet = true;
+            }
+            //end - add movie procedure
+
             //display metadata
-            if(!isStarAddUsed){
+            if(!isStatusSet){
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("status", "");
                 jsonArray.add(jsonObject);
@@ -106,16 +149,18 @@ public class DashboardServlet extends HttpServlet {
                 jsonObjectTables.addProperty("col_count",count);
 
                 jsonArray.add(jsonObjectTables);
+                resultSet.close();
+                queryStatement.close();
             }
-
             //end - display metadata
+
             rsTables.close();
             tableStatement.close();
             dbcon.close();
 
         } catch (Exception e){
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("status", "Oops! Something went wrong");
+            jsonObject.addProperty("status", "Oops! Something went wrong: "+e.getMessage());
             jsonArray.add(jsonObject);
 
         }
@@ -123,6 +168,12 @@ public class DashboardServlet extends HttpServlet {
         // Output stream to STDOUT
         out.write(jsonArray.toString());
     }
+
+    private boolean isAddMovie(String director, String title, String movieYearString, String movieStar, String movieGenre){
+        return !director.equals("null") && !title.equals("null") && !movieYearString.equals("null")
+            && !movieGenre.equals("null") && !movieStar.equals("null");
+    }
+
     private String findId(Connection dbcon, String table, String pref) throws SQLException {
         String starId_query = "select max(id) from "+table;
         PreparedStatement starId_statement = dbcon.prepareStatement(starId_query);
@@ -135,8 +186,29 @@ public class DashboardServlet extends HttpServlet {
         starId_statement.close();
         return id;
     }
+
+    private String checkIfMovieAlreadyInTable(Connection dbcon, String title, String director, int year) throws SQLException{
+        String query = "select * from movies where title like ? and director like ? and year = ?";
+        PreparedStatement check_statement = dbcon.prepareStatement(query);
+        check_statement.setString(1, "%"+title+"%");
+        check_statement.setString(2, "%"+director+"%");
+        check_statement.setInt(3, year);
+        ResultSet check_resultSet = check_statement.executeQuery();
+        if (check_resultSet.next()) {
+            String id = check_resultSet.getString("id");
+            check_resultSet.close();
+            check_statement.close();
+            return id;
+        }
+        else {
+            check_resultSet.close();
+            check_statement.close();
+            return "";
+        }
+    }
+
     private String checkIfAlreadyInTable(Connection dbcon, String name, String table) throws SQLException {
-        String query = "select * from "+table+" where name like ?";
+        String query = "select * from" +table+ "where name like ?";
         PreparedStatement check_statement = dbcon.prepareStatement(query);
         check_statement.setString(1, "%"+name+"%");
         ResultSet check_resultSet = check_statement.executeQuery();

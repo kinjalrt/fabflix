@@ -46,14 +46,32 @@
 
 <h1 align="center">Dashboard</h1>
 <p id="status" align="center"></p>
-<form id="add_star_form" class="form-inline justify-content-center" action="dashboard.html" method="GET">
+<div class="card-deck mx-auto text-center">
+    <div class="card">
+        <div class="card-header text-center text-white bg-primary"><h4>Add a New Star</h4></div>
+        <div class="card-body text-center">
+            <form id="add_star_form" class="justify-content-center" action="dashboard.html" method="GET">
+                <label><input type="text" id="star" class="form-control" placeholder="Enter Star Name" name="star" required></label><br>
+                <label><input type="number" id="birth_year" class="form-control" placeholder="Enter Birth Year" name="birth_year"></label><br>
+                <button type="SUBMIT" class="btn btn-primary">Add Star</button>
+            </form>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header text-center text-white bg-primary"><h4>Add a New Movie</h4></div>
+        <div class="card-body text-center">
+            <form id="add_movie_form" class="justify-content-center" action="dashboard.html" method="GET">
+                <label><input type="text" id="director" class="form-control" placeholder="Enter Director Name" name="director" required></label><br>
+                <label><input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" required></label><br>
+                <label><input type="number" id="year" class="form-control" placeholder="Enter Year" name="year" required></label><br>
+                <label><input type="text" id="movie_star" class="form-control" placeholder="Enter Star Name" name="movie_star" required></label><br>
+                <label><input type="text" id="movie_genre" class="form-control" placeholder="Enter Genre" name="movie_genre" required></label><br>
+                <button type="SUBMIT" class="btn btn-primary">Add Movie</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-    <label for="star" class="mr-sm-2">Star: </label><input type="text" id="star" class="form-control mb-2 mr-sm-2" name="star" required><br>
-
-    <label for="birth_year" class="mr-sm-2"> Birth Year: </label><input type="text" id="birth_year" class="form-control mb-2 mr-sm-2" name="birth_year"><br>
-
-    <button type="SUBMIT" class="btn btn-primary mb-2">Add Star</button>
-</form>
 <table id=dashboard_table class="table table-striped">
     <!-- Create a table header -->
     <thead>
