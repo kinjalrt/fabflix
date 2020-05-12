@@ -1,8 +1,8 @@
 # Project 3 - cs122b-spring20-team-80 
 cs122b-spring20-team-80 created by GitHub Classroom
-submitted by Kinjal Reetoo and Yasvi Patel on April 10th, 2020.
+submitted by Kinjal Reetoo and Yasvi Patel on May 12th, 2020.
 
-- Developing Fabflix Website.
+- reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing.
 
 ## Demo video URL
 
