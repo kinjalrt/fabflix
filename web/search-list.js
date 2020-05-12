@@ -41,7 +41,14 @@ function handleMovieResult(resultData) {
                 '</a>' + '</td>';
             rowHTML += "<td>" + resultData[i]["year"] + "</td>";
             rowHTML += "<td>" + resultData[i]["dir"] + "</td>";
-            rowHTML += "<td>" + resultData[i]["rating"] + "</td>";
+
+            if(resultData[i]["rating"]==="0" || resultData[i]["rating"]===0){
+                rowHTML += "<td> N/A </td>" ;
+            }else{
+                rowHTML += "<td>" + resultData[i]["rating"] + "</td>" ;
+            }
+           // rowHTML += "<td>" + resultData[i]["rating"] + "</td>";
+
             rowHTML += "<td>";
             let count = 1;
             //y - added hyperlink
