@@ -73,9 +73,9 @@ public class MovieListServlet extends HttpServlet {
             //search by genre
             else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
                 param_index = 0;
-                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
-                        "FROM movies as m, ratings as r, genres_in_movies as gim\n" +
-                        "WHERE m.id = r.movieId AND gim.genreId = ? AND m.id = gim.movieId \n"+
+                query = "SELECT DISTINCT m.id, title, year, director\n" +
+                        "FROM movies as m, genres_in_movies as gim\n" +
+                        "WHERE gim.genreId = ? AND m.id = gim.movieId \n"+
                         sort_string + num_string + first_record;
                 statement = dbcon.prepareStatement(query);
                 statement.setString(++param_index, param_gid);
