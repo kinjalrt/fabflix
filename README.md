@@ -1,10 +1,12 @@
-# Project 2 - cs122b-spring20-team-80 
+# Project 3 - cs122b-spring20-team-80 
 cs122b-spring20-team-80 created by GitHub Classroom
 submitted by Kinjal Reetoo and Yasvi Patel on April 10th, 2020.
 
 - Developing Fabflix Website.
 
 ## Demo video URL
+
+- [Project 3 - reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing](#)
 
 - [Project 2 - Developing Fablix Website](https://www.youtube.com/watch?v=C_lelf4wlZE)
 
@@ -37,7 +39,25 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
 ```
   5. Launch the app from the Tomcat manager page on localhost.
 
+## All queries with Prepared Statements
 
+Following files contain all queries with prepared statements.
+  1. [SingleMovieServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/SingleMovieServlet.java)
+  2. [SingleStarServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/SingleStarServlet.java)
+  3. [SAXParserCast.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/SAXParserCast.java)
+  4. [SAXParserMovies.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/SAXParserMovies.java)
+  5. [SAXParserStars.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/SAXParserStars.java)
+  6. [MovieListServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/MovieListServlet.java)
+  7. [LoginServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/LoginServlet.java)
+  8. [IndexServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/IndexServlet.java)
+  9. [DashboardServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/DashboardServlet.java)
+  10. [CheckoutServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/CheckoutServlet.java)
+  11. [AdminLoginServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p3-api/src/AdminLoginServlet.java)
+  
+## Two parsing time optimization strategies compared with the naive approach.
+
+## Inconsistent data report from parsing/seperate file generated from code.
+  
 ## Contribution
 
 ### Kinjal Reetoo 
@@ -46,6 +66,10 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
   - Implemented the Main Page with Search and Browse
   - Implemented the Shopping Cart
   - Demo video and final deployment for grading P2.
+  - Added HTTPS
+  - Used encrypted password
+  - Importing large XML data files into the Fabflix database
+  - Demo video and final deployement P3
 
 ### Yasvi Patel 
   - Implemented Single Movie page, hyperlinks and jump requirements.
@@ -53,3 +77,7 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
   - Implemented the Login Page
   - Implement the Movie List Page, Single Pages & Jump Functionality (Extended from Project 1)
   - Updated the Look and Feel and README.md for P2.
+  - Added reCAPTCHA
+  - Used PreparedStatement
+  - Implemented a Dashboard using Stored Procedure
+  - Readme P3
