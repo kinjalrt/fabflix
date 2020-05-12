@@ -1,4 +1,5 @@
 let add_star_form = $("#add_star_form");
+let add_movie_form = $("#add_movie_form");
 /**
  * This example is following frontend and backend separation.
  *
@@ -76,12 +77,18 @@ function getParameterByName(target) {
 
 let star = getParameterByName("star");
 let birthYear = getParameterByName("birth_year");
+let director = getParameterByName("director");
+let title = getParameterByName("title");
+let movieYear = getParameterByName("year");
+let movieStar = getParameterByName("movie_star");
+let movieGenre = getParameterByName("movie_genre");
 
 // let star = getParameterByName("star");
 // Makes the HTTP GET request and registers on success callback function handleStarResult
 $.ajax({
     dataType: "json",
-    url: "api/dashboard?star="+star+"&birthYear="+birthYear,
+    url: "api/dashboard?star="+star+"&birthYear="+birthYear+"&director="+director+"&title="
+        +title+"&movieYear="+movieYear+"&movieStar="+movieStar+"&movieGenre="+movieGenre,
     method: "GET",
     success: (resultData) => handleResult(resultData)
 });
