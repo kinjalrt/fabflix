@@ -74,7 +74,7 @@ public class SAXParserCast extends DefaultHandler {
     private void printData(ArrayList<Pair<String, String>> batch) throws Exception {
 
         PreparedStatement psInsertRecord=null;
-        String sqlInsertRecord="INSERT INTO stars_in_movies_test (starId,movieId) VALUES(?, ?)";
+        String sqlInsertRecord="INSERT INTO stars_in_movies (starId,movieId) VALUES(?, ?)";
 
         try(FileWriter fw = new FileWriter("ParserCast.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -152,7 +152,7 @@ public class SAXParserCast extends DefaultHandler {
                 if(currentMovie.equals("")){
                     try{
                         currentMovie = tempVal;
-                        String query0 = "select id from movies_test where title = ?;";
+                        String query0 = "select id from movies where title = ?;";
                         PreparedStatement ps0 = connection.prepareStatement(query0);
                         ps0.setString (1, currentMovie);
                         ResultSet rs0 = ps0.executeQuery();
@@ -189,7 +189,7 @@ public class SAXParserCast extends DefaultHandler {
                             //check if actor in db;
                             try {
 
-                                String query1 = "select id from stars_test where name = ?;";
+                                String query1 = "select id from stars where name = ?;";
                                 PreparedStatement ps1 = connection.prepareStatement(query1);
                                 ps1.setString (1, currentStar);
                                 ResultSet rs1 = ps1.executeQuery();

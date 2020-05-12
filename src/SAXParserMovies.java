@@ -83,17 +83,17 @@ public class SAXParserMovies extends DefaultHandler {
 
 
         PreparedStatement psInsertRecord=null;
-        String sqlInsertRecord="INSERT INTO movies_test (id,title,year,director) VALUES(?, ?, ?, ?)";
+        String sqlInsertRecord="INSERT INTO movies (id,title,year,director) VALUES(?, ?, ?, ?)";
 
         PreparedStatement psInsertRecordGenres =null;
-        String sqlInsertRecordGenres = "INSERT INTO genres_in_movies_test (genreId,movieId) SELECT ?, ? FROM DUAL" +
-                " WHERE NOT EXISTS (SELECT * FROM genres_in_movies_test WHERE genreId = ? AND movieId = ? LIMIT 1);";
+        String sqlInsertRecordGenres = "INSERT INTO genres_in_movies (genreId,movieId) SELECT ?, ? FROM DUAL" +
+                " WHERE NOT EXISTS (SELECT * FROM genres_in_movies WHERE genreId = ? AND movieId = ? LIMIT 1);";
               //  "INSERT INTO genres_in_movies_test (genreId,movieId) values(?, ?)";
 
 
         //get max id in db
         String biggestId = "";
-        String maxIdQuery = "select substring(max(id), 3) as id from movies_test;";
+        String maxIdQuery = "select substring(max(id), 3) as id from movies;";
         PreparedStatement maxIdStatement = connection.prepareStatement(maxIdQuery);
         ResultSet rs = maxIdStatement.executeQuery();
         while (rs.next()) {
@@ -140,11 +140,12 @@ public class SAXParserMovies extends DefaultHandler {
 
                 }
 
-                psInsertRecordGenres.executeBatch();
+              //  psInsertRecordGenres.executeBatch();
 
 
             }
             psInsertRecord.executeBatch();
+            psInsertRecordGenres.executeBatch();
             connection.commit();
 
         } catch (SQLException e) {
@@ -237,7 +238,7 @@ public class SAXParserMovies extends DefaultHandler {
                         try {
                             //check if movie in db
                             String mid = "";
-                            String query0 = "select id from movies_test where title = ? and year = ? and director = ?;";
+                            String query0 = "select id from movies where title = ? and year = ? and director = ?;";
                             PreparedStatement ps0 = connection.prepareStatement(query0);
                             ps0.setString(1, tempMovie.getMovieTitle());
                             ps0.setInt(2, tempMovie.getMovieYear());
@@ -252,7 +253,7 @@ public class SAXParserMovies extends DefaultHandler {
                                 for(int g : tempMovie.getMovieGenres()) {
                                     //SET PRIMARY KEYS FOR BOTH IDS IN GENRES_IN_MOVIES
                                     try{
-                                        String query10 = "INSERT INTO genres_in_movies_test (genreId,movieId) VALUES (?, ?);";
+                                        String query10 = "INSERT INTO genres_in_movies (genreId,movieId) VALUES (?, ?);";
                                         PreparedStatement ps10 = connection.prepareStatement(query10);
                                         ps10.setInt (1, g);
                                         ps10.setString (2, mid);
@@ -309,7 +310,7 @@ public class SAXParserMovies extends DefaultHandler {
         //add genre to genres tables if not exist
         if(genre.equals("CnR") || genre.equals("Noir") || genre.equals("TVm") || genre.equals("TV") || genre.equals("TVs")){
             try {
-                String query5 = "select * from genres_test where name = ?;";
+                String query5 = "select * from genres where name = ?;";
                 PreparedStatement ps5 = connection.prepareStatement(query5);
                 ps5.setString(1, genre);
                 ResultSet rs5 = ps5.executeQuery();
@@ -318,7 +319,7 @@ public class SAXParserMovies extends DefaultHandler {
                     // System.out.println("GENRE " + genreId);
                 }else{
                     //if genre not in genres table
-                    String query4 = "INSERT INTO genres_test (name) VALUES (?);";
+                    String query4 = "INSERT INTO genres (name) VALUES (?);";
                     PreparedStatement ps4 = connection.prepareStatement(query4);
                     ps4.setString (1, genre);
                     ps4.execute();
@@ -395,7 +396,7 @@ public class SAXParserMovies extends DefaultHandler {
         //return associated genre id
         int genreId = 0;
         try {
-            String query7 = "select id from genres_test where name = ?;";
+            String query7 = "select id from genres where name = ?;";
             PreparedStatement ps7 = connection.prepareStatement(query7);
             ps7.setString(1, translatedGenre);
             ResultSet rs7 = ps7.executeQuery();

@@ -1,3 +1,4 @@
+CREATE schema moviedb;
 USE moviedb;
 
 CREATE TABLE movies (
@@ -62,7 +63,6 @@ id integer not null auto_increment,
 customerId integer not null,
 movieId varchar(10) not null, 
 saleDate date not null,
-quantity integer default 1,
 primary key(id),
 foreign key (customerId) references customers(id),
 foreign key (movieId) references movies(id)
@@ -74,3 +74,11 @@ rating float not null,
 numVotes integer not null,
 foreign key (movieId) references movies(id)
 );
+
+CREATE TABLE employees (
+email varchar(50),
+password varchar(20) not null,
+fullname varchar(100),
+primary key(email)
+);
+
