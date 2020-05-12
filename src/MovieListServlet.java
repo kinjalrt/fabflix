@@ -83,9 +83,9 @@ public class MovieListServlet extends HttpServlet {
             else {
                 param_index = 0;
                 String add_year = year(param_year);
-                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
-                        "FROM movies as m, ratings as r, stars_in_movies as sim, stars as s\n" +
-                        "WHERE m.title LIKE ? AND m.id = r.movieId"+add_year+"AND m.director LIKE ?\n"+
+                query = "SELECT DISTINCT m.id, title, year, director\n" +
+                        "FROM movies as m, stars_in_movies as sim, stars as s\n" +
+                        "WHERE m.title LIKE ? "+add_year+"AND m.director LIKE ?\n"+
                         "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE ?" +
                         sort_string + num_string + first_record;
                 statement = dbcon.prepareStatement(query);
@@ -120,7 +120,22 @@ public class MovieListServlet extends HttpServlet {
                     String title = rs.getString("title");
                     int year = rs.getInt("year");
                     String dir = rs.getString("director");
-                    float rating = rs.getFloat("rating");
+
+                    String q0 = "SELECT rating\n" +
+                            "FROM movies as m, ratings as r \n" +
+                            "WHERE  m.id = ? AND m.id = r.rating; ";
+                    PreparedStatement s0 = dbcon.prepareStatement(q0);
+                    s0.setString(1, movie_id);
+                    ResultSet r0 = s0.executeQuery();
+                    float rating = 0;
+                    if (r0.next()) {
+                        float g = r0.getFloat("rating");
+                        rating = g;
+                    }
+                    r0.close();
+                    s0.close();
+
+                    //float rating = rs.getFloat("rating");
 
                     JsonObject jsonObject = new JsonObject();
 
