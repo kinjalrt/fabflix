@@ -56,7 +56,27 @@ Following files contain all queries with prepared statements.
   
 ## Two parsing time optimization strategies compared with the naive approach.
 
+- Use of batch:
+    - In all 3 parsers we send all “insert into” statements in batches of 100 statements instead of executing each insert statement one after the other
+    - This strategy considerably reduced the running time; for instance the naive approach took over 30 minutes to parse the casts xml file, after executing the insert statements in batches of 100 (or >=100 for the last batch only), the running time for the cast parser reduced by approximately half (~13/15min)
+
+- Print inconsistencies to a file instead of console 
+    - Using a buffered writer to speed up the process, instead of opening and closing the files on the disk too many times 
+    - This reduces the running time to ~1/2 minutes depending on the file being parsed and the number of inconsistencies being reported for each 
+
+- Limit the number of sql queries as much as possible; a few minor strategies were employed in order to try to limit the number of queries, including:
+        - Since we insert data into the tables by batches of 100, when creating a new id, instead of retrieving the current maxId for each movie or star, we retrieve it once for the first movie/star in the batch and keep incrementing the id by +1 for the next 99 movies/stars in this batch.
+        - Instead of checking for duplicates for genres_in_movies and stars_in_movies using “select” statements, we set both existing fields in both tables (genres_in_movies(genreId, movieId) and stars_in_movies(starId, movieId)) as primary keys. Therefore when the user tries to insert an already existing genreId-movieId or starId-movieId mapping in one of these tables, a MySQLException is thrown, from which we can get the error message with the associated values that caused the error.
+    - In total, these query optimization techniques saved us ~1min, or less depending on the parsers. 
+
 ## Inconsistent data report from parsing/seperate file generated from code.
+
+- Few assumptions:
+  - Movies are differentiated by title AND year AND director
+  - Movie should have at least 1 genre in order to be counted as consistent and be added to the database 
+  - If a movie already exists in the database -> only add any missing genres 
+  - If a genre is not reported in the movies documentation page provided (http://infolab.stanford.edu/pub/movies/doc.html#CATS) -> ignore the genre type
+  - If a star is mapped to a movie that has a duplicate (based on title only) -> map star to either one of the duplicated movies since cast.xml does not include the year and director information related to the movie
   
 ## Contribution
 
