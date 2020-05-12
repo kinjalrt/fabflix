@@ -68,7 +68,11 @@ function handleResult(resultData) {
 
         rowHTML += "<td>" + resultData[i]["movie_director"] + "</td>";
 
-        rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>" ;
+        if(resultData[i]["movie_rating"]==="0" || resultData[i]["movie_rating"]===0){
+            rowHTML += "<td> N/A </td>" ;
+        }else{
+            rowHTML += "<td>" + resultData[i]["movie_rating"] + "</td>" ;
+        }
 
 
         rowHTML += "<td>";

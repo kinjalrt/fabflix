@@ -44,7 +44,7 @@ public class SingleMovieServlet extends HttpServlet {
             Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
-            String query = "SELECT id, title, year, director, rating FROM moviedb.movies as m, ratings as r where m.id = r.movieId and m.id = ?;";
+            String query = "SELECT id, title, year, director FROM moviedb.movies as m where m.id = ?;";
 
             // Declare our statement
             PreparedStatement statement = dbcon.prepareStatement(query);
@@ -65,7 +65,21 @@ public class SingleMovieServlet extends HttpServlet {
                 String movieTitle = rs.getString("title");
                 int movieYear = rs.getInt("year");
                 String movieDirector = rs.getString("director");
-                float movieRating = rs.getFloat("rating");
+
+
+                String q0 = "SELECT rating\n" +
+                        "FROM movies as m, ratings as r \n" +
+                        "WHERE  m.id = ? AND m.id = r.rating; ";
+                PreparedStatement s0 = dbcon.prepareStatement(q0);
+                s0.setString(1, movieId);
+                ResultSet r0 = s0.executeQuery();
+                float movieRating = 0;
+                if (r0.next()) {
+                    float g = r0.getFloat("rating");
+                    movieRating = g;
+                }
+                r0.close();
+                s0.close();
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
