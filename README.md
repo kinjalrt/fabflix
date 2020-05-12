@@ -77,6 +77,10 @@ Following files contain all queries with prepared statements.
   - If a movie already exists in the database -> only add any missing genres 
   - If a genre is not reported in the movies documentation page provided (http://infolab.stanford.edu/pub/movies/doc.html#CATS) -> ignore the genre type
   - If a star is mapped to a movie that has a duplicate (based on title only) -> map star to either one of the duplicated movies since cast.xml does not include the year and director information related to the movie
+- Inconsistency Reports
+  - [ParserCast.txt](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/master/ParserCast.txt)
+  - [ParserStars.txt](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/master/ParserStars.txt)
+  - [ParserMovies.txt](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/master/ParserMovies.txt)
   
 ## Contribution
 
