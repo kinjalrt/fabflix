@@ -94,11 +94,13 @@ public class DashboardServlet extends HttpServlet {
                     add_movie_procedure.setString(6, movieGenre);
 
                     ResultSet rs = add_movie_procedure.executeQuery();
+                    String ids = "";
+                    int index = 0;
                     while (rs.next()) {
-                        System.out.println(rs.getString(1));
+                        ids += rs.getString(++index) + " ";
                     }
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("status", "Movie Added Successfully");
+                    jsonObject.addProperty("status", "Movie Added Successfully "+ movieId + ids);
                     jsonArray.add(jsonObject);
 
                 }
