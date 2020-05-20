@@ -80,7 +80,35 @@ public class MovieListServlet extends HttpServlet {
                 statement = dbcon.prepareStatement(query);
                 statement.setString(++param_index, param_gid);
             }
-            else {
+            //if title not empty string
+            else if(param_title != null && !param_title.equals("null") && !param_title.isEmpty()){
+                //splitting title
+                String[] splited = param_title.trim().split("\\s+");
+                String search_title = "";
+                for (String i : splited){
+                    System.out.println(i);
+                    search_title+="+"+i+"* ";
+                }
+                System.out.println(search_title);
+
+                param_index = 0;
+                String add_year = year(param_year);
+                query = "SELECT DISTINCT m.id, title, year, director\n" +
+                        "FROM movies as m, stars_in_movies as sim, stars as s\n" +
+                        "WHERE MATCH (m.title) AGAINST (? IN BOOLEAN MODE) "+add_year+"AND m.director LIKE ?\n"+
+                        "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE ?" +
+                        sort_string + num_string + first_record;
+                statement = dbcon.prepareStatement(query);
+                statement.setString(++param_index, search_title);
+                if(!add_year.equals(" ")){
+                    statement.setInt(++param_index, Integer.parseInt(param_year));
+                }
+                statement.setString(++param_index, "%"+param_dir+"%");
+                statement.setString(++param_index, "%"+param_star+"%");
+
+            }
+            else
+            {
                 param_index = 0;
                 String add_year = year(param_year);
                 query = "SELECT DISTINCT m.id, title, year, director\n" +
