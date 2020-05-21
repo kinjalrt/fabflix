@@ -80,7 +80,28 @@ public class MovieListServlet extends HttpServlet {
                 statement = dbcon.prepareStatement(query);
                 statement.setString(++param_index, param_gid);
             }
-            //if title not empty string
+            //if title is the ONLY param -> FOR MAIN SEARCH mostly
+            else if(!param_title.equals("null") && param_year.equals("null") && param_dir.equals("null") && param_star.equals("null") ){
+                //splitting title
+                System.out.println("atsumu");
+                String[] splited = param_title.trim().split("\\s+");
+                String search_title = "";
+                for (String i : splited){
+                    System.out.println(i);
+                    search_title+="+"+i+"* ";
+                }
+                System.out.println(search_title);
+
+                String sqlQuery = "SELECT DISTINCT id, title, year, director\n" +
+                        "FROM movies\n" +
+                        "WHERE MATCH (title) AGAINST (? IN BOOLEAN MODE) " +
+                        sort_string + num_string + first_record;
+                statement = dbcon.prepareStatement(sqlQuery);
+                statement.setString(1, search_title);System.out.println("osamu 321");
+
+
+            }
+            //title NOT empty + other params; match against does not work w empty param
             else if(param_title != null && !param_title.equals("null") && !param_title.isEmpty()){
                 //splitting title
                 String[] splited = param_title.trim().split("\\s+");

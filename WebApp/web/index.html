@@ -13,11 +13,20 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <title>Fabflix</title>
+
+
     <!-- Bootstrap CSS -->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
+<!--          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Fabflix</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
 </head>
 <body>
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
@@ -45,6 +54,18 @@
 <br>
 
 <h1 align="center">Movie Search</h1>
+<br>
+
+<div class="container">
+    <input type="text" name="suggestions" id="autocomplete"
+           class="autocomplete-searchbox form-control"
+           placeholder="Main Search"/>
+</div>
+
+
+<br>
+<br>
+<h2 align="center">Advanced Search</h2>
 <form id="search_form" class="form-inline justify-content-center" action="search-list.html" method="GET">
 
     <label for="title" class="mr-sm-2">Title: </label><input type="text" id="title" class="form-control mb-2 mr-sm-2" name="title"><br>
@@ -74,8 +95,9 @@
 
 <!-- Load jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.7/jquery.autocomplete.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 
 
 <!-- Load our own JS file -->
