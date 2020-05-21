@@ -153,6 +153,14 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+### Android App ###
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+
 ### Java-Web ###
 ## ignoring target file
 target/
