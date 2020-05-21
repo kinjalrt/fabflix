@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Checkout</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a class="navbar-brand" href="#">FABFLIX</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.html?">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Movies</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="admin-login.html?">Staff</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="login.html?">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="shopping-cart.html?">Cart</a>
+        </li>
+    </ul>
+</nav>
+<br>
+
+<h1 align='center'>Checkout</h1>
+
+<br/>
+<h4 align="center" id="total"></h4>
+<br/>
+<div class="card mx-auto text-center">
+    <div class="card-header" ><h4 align="center">Please Enter Your Payment Information: </h4></div>
+    <div class="card-body" >
+        <form ACTION="#" id="checkout_form" METHOD="get">
+            <label>First Name: </label>
+            <label>
+                <input name="first_name" placeholder="First Name" type="text">
+            </label>
+            <br>
+            <label>Last Name: </label>
+            <label>
+                <input name="last_name" placeholder="Last Name" type="text">
+            </label>
+            <br>
+            <label>Credit card number: </label>
+            <label>
+                <input name="credit_card_number" placeholder="CCN" type="text">
+            </label>
+            <br>
+            <label>Credit card expiration date (in the form YYYY-MM-DD):  </label>
+            <label>
+                <input name="expiration_date" placeholder="YYYY-MM-DD" type="text">
+            </label>
+            <br>
+            <input class="btn btn-primary" type="submit" value="Place Order">
+        </form>
+    </div>
+</div>
+<br/>
+<h4 align="center" id="payment_outcome"></h4>
+
+
+<!-- Load our own JS file -->
+<!-- The path is relative to index.html, since these two files are in the same directory -->
+<!-- Note the url does not contain a "/" in the beginning, which means the url is relative to current path
+     otherwise the url is relative to the root path-->
+<script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
+<script type='text/javascript' src='checkout.js'></script>
+</body>
+</html>

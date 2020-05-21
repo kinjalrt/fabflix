@@ -1,0 +1,68 @@
+<!-- This page will be redirected from any url if you are not logged in -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="//www.google.com/recaptcha/api.js"></script>
+
+    <title>Employee Login</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a class="navbar-brand" href="#">FABFLIX</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.html?">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Movies</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="admin-login.html?">Staff</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="login.html?">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="shopping-cart.html?">Cart</a>
+        </li>
+    </ul>
+</nav>
+<br>
+<br>
+<br>
+<div class="card mx-auto text-center" style="width: 23rem;">
+    <div class="card-header text-white bg-primary"><h1>Fablix Staff Login</h1></div>
+    <!-- Set the method to POST to avoid showing the username/password in the URL
+         The default action is disabled to allow your own implementation. -->
+    <div class="card-body" style="width: auto;">
+        <form id="login_form" class="justify-content-center" method="post" action="#">
+            <label>
+                <input name="email" class="form-control" placeholder="Enter Email" type="text" required>
+            </label>
+            <br>
+            <label>
+                <input name="password" class="form-control" placeholder="Enter Password" type="password" required>
+            </label>
+            <br>
+            <div align="center" class="g-recaptcha" data-sitekey="6Lfan_QUAAAAAGrE9VOelC7Nl6xVtbqRmHETz1Fo"></div>
+            <br>
+            <div class="d-inline-block"><button class="btn btn-primary" type="submit">Admin Login</button></div>
+        </form>
+    </div>
+    <div class="card-footer text-white bg-primary" id="login_error_message"></div>
+</div>
+
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="./admin-login.js"></script>
+</body>
+</html>

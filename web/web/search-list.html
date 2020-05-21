@@ -1,0 +1,121 @@
+<!-- This example is following frontend and backend separation.
+
+    This .html performs two steps:
+    1. Create a html template skeleton, with all the elements defined (some left empty) and named with ids.
+    2. Load index.js to populate the data into empty elements.
+    -->
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Movie List</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a class="navbar-brand" href="#">FABFLIX</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="index.html?">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="search-list.html?title=&year=&director=&star=&sort=rating+desc">Movies</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="dashboard.html?">Staff</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="login.html?">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="shopping-cart.html?">Cart</a>
+        </li>
+    </ul>
+</nav>
+<br>
+
+<h1 align = "center">Movie List</h1>
+<p>
+    <div class="dropdown d-inline-block" >
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            Sort By
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item" type="button" onclick="sortBy('Title','A')">Title Ascending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Title','D')">Title Descending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Rating','A')">Rating Ascending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Rating','D')">Rating Descending</button>
+
+        </div>
+    </div>
+    <div class="dropdown d-inline-block" >
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            Tie Break
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item" type="button" onclick="sortBy('Title2','A')">Title Ascending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Title2','D')">Title Descending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Rating2','A')">Rating Ascending</button>
+            <button class="dropdown-item" type="button" onclick="sortBy('Rating2','D')">Rating Descending</button>
+
+        </div>
+    </div>
+    <div class="dropdown d-inline-block" align ="right">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            N
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item" type="button" onclick="displayedRecord('10')">10</button>
+            <button class="dropdown-item" type="button" onclick="displayedRecord('25')">25</button>
+            <button class="dropdown-item" type="button" onclick="displayedRecord('50')">50</button>
+            <button class="dropdown-item" type="button" onclick="displayedRecord('100')">100</button>
+        </div>
+    </div>
+    <div class="d-inline-block"><button id="prevButton" type="button" class="btn btn-info" onclick="pagination('prev')"><< Prev</button></div>
+    <div class="d-inline-block"><button id="nextButton" type="button" class="btn btn-info" onclick="pagination('next')">Next >></button></div>
+</p>
+<!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
+<table id=movie_table class="table table-striped">
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th>Title</th>
+        <th>Year</th>
+        <th>Director</th>
+        <th>Rating</th>
+        <th>Genres</th>
+        <th>Stars</th>
+        <!--Empty column for Add to Cart-->
+        <th></th>
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=movie_table_body></tbody>
+</table>
+
+<!-- Load jQuery and Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<!-- Load our own JS file -->
+<!-- The path is relative to index.html, since these two files are in the same directory -->
+<!-- Note the url does not contain a "/" in the beginning, which means the url is relative to current path
+     otherwise the url is relative to the root path-->
+<script src="search-list.js"></script>
+</body>
+
+
+</html>
