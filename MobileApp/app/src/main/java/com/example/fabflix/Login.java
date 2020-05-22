@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
          * In Android, localhost is the address of the device or the emulator.
          * To connect to your machine, you need to use the below IP address
          * **/
-        url = "http://10.0.2.2:8080/cs122b-spring20-team-80/api/";
+        url = "https://52.53.197.90:8443/cs122b-spring20-team-80/api/";
 
         //assign a listener to call a function to handle the user request when clicking a button
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +58,8 @@ public class Login extends AppCompatActivity {
         final StringRequest loginRequest = new StringRequest(Request.Method.POST, url + "login?isMobile=true", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                message.setText(response);
+                System.out.println(response);
                 //TODO should parse the json response to redirect to appropriate functions.
                 Log.d("login.success", response);
                 //initialize the activity(page)/destination
@@ -70,6 +72,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // error
+                message.setText(error.toString());
+                System.out.println(error.toString());
                 Log.d("login.error", error.toString());
             }
         }) {
