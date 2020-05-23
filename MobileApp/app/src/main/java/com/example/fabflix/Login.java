@@ -13,6 +13,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,17 +58,28 @@ public class Login extends AppCompatActivity {
         // Use the same network queue across our application
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         //request type is POST
-        final StringRequest loginRequest = new StringRequest(Request.Method.POST, url + "login?isMobile=true", new Response.Listener<String>() {
+        final StringRequest loginRequest = new StringRequest(Request.Method.POST, url + "login", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                message.setText(response);
-                System.out.println(response);
+
                 //TODO should parse the json response to redirect to appropriate functions.
-                Log.d("login.success", response);
-                //initialize the activity(page)/destination
-//                Intent listPage = new Intent(Login.this, ListViewActivity.class);
-                //without starting the activity/page, nothing would happen
-//                startActivity(listPage);
+
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    Log.d("login.success", response);
+                    if(jsonResponse.getString("status").equals("success")) {
+                        //initialize the activity(page)/destination
+                        Intent listPage = new Intent(Login.this, ListViewActivity.class);
+                        //without starting the activity/page, nothing would happen
+                        startActivity(listPage);
+                    } else {
+                        message.setText(jsonResponse.getString("message"));
+                    }
+
+                } catch (JSONException e) {
+                    message.setText("Bad Response");
+                    e.printStackTrace();
+                }
             }
         },
         new Response.ErrorListener() {
@@ -85,6 +98,7 @@ public class Login extends AppCompatActivity {
 
                 params.put("email", username.getText().toString());
                 params.put("password", password.getText().toString());
+                params.put("isMobile","true");
 
                 return params;
             }
