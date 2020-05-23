@@ -73,14 +73,15 @@ public class MovieListServlet extends HttpServlet {
             //search by genre
             else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
                 param_index = 0;
-                query = "SELECT DISTINCT m.id, title, year, director\n" +
-                        "FROM movies as m, genres_in_movies as gim\n" +
+                System.out.println(sort_string);
+                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                        "FROM genres_in_movies as gim, movies as m LEFT JOIN ratings as r ON m.id = r.movieId\n" +
                         "WHERE gim.genreId = ? AND m.id = gim.movieId \n"+
                         sort_string + num_string + first_record;
                 statement = dbcon.prepareStatement(query);
                 statement.setString(++param_index, param_gid);
             }
-            //if title is the ONLY param -> FOR MAIN SEARCH mostly
+            //if title is NOT empty AND the ONLY param -> FOR MAIN SEARCH mostly
             else if(!param_title.equals("null") && param_year.equals("null") && param_dir.equals("null") && param_star.equals("null") ){
                 //splitting title
                 System.out.println("atsumu");
@@ -92,9 +93,9 @@ public class MovieListServlet extends HttpServlet {
                 }
                 System.out.println(search_title);
 
-                String sqlQuery = "SELECT DISTINCT id, title, year, director\n" +
-                        "FROM movies\n" +
-                        "WHERE MATCH (title) AGAINST (? IN BOOLEAN MODE) " +
+                String sqlQuery = "SELECT DISTINCT id, title, year, director, rating\n" +
+                        "FROM movies as m LEFT JOIN ratings as r ON m.id = r.movieId\n" +
+                        "WHERE MATCH (m.title) AGAINST (? IN BOOLEAN MODE) " +
                         sort_string + num_string + first_record;
                 statement = dbcon.prepareStatement(sqlQuery);
                 statement.setString(1, search_title);System.out.println("osamu 321");
@@ -114,8 +115,8 @@ public class MovieListServlet extends HttpServlet {
 
                 param_index = 0;
                 String add_year = year(param_year);
-                query = "SELECT DISTINCT m.id, title, year, director\n" +
-                        "FROM movies as m, stars_in_movies as sim, stars as s\n" +
+                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                        "FROM stars_in_movies as sim, stars as s, movies as m LEFT JOIN ratings as r ON m.id = r.movieId\n" +
                         "WHERE MATCH (m.title) AGAINST (? IN BOOLEAN MODE) "+add_year+"AND m.director LIKE ?\n"+
                         "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE ?" +
                         sort_string + num_string + first_record;
@@ -130,10 +131,11 @@ public class MovieListServlet extends HttpServlet {
             }
             else
             {
+                System.out.println("nagisa "+ param_sort + " "+ num_string + " "+ first_record);
                 param_index = 0;
                 String add_year = year(param_year);
-                query = "SELECT DISTINCT m.id, title, year, director\n" +
-                        "FROM movies as m, stars_in_movies as sim, stars as s\n" +
+                query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
+                        "FROM stars_in_movies as sim, stars as s, movies as m LEFT JOIN ratings as r ON m.id = r.movieId\n" +
                         "WHERE m.title LIKE ? "+add_year+"AND m.director LIKE ?\n"+
                         "AND sim.movieId = m.id AND sim.starId = s.id AND s.name LIKE ?" +
                         sort_string + num_string + first_record;
