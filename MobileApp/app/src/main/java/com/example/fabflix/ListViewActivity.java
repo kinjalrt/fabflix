@@ -60,11 +60,29 @@ public class ListViewActivity extends Activity {
                     for(int i = 0; i < jsonResponse.length(); ++i){
                         JSONObject object = jsonResponse.getJSONObject(i);
                         if(object.getString("result").equals("success")){
+                            String title = object.getString("title");
                             short year = (short) Integer.parseInt(object.getString("year"));
-                            movies.add(new Movie(object.getString("title"), year));
+                            String director = object.getString("dir");
+                            String stars = "";
+                            String genres = "";
+                            for(int j = 1; j < 4; ++j){
+                                if(object.has("genre"+j)) {
+                                    if(j != 1)
+                                        genres += ", " + object.getString("genre" + j);
+                                    else
+                                        genres += object.getString("genre" + j);
+                                }
+                                if(object.has("starname"+j)) {
+                                    if(j != 1)
+                                        stars += ", " + object.getString("starname" + j);
+                                    else
+                                        stars += object.getString("starname" + j);
+                                }
+                            }
+                            Log.d("sg", stars + " " + genres);
+                            movies.add(new Movie(title, year, director, stars, genres));
                         }
                     }
-                    Log.d("onResponse", movies.toString());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
