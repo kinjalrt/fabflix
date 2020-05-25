@@ -23,13 +23,15 @@ public class ListViewActivity extends Activity {
     private ArrayList<Movie> movies = new ArrayList<>();
     private MovieListAdapter adapter;
     private int firstRecord;
+    private String search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
         url = URLConstant.url;
-
+        Intent intent = getIntent();
+        search = intent.getStringExtra("search");
         //data retrieved from the database and the backend server
         movies = new ArrayList<>();
         firstRecord = 0;
@@ -48,7 +50,7 @@ public class ListViewActivity extends Activity {
             public void onClick(View v) {
                 if(firstRecord == 0){
                     String message = "Already on first page";
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     firstRecord -= 20;
@@ -68,9 +70,9 @@ public class ListViewActivity extends Activity {
                 firstRecord += 20;
                 //refresh displayed data
                 retrieveData();
-                if(!movies.isEmpty()){
+                if(movies.isEmpty()){
                     String message = "End of the result";
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -94,7 +96,7 @@ public class ListViewActivity extends Activity {
         }
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         final String urlParams = URLConstant.searchParams + firstRecord;
-        final StringRequest retrieveRequest = new StringRequest(Request.Method.GET, url + "top20?" + urlParams, new Response.Listener<String>() {
+        final StringRequest retrieveRequest = new StringRequest(Request.Method.GET, url + "top20?title=" + search + urlParams, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //parse the json response to redirect to appropriate functions.

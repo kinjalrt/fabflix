@@ -54,7 +54,6 @@ public class Login extends AppCompatActivity {
 
     public void login() {
 
-        message.setText("Trying to login");
         // Use the same network queue across our application
         final RequestQueue queue = NetworkManager.sharedManager(this).queue;
         //request type is POST
@@ -62,16 +61,16 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
 
-                //TODO should parse the json response to redirect to appropriate functions.
+                //parse the json response to redirect to appropriate functions.
 
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     Log.d("login.success", response);
                     if(jsonResponse.getString("status").equals("success")) {
                         //initialize the activity(page)/destination
-                        Intent listPage = new Intent(Login.this, ListViewActivity.class);
+                        Intent mainPage = new Intent(Login.this, MainPage.class);
                         //without starting the activity/page, nothing would happen
-                        startActivity(listPage);
+                        startActivity(mainPage);
                     } else {
                         message.setText(jsonResponse.getString("message"));
                     }

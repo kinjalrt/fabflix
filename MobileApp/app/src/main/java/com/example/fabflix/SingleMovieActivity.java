@@ -31,7 +31,6 @@ public class SingleMovieActivity extends AppCompatActivity {
         setContentView(R.layout.singlemovie);
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
-        Log.d("Movie Id:",id);
 
         url = URLConstant.url;
 
