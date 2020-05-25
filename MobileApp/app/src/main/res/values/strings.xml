@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Fabflix</string>
+    <string name="prev">prev</string>
+    <string name="next">next</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="back">Back</string>
+</resources>
