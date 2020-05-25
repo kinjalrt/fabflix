@@ -85,7 +85,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // error
-                message.setText(error.toString());
+                message.setText("Something went wrong :(");
                 System.out.println(error.toString());
                 Log.d("login.error", error.toString());
             }

@@ -14,15 +14,14 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ListViewActivity extends Activity {
     private String url;
-    private ArrayList<Movie> movies = new ArrayList<>();
+    private ArrayList<Movie> movies;
     private MovieListAdapter adapter;
     private int firstRecord;
+    private boolean endOfResult;
     private String search;
 
     @Override
@@ -37,6 +36,7 @@ public class ListViewActivity extends Activity {
         firstRecord = 0;
         Button prevButton = findViewById(R.id.prev);
         Button nextButton = findViewById(R.id.next);
+        endOfResult = false;
 
         retrieveData();
         adapter = new MovieListAdapter(movies, this);
@@ -48,7 +48,7 @@ public class ListViewActivity extends Activity {
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(firstRecord == 0){
+                if(firstRecord <= 0){
                     String message = "Already on first page";
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
@@ -59,6 +59,7 @@ public class ListViewActivity extends Activity {
                     }
                     //refresh displayed data
                     retrieveData();
+                    endOfResult = false;
                 }
 
             }
@@ -67,12 +68,13 @@ public class ListViewActivity extends Activity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firstRecord += 20;
-                //refresh displayed data
-                retrieveData();
-                if(movies.isEmpty()){
+                if(endOfResult){
                     String message = "End of the result";
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                } else{
+                    firstRecord += 20;
+                    //refresh displayed data
+                    retrieveData();
                 }
             }
         });
@@ -102,31 +104,43 @@ public class ListViewActivity extends Activity {
                 //parse the json response to redirect to appropriate functions.
                 Log.d("retrieve.success", response);
                 try {
-                    JSONArray jsonResponse = new JSONArray(response);
-                    for(int i = 0; i < jsonResponse.length(); ++i){
-                        JSONObject object = jsonResponse.getJSONObject(i);
-                        if(object.getString("result").equals("success")){
-                            String id = object.getString("movie_id");
-                            String title = object.getString("title");
-                            short year = (short) Integer.parseInt(object.getString("year"));
-                            String director = object.getString("dir");
-                            String[] stars = new String[3];
-                            String[] genres = new String[3];
-                            for(int j = 1; j < 4; ++j){
-                                if(object.has("genre"+j)) {
-                                    genres[j-1] = object.getString("genre" + j);
+                    if(!response.isEmpty()) {
+                        JSONArray jsonResponse = new JSONArray(response);
+                        for (int i = 0; i < jsonResponse.length(); ++i) {
+                            JSONObject object = jsonResponse.getJSONObject(i);
+                            if (object.getString("result").equals("success")) {
+                                String id = object.getString("movie_id");
+                                String title = object.getString("title");
+                                short year = (short) Integer.parseInt(object.getString("year"));
+                                String director = object.getString("dir");
+                                String[] stars = new String[3];
+                                String[] genres = new String[3];
+                                for (int j = 1; j < 4; ++j) {
+                                    if (object.has("genre" + j)) {
+                                        genres[j - 1] = object.getString("genre" + j);
+                                    }
+                                    if (object.has("starname" + j)) {
+                                        stars[j - 1] = object.getString("starname" + j);
+                                    }
                                 }
-                                if(object.has("starname"+j)) {
-                                    stars[j-1] = object.getString("starname" + j);
-                                }
+                                movies.add(new Movie(id, title, year, director, stars, genres));
+                            }else {
+                                endOfResult = true;
                             }
-                            movies.add(new Movie(id, title, year, director, stars, genres));
                         }
+                    } else{
+                        endOfResult = true;
                     }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter.notifyDataSetChanged();
+                            Log.d("firstRecord", String.valueOf(firstRecord));
+                            if(!endOfResult) {
+                                adapter.notifyDataSetChanged();
+                            }else {
+                                String message = "End of the result";
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 } catch (JSONException e) {
