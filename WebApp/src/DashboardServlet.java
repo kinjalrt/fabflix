@@ -192,10 +192,10 @@ public class DashboardServlet extends HttpServlet {
     }
 
     private String checkIfMovieAlreadyInTable(Connection dbcon, String title, String director, int year) throws SQLException{
-        String query = "select * from movies where title like ? and director like ? and year = ?";
+        String query = "select * from movies where upper(title) like upper(?) and upper(director) like upper(?) and year = ?";
         PreparedStatement check_statement = dbcon.prepareStatement(query);
-        check_statement.setString(1, "%"+title+"%");
-        check_statement.setString(2, "%"+director+"%");
+        check_statement.setString(1, title);
+        check_statement.setString(2, director);
         check_statement.setInt(3, year);
         ResultSet check_resultSet = check_statement.executeQuery();
         if (check_resultSet.next()) {
@@ -212,9 +212,9 @@ public class DashboardServlet extends HttpServlet {
     }
 
     private String checkIfAlreadyInTable(Connection dbcon, String name, String table) throws SQLException {
-        String query = "select * from " +table+ " where name like ?";
+        String query = "select * from " +table+ " where upper(name) = upper(?)";
         PreparedStatement check_statement = dbcon.prepareStatement(query);
-        check_statement.setString(1, "%"+name+"%");
+        check_statement.setString(1, name);
         ResultSet check_resultSet = check_statement.executeQuery();
         if (check_resultSet.next()) {
             String id = check_resultSet.getString("id");

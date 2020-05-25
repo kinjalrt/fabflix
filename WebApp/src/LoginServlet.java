@@ -32,17 +32,18 @@ public class LoginServlet extends HttpServlet {
 
         JsonObject responseJsonObject = new JsonObject();
 
-        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        if(request.getParameter("isMobile") == null) {
+            String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
-        //recaptcha verification
-        try {
-            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-        }
-        catch (Exception e){
-            responseJsonObject.addProperty("status", "fail");
-            responseJsonObject.addProperty("message", "Recaptcha verification error");
-            response.getWriter().write(responseJsonObject.toString());
-            return;
+            //recaptcha verification
+            try {
+                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+            } catch (Exception e) {
+                responseJsonObject.addProperty("status", "fail");
+                responseJsonObject.addProperty("message", "Recaptcha verification error");
+                response.getWriter().write(responseJsonObject.toString());
+                return;
+            }
         }
         //checking for the email and password in the database
         try{
@@ -85,7 +86,7 @@ public class LoginServlet extends HttpServlet {
 
                 // email does not exist
                 // Login fail
-                System.out.println("email does not exist");
+                System.out.println("email does not exist"+email);
                 responseJsonObject.addProperty("status", "fail");
                 responseJsonObject.addProperty("message", "Invalid email");
 
