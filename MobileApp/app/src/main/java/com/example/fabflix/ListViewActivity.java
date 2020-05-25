@@ -1,8 +1,7 @@
 package com.example.fabflix;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ListViewActivity extends Activity {
     private String url;
@@ -80,8 +79,11 @@ public class ListViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = movies.get(position);
-                String message = String.format("Clicked on position: %d, name: %s, %d", position, movie.getName(), movie.getYear());
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                //initialize the activity(page)/destination
+                Intent singleMoviePage = new Intent(ListViewActivity.this, SingleMovieActivity.class);
+                String movieId = movie.getId();
+                singleMoviePage.putExtra("id",movieId);
+                startActivity(singleMoviePage);
             }
         });
     }
@@ -102,26 +104,21 @@ public class ListViewActivity extends Activity {
                     for(int i = 0; i < jsonResponse.length(); ++i){
                         JSONObject object = jsonResponse.getJSONObject(i);
                         if(object.getString("result").equals("success")){
+                            String id = object.getString("movie_id");
                             String title = object.getString("title");
                             short year = (short) Integer.parseInt(object.getString("year"));
                             String director = object.getString("dir");
-                            String stars = "";
-                            String genres = "";
+                            String[] stars = new String[3];
+                            String[] genres = new String[3];
                             for(int j = 1; j < 4; ++j){
                                 if(object.has("genre"+j)) {
-                                    if(j != 1)
-                                        genres += ", " + object.getString("genre" + j);
-                                    else
-                                        genres += object.getString("genre" + j);
+                                    genres[j-1] = object.getString("genre" + j);
                                 }
                                 if(object.has("starname"+j)) {
-                                    if(j != 1)
-                                        stars += ", " + object.getString("starname" + j);
-                                    else
-                                        stars += object.getString("starname" + j);
+                                    stars[j-1] = object.getString("starname" + j);
                                 }
                             }
-                            movies.add(new Movie(title, year, director, stars, genres));
+                            movies.add(new Movie(id, title, year, director, stars, genres));
                         }
                     }
                     runOnUiThread(new Runnable() {
