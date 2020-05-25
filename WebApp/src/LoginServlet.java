@@ -36,14 +36,14 @@ public class LoginServlet extends HttpServlet {
             String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
             //recaptcha verification
-//            try {
-//                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-//            } catch (Exception e) {
-//                responseJsonObject.addProperty("status", "fail");
-//                responseJsonObject.addProperty("message", "Recaptcha verification error");
-//                response.getWriter().write(responseJsonObject.toString());
-//                return;
-//            }
+            try {
+                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+            } catch (Exception e) {
+                responseJsonObject.addProperty("status", "fail");
+                responseJsonObject.addProperty("message", "Recaptcha verification error");
+                response.getWriter().write(responseJsonObject.toString());
+                return;
+            }
         }
         //checking for the email and password in the database
         try{
