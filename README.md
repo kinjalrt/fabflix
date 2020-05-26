@@ -68,7 +68,11 @@ cp ./target/*.war /home/ubuntu/tomcat/webapps
 
 
 
-# PROJECT 3:
+# Project 3 details:
+
+## Substring matching design
+
+We used the mysql command  LIKE "%ABC%"  for the movie title, director name and star name search parameters; this command is case insensitive and finds any string that contains the pattern ABC anywhere in the string. For the year parameter we used exact match.
 
 ## All queries with Prepared Statements
 
