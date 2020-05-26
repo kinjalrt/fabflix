@@ -1,20 +1,18 @@
-# Project 3 - cs122b-spring20-team-80 
+# Project 4 - cs122b-spring20-team-80 
 cs122b-spring20-team-80 created by GitHub Classroom
 submitted by Kinjal Reetoo and Yasvi Patel on May 12th, 2020.
 
-- reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing.
+- Full Text Search, Autocomplete, Android Application, Fuzzy Search.
 
 ## Demo video URL
+
+- [Project 4 - Full Text Search, Autocomplete, Android Application, Fuzzy Search](https://youtu.be/OO4qpw2fhHk)
 
 - [Project 3 - reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing](https://youtu.be/Xy-2g7unQCI)
 
 - [Project 2 - Developing Fablix Website](https://www.youtube.com/watch?v=C_lelf4wlZE)
 
 - [Project 1 - Set up AWS, MySQL, JDBC, Tomcat, Start Fablix](https://youtu.be/Cd_2F8tFhRM)
-
-## Substring matching design
-
-We used the mysql command  LIKE "%ABC%"  for the movie title, director name and star name search parameters; this command is case insensitive and finds any string that contains the pattern ABC anywhere in the string. For the year parameter we used exact match.
 
 
 ## Instruction of deployment
@@ -30,7 +28,7 @@ git clone https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80.git
   3. Build war file inside project repository.
   
 ```bash
-cd /home/ubuntu/cs122b-spring20-team-80
+cd /home/ubuntu/cs122b-spring20-team-80/WebApp
 mvn clean package
 ```
   4. Copy newly built war file to Tomcat webapps folder.
@@ -38,6 +36,39 @@ mvn clean package
 cp ./target/*.war /home/ubuntu/tomcat/webapps
 ```
   5. Launch the app from the Tomcat manager page on localhost.
+  
+  
+## Contribution
+
+### Kinjal Reetoo 
+  - Implemented Movie List and Single Star pages.
+  - Initial git setup and wrote README.md for P1.
+  - Implemented the Main Page with Search and Browse
+  - Implemented the Shopping Cart
+  - Demo video and final deployment for grading P2.
+  - Added HTTPS
+  - Used encrypted password
+  - Importing large XML data files into the Fabflix database
+  - Demo video and final deployement P3
+  - Improving the Fabflix by full-text Search and Autocomplete
+  - Demo video and Readme P4
+
+### Yasvi Patel 
+  - Implemented Single Movie page, hyperlinks and jump requirements.
+  - Demo video and final deployment for grading P1.
+  - Implemented the Login Page
+  - Implement the Movie List Page, Single Pages & Jump Functionality (Extended from Project 1)
+  - Updated the Look and Feel and README.md for P2.
+  - Added reCAPTCHA
+  - Used PreparedStatement
+  - Implemented a Dashboard using Stored Procedure
+  - Readme P3 
+  - Developing an Android App for Fabflix
+  
+
+
+
+# PROJECT 3:
 
 ## All queries with Prepared Statements
 
@@ -82,26 +113,4 @@ Following files contain all queries with prepared statements.
   - [ParserStars.txt](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/master/ParserStars.txt)
   - [ParserMovies.txt](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/master/ParserMovies.txt)
   
-## Contribution
 
-### Kinjal Reetoo 
-  - Implemented Movie List and Single Star pages.
-  - Initial git setup and wrote README.md for P1.
-  - Implemented the Main Page with Search and Browse
-  - Implemented the Shopping Cart
-  - Demo video and final deployment for grading P2.
-  - Added HTTPS
-  - Used encrypted password
-  - Importing large XML data files into the Fabflix database
-  - Demo video and final deployement P3
-
-### Yasvi Patel 
-  - Implemented Single Movie page, hyperlinks and jump requirements.
-  - Demo video and final deployment for grading P1.
-  - Implemented the Login Page
-  - Implement the Movie List Page, Single Pages & Jump Functionality (Extended from Project 1)
-  - Updated the Look and Feel and README.md for P2.
-  - Added reCAPTCHA
-  - Used PreparedStatement
-  - Implemented a Dashboard using Stored Procedure
-  - Readme P3
