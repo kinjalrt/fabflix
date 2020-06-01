@@ -2,6 +2,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,8 +42,25 @@ public class SingleMovieServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
+
+            // the following few lines are for connection pooling
+            // Obtain our environment naming context
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+
+            // the following commented lines are direct connections without pooling
+            //Class.forName("org.gjt.mm.mysql.Driver");
+            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+            Connection dbcon = ds.getConnection();
+            if (dbcon == null)
+                System.out.println("dbcon is null.");
+
+
             // Get a connection from dataSource
-            Connection dbcon = dataSource.getConnection();
+          //  Connection dbcon = dataSource.getConnection();
 
             // Construct a query with parameter represented by "?"
             String query = "SELECT id, title, year, director FROM moviedb.movies as m where m.id = ?;";

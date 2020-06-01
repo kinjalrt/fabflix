@@ -2,6 +2,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +43,23 @@ public class CheckoutServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            Connection dbcon = dataSource.getConnection();
+            // the following few lines are for connection pooling
+            // Obtain our environment naming context
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+
+            // the following commented lines are direct connections without pooling
+            //Class.forName("org.gjt.mm.mysql.Driver");
+            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+            Connection dbcon = ds.getConnection();
+            if (dbcon == null)
+                System.out.println("dbcon is null.");
+
+
+          //  Connection dbcon = dataSource.getConnection();
             JsonArray jsonArray = new JsonArray();
 
             //get customer info from transaction form
