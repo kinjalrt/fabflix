@@ -13,6 +13,16 @@
               password="mypassword"
               url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
 
+    <Resource name="jdbc/moviedbMaster"
+              auth="Container"
+              driverClassName="com.mysql.jdbc.Driver"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              type="javax.sql.DataSource"
+              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+              username="mytestuser"
+              password="mypassword"
+              url="jdbc:mysql://172.31.20.108:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+
 <!--    database settings set without pooling: -->
 <!--    &lt;!&ndash; Defines a Data Source Connecting to localhost moviedb&ndash;&gt;-->
 <!--    <Resource name="jdbc/moviedb"-->
