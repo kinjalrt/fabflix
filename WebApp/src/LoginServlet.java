@@ -1,6 +1,8 @@
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,65 +38,84 @@ public class LoginServlet extends HttpServlet {
             String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
             //recaptcha verification
-            try {
-                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-            } catch (Exception e) {
-                responseJsonObject.addProperty("status", "fail");
-                responseJsonObject.addProperty("message", "Recaptcha verification error");
-                response.getWriter().write(responseJsonObject.toString());
-                return;
-            }
+//            try {
+//                RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+//            } catch (Exception e) {
+//                responseJsonObject.addProperty("status", "fail");
+//                responseJsonObject.addProperty("message", "Recaptcha verification error");
+//                response.getWriter().write(responseJsonObject.toString());
+//                return;
+//            }
         }
         //checking for the email and password in the database
         try{
-            Connection dbcon = dataSource.getConnection();
-            String query = "SELECT * from customers where email=?";
-            PreparedStatement statement = dbcon.prepareStatement(query);
-            statement.setString(1, email);
-            ResultSet rs = statement.executeQuery();
+            // the following few lines are for connection pooling
+            // Obtain our environment naming context
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
 
-            boolean success = false;
-            if(rs.next()){
+            // the following commented lines are direct connections without pooling
+            //Class.forName("org.gjt.mm.mysql.Driver");
+            //Class.forName("com.mysql.jdbc.Driver").newInstance();
+            //Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 
-                //email exists
-                String encryptedPassword = rs.getString("password");
-                success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
-                System.out.println(success);
-
-                //set this user into the session
-                if(success) {
-
-                    //both email and password correct
-                    int id = rs.getInt("id");
-                    String firstName = rs.getString("firstName");
-                    String lastName = rs.getString("lastName");
-                    String address = rs.getString("address");
-
-                    request.getSession().setAttribute("user", new User(id, firstName, lastName, address, email));
+            Connection dbcon = ds.getConnection();
+            try {
+                if (dbcon == null)
+                    System.out.println("dbcon is null.");
 
 
-                    responseJsonObject.addProperty("status", "success");
-                    responseJsonObject.addProperty("message", "success");
-                }
-                else{
+                // Connection dbcon = dataSource.getConnection();
+                String query = "SELECT * from customers where email=?";
+                PreparedStatement statement = dbcon.prepareStatement(query);
+                statement.setString(1, email);
+                ResultSet rs = statement.executeQuery();
 
-                    //email correct but password incorrect
+                boolean success = false;
+                if (rs.next()) {
+
+                    //email exists
+                    String encryptedPassword = rs.getString("password");
+                    success = new StrongPasswordEncryptor().checkPassword(password, encryptedPassword);
+                    System.out.println(success);
+
+                    //set this user into the session
+                    if (success) {
+
+                        //both email and password correct
+                        int id = rs.getInt("id");
+                        String firstName = rs.getString("firstName");
+                        String lastName = rs.getString("lastName");
+                        String address = rs.getString("address");
+
+                        request.getSession().setAttribute("user", new User(id, firstName, lastName, address, email));
+
+
+                        responseJsonObject.addProperty("status", "success");
+                        responseJsonObject.addProperty("message", "success");
+                    } else {
+
+                        //email correct but password incorrect
+                        responseJsonObject.addProperty("status", "fail");
+                        responseJsonObject.addProperty("message", "Invalid password");
+                    }
+                } else {
+
+                    // email does not exist
+                    // Login fail
+                    System.out.println("email does not exist" + email);
                     responseJsonObject.addProperty("status", "fail");
-                    responseJsonObject.addProperty("message", "Invalid password");
+                    responseJsonObject.addProperty("message", "Invalid email");
+
                 }
-            } else{
 
-                // email does not exist
-                // Login fail
-                System.out.println("email does not exist"+email);
-                responseJsonObject.addProperty("status", "fail");
-                responseJsonObject.addProperty("message", "Invalid email");
 
+                rs.close();
+                statement.close();
+            } finally {
+                dbcon.close();
             }
-
-            rs.close();
-            statement.close();
-            dbcon.close();
         }
         catch (Exception e) {
 
