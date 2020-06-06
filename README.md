@@ -4,7 +4,7 @@
     - #### Names: Kinjal Reetoo, Yasvi Patel
     
     - #### Project 5 Video Demo Link: 
-        - [Demo]()
+        - [Demo](https://youtu.be/k09b3cqJ1jM)
 
     - #### Instruction of deployment:
         Followed the exact same process of deployment as described on Canvas.
@@ -22,6 +22,14 @@
         5) Launch the app from the Tomcat manager page on localhost.
 
     - #### Collaborations and Work Distribution:
+     - ### Yasvi patel
+        - MySQL Master-Slave Replication 
+        - Scaling Fabflix with a cluster of MySQL/Tomcat and a load balancer
+        - ReadME
+    - ### Kinjal Reetoo
+        - JDBC Connection Pooling
+        - Measuring the performance of Fabflix search feature
+        - ReadME and demo video
         
 
 
@@ -102,15 +110,7 @@ Case 2: ![](https://i.imgur.com/9xfqZHU.png)
 Case 3: ![](https://i.imgur.com/8BEJGu9.png)
 
 
-- # Contribution
-    - ### Yasvi patel
-        - MySQL Master-Slave Replication 
-        - Scaling Fabflix with a cluster of MySQL/Tomcat and a load balancer
-        - ReadME
-    - ### Kinjal Reetoo
-        - JDBC Connection Pooling
-        - Measuring the performance of Fabflix search feature
-        - ReadME and demo video
+   
 
 
 
