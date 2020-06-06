@@ -102,7 +102,15 @@ Case 2: ![](https://i.imgur.com/9xfqZHU.png)
 Case 3: ![](https://i.imgur.com/8BEJGu9.png)
 
 
-
+- # Contribution
+    - ### Yasvi patel
+        - MySQL Master-Slave Replication 
+        - Scaling Fabflix with a cluster of MySQL/Tomcat and a load balancer
+        - ReadME
+    - ### Kinjal Reetoo
+        - JDBC Connection Pooling
+        - Measuring the performance of Fabflix search feature
+        - ReadME and demo video
 
 
 
