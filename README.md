@@ -1,4 +1,4 @@
-- # Project 5 details:
+- # General
     - #### Team#: 80
     
     - #### Names: Kinjal Reetoo, Yasvi Patel
