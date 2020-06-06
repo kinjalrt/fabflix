@@ -37,7 +37,7 @@
 
 - # Master/Slave
     - #### Include the filename/path of all code/configuration files in GitHub of routing queries to Master/Slave SQL.
-        **Note:** The following files are on a seperate branch p4 which contains the scaled-version of the WebApp
+        **Note:** The following files are on a seperate branch [p4](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/tree/p4) which contains the scaled-version of the WebApp
         - [DashboardServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p4/WebApp/src/DashboardServlet.java)
         - [CheckoutServlet.java](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p4/WebApp/src/CheckoutServlet.java)
         - [context.xml](https://github.com/UCI-Chenli-teaching/cs122b-spring20-team-80/blob/p4/WebApp/web/META-INF/context.xml)
