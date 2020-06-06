@@ -35,6 +35,15 @@
 
 - # Connection Pooling
     - #### Include the filename/path of all code/configuration files in GitHub of using JDBC Connection Pooling.
+        WebApp/src/AdminLoginServlet.java
+        WebApp/src/CheckoutServlet.java
+        WebApp/src/DashboardServlet.java
+        WebApp/src/IndexServlet.java
+        WebApp/src/LoginServlet.java
+        WebApp/src/MovieListServlet.java
+        WebApp/src/MovieSuggestions.java
+        WebApp/src/SingleMovieServlet.java
+        WebApp/src/SingleStarServlet.java
     
     - #### Explain how Connection Pooling is utilized in the Fabflix code.
         Creates a pool of 100 connections to the backend sql. When executing a mySql query, one of the connections from the pool is fetched and used, and then put back in the pool for reuse for the other queries. MaxIdle is set to 30, meaning that if we have more than 30 free connections that are not being used, the tomcat server will automatically free some connections.
