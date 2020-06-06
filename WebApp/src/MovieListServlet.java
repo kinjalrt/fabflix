@@ -32,15 +32,18 @@ public class MovieListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String contextPath = getServletContext().getRealPath("/");
-        System.out.println(contextPath);
+        //System.out.println(contextPath);
         String logFilePath = contextPath+"log.txt";
         path = logFilePath;
-        System.out.println(logFilePath);
+      //  System.out.println(logFilePath);
         //File myfile = new File(xmlFilePath);
-        try(FileWriter fw = new FileWriter(logFilePath, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter fout = new PrintWriter(bw)){
-         //   fout.println("nagisa shiota the natural");
+        try{
+
+            FileWriter fw = new FileWriter(logFilePath, true);
+           // BufferedWriter bw = new BufferedWriter(fw);
+            //    PrintWriter fout = new PrintWriter(bw)
+
+
 
 
             long totalTj = 0;
@@ -80,7 +83,7 @@ public class MovieListServlet extends HttpServlet {
                     System.out.println("dbcon is null.");
 
 
-             //   Connection dbcon = dataSource.getConnection();
+              //  Connection dbcon = dataSource.getConnection();
 
                 JsonArray jsonArray = new JsonArray();
 
@@ -107,7 +110,7 @@ public class MovieListServlet extends HttpServlet {
                 //search by genre
                 else if(param_gid != null && !param_gid.equals("null") && !param_gid.isEmpty()){
                     param_index = 0;
-                    System.out.println(sort_string);
+                 //   System.out.println(sort_string);
                     query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
                             "FROM genres_in_movies as gim, movies as m LEFT JOIN ratings as r ON m.id = r.movieId\n" +
                             "WHERE gim.genreId = ? AND m.id = gim.movieId \n"+
@@ -121,10 +124,10 @@ public class MovieListServlet extends HttpServlet {
                     String[] splited = param_title.trim().split("\\s+");
                     String search_title = "";
                     for (String i : splited){
-                        System.out.println(i);
+                        //System.out.println(i);
                         search_title+="+"+i+"* ";
                     }
-                    System.out.println(search_title);
+                //    System.out.println(search_title);
 
                     String sqlQuery = "SELECT DISTINCT id, title, year, director, rating\n" +
                             "FROM movies as m LEFT JOIN ratings as r ON m.id = r.movieId\n" +
@@ -141,10 +144,10 @@ public class MovieListServlet extends HttpServlet {
                     String[] splited = param_title.trim().split("\\s+");
                     String search_title = "";
                     for (String i : splited){
-                        System.out.println(i);
+                     //   System.out.println(i);
                         search_title+="+"+i+"* ";
                     }
-                    System.out.println(search_title);
+                   // System.out.println(search_title);
 
                     param_index = 0;
                     String add_year = year(param_year);
@@ -164,7 +167,7 @@ public class MovieListServlet extends HttpServlet {
                 }
                 else
                 {
-                    System.out.println(param_sort + " "+ num_string + " "+ first_record);
+                   // System.out.println(param_sort + " "+ num_string + " "+ first_record);
                     param_index = 0;
                     String add_year = year(param_year);
                     query = "SELECT DISTINCT m.id, title, year, director, rating\n" +
@@ -326,28 +329,32 @@ public class MovieListServlet extends HttpServlet {
 
             long totalEndTime = System.nanoTime();
             long ts = totalEndTime-totalStartTime;
-            System.out.println("ts "+ ts);
-            System.out.println("tj " + totalTj);
-            fout.print(totalTj + " ");
-            fout.println(ts);
+            synchronized(fw){
+                fw.write(totalTj + " "+ ts + "\n");        // write to file
+            }
+            fw.close();
+       //     System.out.println("ts "+ ts);
+       //     System.out.println("tj " + totalTj);
+//            fout.print(totalTj + " ");
+//            fout.println(ts);
 
         }catch (IOException e) {
             e.printStackTrace();
         }
 
         //read file
-        try {
-            File myObj = new File(logFilePath);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                System.out.println(data);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+//        try {
+//            File myObj = new File(logFilePath);
+//            Scanner myReader = new Scanner(myObj);
+//            while (myReader.hasNextLine()) {
+//                String data = myReader.nextLine();
+//            //    System.out.println(data);
+//            }
+//            myReader.close();
+//        } catch (FileNotFoundException e) {
+//         //   System.out.println("An error occurred.");
+//            e.printStackTrace();
+//        }
 
     }
 
