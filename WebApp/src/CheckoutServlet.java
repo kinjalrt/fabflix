@@ -32,8 +32,8 @@ public class CheckoutServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
-    @Resource(name= "jdbc/moviedbMaster")
-    private DataSource dataSourceMaster;
+  //  @Resource(name= "jdbc/moviedbMaster")
+ //   private DataSource dataSourceMaster;
 
     /**
      * handles POST requests to add and show the item list information
@@ -52,7 +52,7 @@ public class CheckoutServlet extends HttpServlet {
             Context envContext = (Context) initContext.lookup("java:/comp/env");
             DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
             //Master for write queries
-            DataSource dsMaster = (DataSource) envContext.lookup("jdbc/moviedbMaster");
+        //    DataSource dsMaster = (DataSource) envContext.lookup("jdbc/moviedb");
 
             // the following commented lines are direct connections without pooling
             //Class.forName("org.gjt.mm.mysql.Driver");
@@ -60,11 +60,11 @@ public class CheckoutServlet extends HttpServlet {
             //Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 
             Connection dbcon = ds.getConnection();
-            Connection dbconMaster = dsMaster.getConnection();
+           // Connection dbconMaster = dsMaster.getConnection();
             if (dbcon == null)
                 System.out.println("dbcon is null.");
-            if (dbconMaster == null)
-                System.out.println("dbconMaster is null.");
+          //  if (dbconMaster == null)
+           //     System.out.println("dbconMaster is null.");
 
 
           //  Connection dbcon = dataSource.getConnection();
@@ -131,7 +131,7 @@ public class CheckoutServlet extends HttpServlet {
 
                     //prepare query and execute
                     String query3 = "INSERT INTO sales (customerId,movieId,saleDate,quantity) VALUES (?, ?, ?, ?);";
-                    PreparedStatement preparedStmt = dbconMaster.prepareStatement(query3);
+                    PreparedStatement preparedStmt = dbcon.prepareStatement(query3);
                     preparedStmt.setInt (1, customerId);
                     preparedStmt.setString (2, movieId);
                     preparedStmt.setString (3, date);
@@ -178,7 +178,7 @@ public class CheckoutServlet extends HttpServlet {
             rs.close();
             statement.close();
             dbcon.close();
-            dbconMaster.close();
+         //   dbconMaster.close();
 
         }
          catch (Exception e) {

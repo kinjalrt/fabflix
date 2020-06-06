@@ -21,8 +21,8 @@ public class DashboardServlet extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
-    @Resource(name= "jdbc/moviedbMaster")
-    private DataSource dataSourceMaster;
+ //   @Resource(name= "jdbc/moviedbMaster")
+  //  private DataSource dataSourceMaster;
 
     /**
      * handles GET requests to store session information
@@ -51,7 +51,7 @@ public class DashboardServlet extends HttpServlet {
             Context envContext = (Context) initContext.lookup("java:/comp/env");
             DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
             //Master for write queries
-            DataSource dsMaster = (DataSource) envContext.lookup("jdbc/moviedbMaster");
+         //   DataSource dsMaster = (DataSource) envContext.lookup("jdbc/moviedb");
 
             // the following commented lines are direct connections without pooling
             //Class.forName("org.gjt.mm.mysql.Driver");
@@ -59,11 +59,11 @@ public class DashboardServlet extends HttpServlet {
             //Connection dbcon = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 
             Connection dbcon = ds.getConnection();
-            Connection dbconMaster = dsMaster.getConnection();
+          //  Connection dbconMaster = dsMaster.getConnection();
             if (dbcon == null)
                 System.out.println("dbcon is null.");
-            if (dbconMaster == null)
-                System.out.println("dbconMaster is null.");
+        //    if (dbconMaster == null)
+          //      System.out.println("dbconMaster is null.");
          //   Connection dbcon = dataSource.getConnection();
 
             //Add star
@@ -74,7 +74,7 @@ public class DashboardServlet extends HttpServlet {
                 System.out.println(check_id);
                 if(check_id.equals("")) {
                     String query = "insert into stars (id,name,birthYear) values(?,?,?)";
-                    PreparedStatement statement = dbconMaster.prepareStatement(query);
+                    PreparedStatement statement = dbcon.prepareStatement(query);
                     statement.setString(1, new_id);
                     statement.setString(2, star);
                     if(!birthYearString.equals("")) {
@@ -109,7 +109,7 @@ public class DashboardServlet extends HttpServlet {
                     //check if star or genre already exists and get their id
 
                     String query = "call add_movie(?,?,?,?,?,?)";
-                    CallableStatement add_movie_procedure = dbconMaster.prepareCall(query);
+                    CallableStatement add_movie_procedure = dbcon.prepareCall(query);
                     add_movie_procedure.setString(1, director);
                     add_movie_procedure.setString(2, movieId);
                     add_movie_procedure.setString(3, title);
@@ -185,7 +185,7 @@ public class DashboardServlet extends HttpServlet {
             rsTables.close();
             tableStatement.close();
             dbcon.close();
-            dbconMaster.close();
+          //  dbconMaster.close();
 
         } catch (Exception e){
             JsonObject jsonObject = new JsonObject();
