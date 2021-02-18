@@ -3,7 +3,7 @@
     - Netflix like website; user can create an account to browse and query for movies, and add them to cart for purchase.
 
     
-    - #### Names: Kinjal Reetoo, Yasvi Patel
+    - ####Names: Kinjal Reetoo, Yasvi Patel
     
     - ####Video Demo Links: 
         - [Scaling Fabflix and Performance Tuning](https://youtu.be/k09b3cqJ1jM)
