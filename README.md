@@ -1,11 +1,11 @@
 - # General
 
-    - Netflix like website; user can create an account to browse and query for movies, and add them to cart for purchase.
+    - #### Netflix like website; user can create an account to browse and query for movies, and add them to cart for purchase.
 
     
-    - ####Names: Kinjal Reetoo, Yasvi Patel
+    - #### Names: Kinjal Reetoo, Yasvi Patel
     
-    - ####Video Demo Links: 
+    - #### Video Demo Links: 
         - [Scaling Fabflix and Performance Tuning](https://youtu.be/k09b3cqJ1jM)
         - [Full Text Search, Autocomplete, Android Application, Fuzzy Search](https://youtu.be/OO4qpw2fhHk)
         - [reCAPTCHA, HTTPS, PreparedStatement, Stored Procedure, XML Parsing](https://youtu.be/Xy-2g7unQCI)
